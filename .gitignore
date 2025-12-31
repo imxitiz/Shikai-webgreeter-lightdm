@@ -265,6 +265,13 @@ FakesAssemblies/
 .ntvs_analysis.dat
 node_modules/
 
+# Build output
+dist/
+
+# Bun
+bun.lock
+*.lockb
+
 # Visual Studio 6 build log
 *.plg
 

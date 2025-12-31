@@ -1,4 +1,4 @@
 #!/bin/bash
 rm -fr ./dist/*
-npx webpack build --node-env production --progress --color
+bun run build
 echo Finished PROD!

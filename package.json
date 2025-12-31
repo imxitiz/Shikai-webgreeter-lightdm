@@ -1,68 +1,50 @@
 {
-  "name": "shikai",
-  "version": "1.6.0",
-  "description": "Modern lightdm webkit2 theme",
-  "keywords": [
-    "lightdm",
-    "theme",
-    "greeter",
-    "linux",
-    "webkit",
-    "login"
-  ],
-  "homepage": "https://github.com/TheWisker/Shikai",
-  "bugs": "https://github.com/TheWisker/Shikai/issues",
-  "license": "GPL-3.0",
-  "author": "TheWisker (https://github.com/TheWisker)",
-  "main": "./dist/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TheWisker/Shikai.git"
-  },
-  "scripts": {
-    "build": "./scripts/production.sh",
-    "dev": "./scripts/development.sh",
-    "watch": "./scripts/watch.sh",
-    "server": "./scripts/server.sh"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-transform-react-constant-elements": "^7.21.3",
-    "@babel/plugin-transform-react-inline-elements": "^7.21.0",
-    "@babel/plugin-transform-runtime": "^7.21.0",
-    "@babel/preset-env": "^7.20.2",
-    "@babel/preset-react": "^7.18.6",
-    "atob": ">=2.1.0",
-    "autoprefixer": "^10.4.14",
-    "babel-loader": "^9.1.2",
-    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "^6.7.3",
-    "css-minimizer-webpack-plugin": "^4.2.2",
-    "html-webpack-plugin": "^5.5.0",
-    "loader-utils": ">=1.4.2",
-    "mini-css-extract-plugin": "^2.7.5",
-    "postcss": "^8.4.21",
-    "postcss-loader": "^7.2.4",
-    "sass": "^1.60.0",
-    "sass-loader": "^13.2.1",
-    "style-loader": "^3.3.2",
-    "svg-react-loader": "^0.4.0",
-    "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^5.1.0"
-  },
-  "dependencies": {
-    "cxs": "^6.2.0",
-    "react": "^18.2.0",
-    "react-color": "^2.19.3",
-    "react-dom": "^18.2.0",
-    "react-draggable": "^4.4.5",
-    "react-dropdown": "^1.11.0",
-    "react-redux": "^8.0.5",
-    "redux": "^4.2.1"
-  },
-  "browserslist": [
-    "last 5 version"
-  ]
+	"name": "shikai",
+	"version": "1.6.0",
+	"description": "Modern lightdm webkit2 theme",
+	"type": "module",
+	"keywords": [
+		"lightdm",
+		"theme",
+		"greeter",
+		"linux",
+		"webkit",
+		"login"
+	],
+	"homepage": "https://github.com/TheWisker/Shikai",
+	"bugs": "https://github.com/TheWisker/Shikai/issues",
+	"license": "GPL-3.0",
+	"author": "TheWisker (https://github.com/TheWisker)",
+	"main": "./dist/index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TheWisker/Shikai.git"
+	},
+	"scripts": {
+		"build": "bun --bun vite build",
+		"dev": "bun --bun vite build --mode development",
+		"watch": "bun --bun vite build --watch",
+		"server": "bun --bun vite",
+		"preview": "bun --bun vite preview"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-react": "^4.3.4",
+		"sass-embedded": "^1.83.1",
+		"terser": "^5.37.0",
+		"vite": "^6.0.7",
+		"vite-plugin-svgr": "^4.3.0"
+	},
+	"dependencies": {
+		"cxs": "^6.2.0",
+		"react": "^18.3.1",
+		"react-color": "^2.19.3",
+		"react-dom": "^18.3.1",
+		"react-draggable": "^4.4.6",
+		"react-dropdown": "^1.11.0",
+		"react-redux": "^9.2.0",
+		"redux": "^5.0.1"
+	},
+	"browserslist": [
+		"last 5 version"
+	]
 }

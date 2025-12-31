@@ -8,7 +8,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {credits} from "./credits";
+import credits from "./credits";
 import {query} from "../js/Tools/Dictionary";
 
 import english from "./eng";

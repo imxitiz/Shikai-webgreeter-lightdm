@@ -1,4 +1,4 @@
 #!/bin/bash
-rm -fr ./out/*
-webpack serve --node-env development --progress --color
+rm -fr ./dist/*
+bun run server
 echo Finished SERVER!

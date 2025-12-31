@@ -1,0 +1,13 @@
+# Bun configuration for Shikai
+# https://bun.sh/docs/runtime/bunfig
+
+[install]
+# Save a text-based lockfile for better git diffs
+saveTextLockfile = true
+
+# Use hoisted installation strategy (npm-like)
+linker = "hoisted"
+
+[install.lockfile]
+# Generate bun.lock file
+save = true

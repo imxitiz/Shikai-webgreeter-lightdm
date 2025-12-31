@@ -1,4 +1,4 @@
 #!/bin/bash
-rm -fr ./out/*
-npx webpack watch --node-env development --progress --color
+rm -fr ./dist/*
+bun run watch
 echo Finished WATCH!

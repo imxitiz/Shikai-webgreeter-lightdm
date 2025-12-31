@@ -1,3 +1,3 @@
 #!/bin/bash
-npx webpack build --node-env development --progress --color
+bun run dev
 echo Finished DEV!

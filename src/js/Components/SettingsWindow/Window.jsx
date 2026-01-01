@@ -46,7 +46,7 @@ export default class Window extends React.Component {
             default: tab = <Behaviour/>; break;
         } let t = (this.props.active) ? null : ("translate(" + (((this.state.data.x + (window_width/2)) <= (screen.availWidth/2)) ? (-(this.state.data.x + window_width)) : (screen.availWidth - this.state.data.x)) + "px, 0px)");
         return (<Draggable axis="x" disabled={!this.props.active} handle="#settings_handle" bounds={{left: 0, right: screen.availWidth - window_width, top: 0, bottom: 0}} position={this.state.data} onDrag={this.dragEvent} onStop={this.dragStop}>
-            <div id="settings_drag">
+            <div id="settings_drag" className="no-wall-change">
                 <div className={classes.join(" ")} style={{transform: t}}>
                     <Sectionbar action={(a) => this.update(a)} callback={this.props.callback} reset={() => {
                         document.getElementById("settings_drag").style.transition = "transform 400ms";

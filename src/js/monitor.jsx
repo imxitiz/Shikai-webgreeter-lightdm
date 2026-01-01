@@ -3,6 +3,7 @@
  * monitor.jsx
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -15,14 +16,24 @@ import * as Operations from "./Greeter/Operations";
 function launch() {
     let wall_callback = (wallpapers) => {
         document.body.onclick = (e) => {
-            if (e.target == e.currentTarget) {
-                let wallpaper = wallpapers[Math.floor(Math.random() * wallpapers.length)];
-                document.body.style.backgroundImage = "url('" + wallpaper + "')";
-                if (greeter_comm) {
-                    greeter_comm.broadcast(wallpaper);
-                }
-            }
+            const isInteractive =
+													e.target?.closest &&
+													e.target.closest(
+														'button, a, input, textarea, select, label, [role="button"]',
+													);
+												if (e.target === e.currentTarget || !isInteractive) {
+													let wallpaper =
+														wallpapers[
+															Math.floor(Math.random() * wallpapers.length)
+														];
+													document.body.style.backgroundImage =
+														"url('" + wallpaper + "')";
+													if (greeter_comm) {
+														greeter_comm.broadcast(wallpaper);
+													}
+												}
         };
+        document.body.click();
     }
     if (window.__is_debug) {
         wall_callback(Operations.getWallpapers(Operations.getWallpaperDir()));
@@ -39,4 +50,11 @@ window.onload = () => {
     } else {launch();}
 }
 
-window.addEventListener("GreeterBroadcastEvent", (e) => {document.body.style.backgroundImage = "url('" + e.data + "')";});
+window.addEventListener("GreeterBroadcastEvent", (e) => {
+    try {
+        document.body.style.backgroundImage = "url('" + e.data + "')";
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+    } catch (err) { console.warn('Failed to apply broadcast background', err); }
+});

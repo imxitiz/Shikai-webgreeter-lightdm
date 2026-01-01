@@ -3,18 +3,23 @@
  * Operations.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
  */
 export function getInitialUser() {
+    // Handle debug mode - lightdm may not exist yet
+    if (typeof lightdm === 'undefined' || !lightdm) {
+        return { username: 'user', display_name: 'User', session: 'plasma', image: '' };
+    }
     // If greeter was started as lock screen initial user must be already logged in
     if (lightdm.lock_hint) {
         let user = lightdm.users.find((user) => {return user.logged_in;});
         if (user != undefined) {return user;}
     }
     // If greeter has default user use it
-    if (greeter_config) {
+    if (typeof greeter_config !== 'undefined' && greeter_config?.greeter) {
         if (greeter_config.greeter.default_user != undefined && greeter_config.greeter.default_user != null) {
             let user = lightdm.users.find((user) => user.username == greeter_config.greeter.default_user);    
             if (user != undefined) {return user;}
@@ -30,9 +35,13 @@ export function getInitialUser() {
 }
 
 export function getInitialSession() {
+    // Handle debug mode - lightdm may not exist yet
+    if (typeof lightdm === 'undefined' || !lightdm) {
+        return { name: 'Plasma', key: 'plasma', type: 'x11' };
+    }
     return (
         findSession(getInitialUser().session) ||
-        findSession(greeter_config ? greeter_config.greeter.default_session : null) ||
+        (typeof greeter_config !== 'undefined' && findSession(greeter_config?.greeter?.default_session)) ||
         findSession(lightdm.default_session) ||
         lightdm.sessions[0]
     );
@@ -43,11 +52,31 @@ export function findSession(name) {
     return lightdm.sessions.find((session) => (session.name.toLowerCase() == name.toLowerCase()) || (session.key.toLowerCase() === name.toLowerCase()));
 }
 
-export function getHostname() {return lightdm.hostname;}
+export function getSessions() {
+    if (window.__is_debug === true) {
+        return [
+            { name: "Plasma (Wayland)", key: "plasmawayland", type: "wayland" },
+            { name: "GNOME", key: "gnome", type: "wayland" },
+            { name: "KDE Plasma", key: "plasma", type: "x11" },
+            { name: "i3", key: "i3", type: "x11" },
+            { name: "Hyprland", key: "hyprland", type: "wayland" }
+        ];
+    }
+    return lightdm.sessions || [];
+}
+
+export function getHostname() {
+    if (typeof lightdm === 'undefined' || !lightdm) {
+        return 'localhost';
+    }
+    return lightdm.hostname;
+}
 
 export function getWallpaperDir() {
     if (window.__is_debug === true) {return "./assets/media/wallpapers/";}
-    return greeter_config.branding.background_images_dir;
+    // console.log(greeter_config);
+    // return greeter_config.branding.background_images_dir;
+    return (typeof greeter_config !== 'undefined' && greeter_config?.branding?.background_images_dir) ? greeter_config.branding.background_images_dir : "./assets/media/wallpapers/";
 }
 
 // Maximum number of wallpapers to load (prevents "too many open files" error)
@@ -82,7 +111,7 @@ export function getWallpapers(dir, callback) {
 
 export function getLogosDir() {
     if (window.__is_debug === true) {return "./assets/media/logos/";}
-    return greeter_config.branding.logo_image;
+    return (typeof greeter_config !== 'undefined' && greeter_config?.branding?.logo_image) ? greeter_config.branding.logo_image : "./assets/media/logos/";
 }
 
 export function getLogos(dir, callback) {

@@ -3,6 +3,7 @@
  * Dictionary.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -21,8 +22,12 @@ export function update(object, key, value) {
 }
 
 export function query(object, key) {
+    if (object == null || object == undefined) return undefined;
     let copy = {...object};
     let path = key.split(".");
-    for(let i = 0; i < path.length; i++) {copy = copy[path[i]];}
+    for(let i = 0; i < path.length; i++) {
+        if (copy == null || copy == undefined) return undefined;
+        copy = copy[path[i]];
+    }
     return copy;
 }

@@ -3,6 +3,7 @@
  * Sectionbar/index.jsx
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -18,15 +19,15 @@ import {data} from "../../../../lang";
 class Sectionbar extends React.Component {
     render() {
         return (<div className="sectionbar">
-            <div id="settings_handle" onDoubleClick={() => {this.props.reset()}}>
+            <button type="button" id="settings_handle" onDoubleClick={() => {this.props.reset()}} aria-label="Recenter settings">
                 <Drag/>
-            </div>
-            <div className="text button" onClick={this.props.action}>{data.get(this.props.lang, "settings.behaviour.name")}</div>
-            <div className="text button" onClick={() => this.props.action("style")}>{data.get(this.props.lang, "settings.style.name")}</div>
-            <div className="text button" onClick={() => this.props.action("themes")}>{data.get(this.props.lang, "settings.themes.name")}</div>
-            <div className="button" onClick={this.props.callback}>
+            </button>
+            <button type="button" className="text button" onClick={this.props.action}>{data.get(this.props.lang, "settings.behaviour.name")}</button>
+            <button type="button" className="text button" onClick={() => this.props.action("style")}>{data.get(this.props.lang, "settings.style.name")}</button>
+            <button type="button" className="text button" onClick={() => this.props.action("themes")}>{data.get(this.props.lang, "settings.themes.name")}</button>
+            <button type="button" className="button" onClick={this.props.callback} aria-label="Close settings">
                 <Image/>
-            </div>
+            </button>
         </div>);
     }
 }

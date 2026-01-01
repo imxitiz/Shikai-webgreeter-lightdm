@@ -3,6 +3,7 @@
  * Switch.jsx
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -16,7 +17,7 @@ import {data} from "../../../../lang";
 
 class Switch extends React.Component {
     constructor(props) {super(props);}
-    render() {return (<div className={"switch text button " + cxs({color: this.props.color})} onClick={() => {this.props.switch()}}>{data.get(this.props.lang, "buttons.switch")}</div>);}
+    render() {return (<button type="button" className={"switch text button " + cxs({color: this.props.color})} onClick={() => {this.props.switch()}}>{data.get(this.props.lang, "buttons.switch")}</button>);}
 }
 
 export default connect((state) => {return {color: state.settings.style.main.textcolor, lang: state.settings.behaviour.language}}, (dispatch) => {return {switch: () => {dispatch({type: "Switch_User"})}}})(Switch);

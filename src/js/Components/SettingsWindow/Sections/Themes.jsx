@@ -3,6 +3,7 @@
  * Themes.jsx
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -21,8 +22,8 @@ class Theme extends React.Component {
         return (<div className="theme">
             {this.props.name}
             <div className="expand"/>
-            <div className="button" style={{textAlign: "center", minWidth: "fit-content"}} onClick={() => {notify(data.get(this.props.lang, "misc.theme") + " " + this.props.name + " " + data.get(this.props.lang, "notifications.theme_activated"), types.Success); this.props.func(this.props.index, "Theme_Activate")}}>{data.get(this.props.lang, "buttons.use")}</div>
-            <div className="button" style={{textAlign: "center", minWidth: "fit-content"}} onClick={() => {notify(data.get(this.props.lang, "misc.theme") + " " + this.props.name + " " + data.get(this.props.lang, "notifications.theme_removed"), types.Success); this.props.func(this.props.index, "Theme_Remove")}}>{data.get(this.props.lang, "buttons.remove")}</div>
+            <button type="button" className="button" style={{textAlign: "center", minWidth: "fit-content"}} onClick={() => {notify(`${data.get(this.props.lang, "misc.theme")} ${this.props.name} ${data.get(this.props.lang, "notifications.theme_activated")}`, types.Success); this.props.func(this.props.index, "Theme_Activate")}}>{data.get(this.props.lang, "buttons.use")}</button>
+            <button type="button" className="button" style={{textAlign: "center", minWidth: "fit-content"}} onClick={() => {notify(`${data.get(this.props.lang, "misc.theme")} ${this.props.name} ${data.get(this.props.lang, "notifications.theme_removed")}`, types.Success); this.props.func(this.props.index, "Theme_Remove")}}>{data.get(this.props.lang, "buttons.remove")}</button>
         </div>);
     }
 }
@@ -41,7 +42,7 @@ class Themes extends React.Component {
             <div className="section">
                 <div className="text title">{data.get(this.props.lang, "settings.themes.current.name")}</div>
                 <Inputs.Textarea name={data.get(this.props.lang, "settings.themes.current.option")} value={this.state.new_name} action={(name) => {this.setState({new_name: name});}}/>
-                <div className="text button" onClick={() => {notify(data.get(this.props.lang, "misc.theme") + " " + this.state.new_name + " added!", types.Success); this.props.add(this.state.new_name)}}>{data.get(this.props.lang, "buttons.save")}</div>
+                <button type="button" className="text button" onClick={() => {notify(data.get(this.props.lang, "misc.theme") + " " + this.state.new_name + " added!", types.Success); this.props.add(this.state.new_name)}}>{data.get(this.props.lang, "buttons.save")}</button>
             </div>
             <div className="section" style={{minHeight: "0"}}>
                 <div className="separator"/>

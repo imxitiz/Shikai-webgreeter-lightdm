@@ -3,21 +3,33 @@
  * Storage.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
-function saveItem(key, data) {localStorage.setItem(key, JSON.stringify(data)); return data;}
+function saveItem(key, data) {
+    try {
+        localStorage.setItem(key, JSON.stringify(data));
+    } catch (err) {
+        console.warn('localStorage.setItem failed for key', key, err);
+    }
+    return data;
+}
 
 function getItem(key) {
-    let item = localStorage.getItem(key);
-    if (item != null && item != undefined && item != "null" && item != "undefined" && item != "") {return JSON.parse(item);}
+    try {
+        let item = localStorage.getItem(key);
+        if (item != null && item != undefined && item != "null" && item != "undefined" && item != "") {return JSON.parse(item);}    
+    } catch (err) {
+        console.warn('localStorage.getItem failed for key', key, err);
+    }
     return null;
 }
 
-export function saveSettings(data) {return saveItem("Settings", data);}
+export function saveSettings(data) {return saveItem("Settings", data);} 
 export function getSettings() {return getItem("Settings");}
 
-export function saveThemes(data) {return saveItem("Themes", data);}
+export function saveThemes(data) {return saveItem("Themes", data);} 
 export function getThemes() {return getItem("Themes");}

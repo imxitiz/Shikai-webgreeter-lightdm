@@ -3,6 +3,8 @@
  * vite.config.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
+ *
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -11,6 +13,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
+import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
@@ -36,6 +39,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: './',  // Use relative paths for LightDM greeter compatibility
     plugins: [
+      tailwindcss(),
       react(),
       svgr({
         svgrOptions: {
@@ -68,6 +72,8 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           index: resolve(__dirname, 'src/index.html'),
+          app: resolve(__dirname, 'src/app.html'),
+          modern: resolve(__dirname, 'src/modern.html'),
           monitor: resolve(__dirname, 'src/monitor.html'),
         },
         output: {

@@ -3,10 +3,12 @@
  * Session.jsx
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
  */
+/** biome-ignore-all lint/suspicious/noDoubleEquals: ... */
 
 import React from "react";
 import {connect} from "react-redux";
@@ -23,7 +25,7 @@ class Session extends React.Component {
             this.auth_event = () => {
                 if (lightdm.is_authenticated) {
                     this.props.success();
-                    notify(data.get(this.props.lang, "notifications.logged_in") + " " + this.props.user.username + "!", types.Success);
+                    notify(`${data.get(this.props.lang, "notifications.logged_in")} ${this.props.user.username}!`, types.Success);
                     setTimeout(() => {lightdm.start_session(this.props.session.key);}, 750);
                 } else {notify(data.get(this.props.lang, "notifications.wrong_password"), types.Error);}
             };
@@ -37,7 +39,7 @@ class Session extends React.Component {
     render() {
         let classes = this.props.hidden ? ["session", "hidden"] : ["session"];
         classes.push(cxs({color: this.props.color, borderRadius: this.props.radius, backgroundColor: this.props.background}));
-        return (<div className={classes.join(" ")} onClick={() => {this.props.switch()}}>{this.props.name}</div>);
+        return (<button type="button" className={classes.join(" ")} onClick={() => {this.props.switch()}}>{this.props.name}</button>);
     }
 }
 

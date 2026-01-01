@@ -3,6 +3,7 @@
  * Store.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -29,11 +30,12 @@ const default_state = {
             user: true,
             logo: true,
             avatar: true,
-            evoker: false,
+            evoker: true,
             session: true,
             hostname: true,
             draggable: true,
             language: "english",
+            dark_mode: true,
             clock: {
                 enabled: true,
                 format: "%H:%K:%S"

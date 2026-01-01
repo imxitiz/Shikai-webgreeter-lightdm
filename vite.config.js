@@ -34,6 +34,7 @@ export default defineConfig(({ mode }) => {
   const isDev = mode === 'development';
 
   return {
+    base: './',  // Use relative paths for LightDM greeter compatibility
     plugins: [
       react(),
       svgr({

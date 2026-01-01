@@ -50,12 +50,34 @@ export function getWallpaperDir() {
     return greeter_config.branding.background_images_dir;
 }
 
+// Maximum number of wallpapers to load (prevents "too many open files" error)
+const MAX_WALLPAPERS = 30;
+
+// Fisher-Yates shuffle for random sampling
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 export function getWallpapers(dir, callback) {
     if (window.__is_debug === true) {
         let defs = [];
         for (let i = 1; i < 12; i++) {defs.push("Wallpaper" + ((i > 9) ? i : ("0" + i)) + "." + ((i > 10) ? "png" : "jpg"));}
         return defs.map((e) => dir + e);
-    } theme_utils.dirlist(dir, true, callback);
+    }
+    // Wrap callback to limit number of wallpapers and prevent file descriptor exhaustion
+    theme_utils.dirlist(dir, true, (wallpapers) => {
+        if (wallpapers.length > MAX_WALLPAPERS) {
+            // Randomly sample MAX_WALLPAPERS from the full list
+            callback(shuffleArray(wallpapers).slice(0, MAX_WALLPAPERS));
+        } else {
+            callback(wallpapers);
+        }
+    });
 }
 
 export function getLogosDir() {

@@ -25,7 +25,8 @@
 		"dev": "bun --bun vite build --mode development",
 		"watch": "bun --bun vite build --watch",
 		"server": "bun --bun vite",
-		"preview": "bun --bun vite preview"
+		"preview": "bun --bun vite preview",
+		"install-theme": "./scripts/install.sh"
 	},
 	"devDependencies": {
 		"@vitejs/plugin-react": "^4.3.4",

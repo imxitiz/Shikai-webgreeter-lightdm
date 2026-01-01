@@ -32,7 +32,7 @@ function ColorPicker({ label, value, onChange }) {
 	return (
 		<div className="flex items-center gap-3 py-2">
 			<div
-				className="w-10 h-10 rounded-lg border border-white/20 cursor-pointer overflow-hidden relative group"
+				className="w-10 h-10 rounded-lg border border-border/50 cursor-pointer overflow-hidden relative group shadow-sm"
 				style={{ backgroundColor: value }}
 			>
 				<input
@@ -58,7 +58,7 @@ function ColorPicker({ label, value, onChange }) {
 				</div>
 			</div>
 			<div className="flex-1">
-				<Label className="text-sm">{label}</Label>
+				<Label className="text-sm text-foreground">{label}</Label>
 				<p className="text-xs text-muted-foreground font-mono">{value}</p>
 			</div>
 		</div>
@@ -67,10 +67,14 @@ function ColorPicker({ label, value, onChange }) {
 
 function SettingSection({ title, description, children }) {
 	return (
-		<Card className="mb-4 bg-white/5 border-white/10">
+		<Card className="mb-4 bg-sidebar/30 border-sidebar-border/50 shadow-md">
 			<CardHeader className="pb-3">
-				<CardTitle className="text-base">{title}</CardTitle>
-				{description && <CardDescription>{description}</CardDescription>}
+				<CardTitle className="text-base text-foreground">{title}</CardTitle>
+				{description && (
+					<CardDescription className="text-muted-foreground">
+						{description}
+					</CardDescription>
+				)}
 			</CardHeader>
 			<CardContent>{children}</CardContent>
 		</Card>
@@ -80,14 +84,15 @@ function SettingSection({ title, description, children }) {
 export default function ModernStyleTab() {
 	const dispatch = useDispatch();
 
-	const { style, lang, logos } = useSelector((state) => ({
-		style: state.settings.style,
-		lang: state.settings.behaviour.language,
-		logos: state.runtime.logos || [],
-	}));
+	const style = useSelector((state) => state.settings?.style || {});
+	const lang = useSelector(
+		(state) => state.settings?.behaviour?.language || "english",
+	);
+	const logos = useSelector((state) => state.runtime?.logos || []);
 
 	const set = (key, value) => {
 		dispatch({ type: "Setting_Set", key: `style.${key}`, value });
+		dispatch({ type: "Settings_Save" });
 	};
 
 	const currentLogoName =
@@ -97,7 +102,7 @@ export default function ModernStyleTab() {
 			.replace(/\.[^/.]+$/, "") || "";
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 pb-4">
 			{/* Logo Section */}
 			<SettingSection
 				title={
@@ -107,8 +112,8 @@ export default function ModernStyleTab() {
 			>
 				<div className="space-y-4">
 					{/* Logo Preview */}
-					<div className="flex items-center gap-4 p-4 rounded-xl bg-white/5">
-						<div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20 flex items-center justify-center">
+					<div className="flex items-center gap-4 p-4 rounded-xl bg-input/30 border border-border/30">
+						<div className="w-16 h-16 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center shadow-sm">
 							{style.sidebar?.logo ? (
 								<img
 									src={style.sidebar.logo}
@@ -119,8 +124,8 @@ export default function ModernStyleTab() {
 								<div className="text-2xl text-muted-foreground">📷</div>
 							)}
 						</div>
-						<div className="flex-1">
-							<Label className="text-sm mb-2 block">Logo</Label>
+						<div className="flex-1 no-wall-change">
+							<Label className="text-sm mb-2 block text-foreground">Logo</Label>
 							<Select
 								value={currentLogoName}
 								onValueChange={(v) => {
@@ -128,12 +133,16 @@ export default function ModernStyleTab() {
 									if (logo) set("sidebar.logo", logo[1]);
 								}}
 							>
-								<SelectTrigger className="w-full h-9 bg-white/5">
+								<SelectTrigger className="w-full h-10 bg-input/50 border-border/50 shadow-sm no-wall-change">
 									<SelectValue placeholder="Select a logo" />
 								</SelectTrigger>
-								<SelectContent>
+								<SelectContent className="no-wall-change">
 									{logos.map((logo) => (
-										<SelectItem key={logo[0]} value={logo[0]}>
+										<SelectItem
+											key={logo[0]}
+											value={logo[0]}
+											className="no-wall-change"
+										>
 											{logo[0]}
 										</SelectItem>
 									))}
@@ -168,7 +177,7 @@ export default function ModernStyleTab() {
 					/>
 				</div>
 
-				<Separator className="my-4" />
+				<Separator className="my-4 bg-border/30" />
 
 				<div className="grid grid-cols-2 gap-4">
 					<ColorPicker
@@ -214,7 +223,7 @@ export default function ModernStyleTab() {
 					/>
 				</div>
 
-				<Separator className="my-4" />
+				<Separator className="my-4 bg-border/30" />
 
 				<div className="grid grid-cols-2 gap-4">
 					<ColorPicker
@@ -283,7 +292,7 @@ export default function ModernStyleTab() {
 							onChange={(e) =>
 								set("userbar.password.border.radius", e.target.value)
 							}
-							className="h-9 bg-white/5"
+							className="h-10 bg-input/50 border-border/50 shadow-sm"
 							placeholder="8px"
 						/>
 					</div>
@@ -295,7 +304,7 @@ export default function ModernStyleTab() {
 						<Input
 							value={style.userbar?.session?.radius || "8px"}
 							onChange={(e) => set("userbar.session.radius", e.target.value)}
-							className="h-9 bg-white/5"
+							className="h-10 bg-input/50 border-border/50 shadow-sm"
 							placeholder="8px"
 						/>
 					</div>
@@ -312,7 +321,7 @@ export default function ModernStyleTab() {
 								onChange={(e) =>
 									set("userbar.password.caret.left", e.target.value)
 								}
-								className="h-9 bg-white/5"
+								className="h-10 bg-input/50 border-border/50 shadow-sm"
 							/>
 						</div>
 						<div>
@@ -327,7 +336,7 @@ export default function ModernStyleTab() {
 								onChange={(e) =>
 									set("userbar.password.caret.right", e.target.value)
 								}
-								className="h-9 bg-white/5"
+								className="h-10 bg-input/50 border-border/50 shadow-sm"
 							/>
 						</div>
 					</div>

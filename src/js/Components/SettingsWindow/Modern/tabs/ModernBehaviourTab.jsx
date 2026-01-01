@@ -34,8 +34,8 @@ import { types, notify } from "@/js/Greeter/Notifications";
 function SettingRow({ label, description, children }) {
 	return (
 		<div className="flex items-center justify-between py-3">
-			<div className="space-y-0.5">
-				<Label className="text-sm font-medium">{label}</Label>
+			<div className="space-y-0.5 flex-1 pr-4">
+				<Label className="text-sm font-medium text-foreground">{label}</Label>
 				{description && (
 					<p className="text-xs text-muted-foreground">{description}</p>
 				)}
@@ -47,10 +47,14 @@ function SettingRow({ label, description, children }) {
 
 function SettingSection({ title, description, children }) {
 	return (
-		<Card className="mb-4 bg-white/5 border-white/10">
+		<Card className="mb-4 bg-sidebar/30 border-sidebar-border/50 shadow-md">
 			<CardHeader className="pb-3">
-				<CardTitle className="text-base">{title}</CardTitle>
-				{description && <CardDescription>{description}</CardDescription>}
+				<CardTitle className="text-base text-foreground">{title}</CardTitle>
+				{description && (
+					<CardDescription className="text-muted-foreground">
+						{description}
+					</CardDescription>
+				)}
 			</CardHeader>
 			<CardContent className="space-y-1">{children}</CardContent>
 		</Card>
@@ -60,10 +64,8 @@ function SettingSection({ title, description, children }) {
 export default function ModernBehaviourTab() {
 	const dispatch = useDispatch();
 
-	const { behaviour, lang } = useSelector((state) => ({
-		behaviour: state.settings.behaviour,
-		lang: state.settings.behaviour.language,
-	}));
+	const behaviour = useSelector((state) => state.settings?.behaviour || {});
+	const lang = behaviour.language || "english";
 
 	const toggle = (key) => {
 		dispatch({ type: "Setting_Toggle", key: `behaviour.${key}` });
@@ -83,8 +85,16 @@ export default function ModernBehaviourTab() {
 		);
 	};
 
+	// Normalize evoker value for select
+	const evokerValue =
+		behaviour.evoker === true || behaviour.evoker === "show"
+			? "show"
+			: behaviour.evoker === "hover"
+				? "hover"
+				: "hide";
+
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 pb-4">
 			{/* General Section */}
 			<SettingSection
 				title={
@@ -102,11 +112,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.logo}
+						checked={behaviour.logo ?? true}
 						onCheckedChange={() => toggle("logo")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -116,11 +126,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.hostname}
+						checked={behaviour.hostname ?? true}
 						onCheckedChange={() => toggle("hostname")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -130,11 +140,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.avatar}
+						checked={behaviour.avatar ?? true}
 						onCheckedChange={() => toggle("avatar")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -144,11 +154,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.dark_mode}
+						checked={behaviour.dark_mode ?? true}
 						onCheckedChange={() => toggle("dark_mode")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -158,11 +168,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.user}
+						checked={behaviour.user ?? true}
 						onCheckedChange={() => toggle("user")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -172,7 +182,7 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.session}
+						checked={behaviour.session ?? true}
 						onCheckedChange={() => toggle("session")}
 					/>
 				</SettingRow>
@@ -186,16 +196,16 @@ export default function ModernBehaviourTab() {
 				description="Select your preferred language"
 			>
 				<Select
-					value={behaviour.language}
+					value={behaviour.language || "english"}
 					onValueChange={(v) => set("language", v)}
 				>
-					<SelectTrigger className="w-full h-10 bg-white/5">
+					<SelectTrigger className="w-full h-11 bg-input/50 border-border/50 shadow-sm">
 						<SelectValue />
 					</SelectTrigger>
-					<SelectContent>
+					<SelectContent className="no-wall-change">
 						{languageNames.map((name) => (
 							<SelectItem key={name} value={name}>
-								{name}
+								{name.charAt(0).toUpperCase() + name.slice(1)}
 							</SelectItem>
 						))}
 					</SelectContent>
@@ -219,11 +229,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.commands.shutdown}
+						checked={behaviour.commands?.shutdown ?? true}
 						onCheckedChange={() => toggle("commands.shutdown")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -233,11 +243,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.commands.reboot}
+						checked={behaviour.commands?.reboot ?? true}
 						onCheckedChange={() => toggle("commands.reboot")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -247,11 +257,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.commands.sleep}
+						checked={behaviour.commands?.sleep ?? true}
 						onCheckedChange={() => toggle("commands.sleep")}
 					/>
 				</SettingRow>
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -261,7 +271,7 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.commands.hibernate}
+						checked={behaviour.commands?.hibernate ?? true}
 						onCheckedChange={() => toggle("commands.hibernate")}
 					/>
 				</SettingRow>
@@ -284,11 +294,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.clock.enabled}
+						checked={behaviour.clock?.enabled ?? true}
 						onCheckedChange={() => toggle("clock.enabled")}
 					/>
 				</SettingRow>
-				{behaviour.clock.enabled && (
+				{behaviour.clock?.enabled && (
 					<div className="py-2">
 						<Label className="text-xs text-muted-foreground mb-2 block">
 							{data.get(
@@ -297,14 +307,14 @@ export default function ModernBehaviourTab() {
 							) || "Clock Format"}
 						</Label>
 						<Input
-							value={behaviour.clock.format}
+							value={behaviour.clock?.format || "%H:%K:%S"}
 							onChange={(e) => set("clock.format", e.target.value)}
-							className="h-9 bg-white/5"
-							placeholder="HH:mm:ss"
+							className="h-10 bg-input/50 border-border/50 shadow-sm"
+							placeholder="%H:%K:%S"
 						/>
 					</div>
 				)}
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(
@@ -314,11 +324,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.date.enabled}
+						checked={behaviour.date?.enabled ?? true}
 						onCheckedChange={() => toggle("date.enabled")}
 					/>
 				</SettingRow>
-				{behaviour.date.enabled && (
+				{behaviour.date?.enabled && (
 					<div className="py-2">
 						<Label className="text-xs text-muted-foreground mb-2 block">
 							{data.get(
@@ -327,10 +337,10 @@ export default function ModernBehaviourTab() {
 							) || "Date Format"}
 						</Label>
 						<Input
-							value={behaviour.date.format}
+							value={behaviour.date?.format || "%B %D, %Y"}
 							onChange={(e) => set("date.format", e.target.value)}
-							className="h-9 bg-white/5"
-							placeholder="dddd, MMMM Do"
+							className="h-10 bg-input/50 border-border/50 shadow-sm"
+							placeholder="%B %D, %Y"
 						/>
 					</div>
 				)}
@@ -353,11 +363,11 @@ export default function ModernBehaviourTab() {
 					}
 				>
 					<Switch
-						checked={behaviour.idle.enabled}
+						checked={behaviour.idle?.enabled ?? true}
 						onCheckedChange={() => toggle("idle.enabled")}
 					/>
 				</SettingRow>
-				{behaviour.idle.enabled && (
+				{behaviour.idle?.enabled && (
 					<div className="py-2">
 						<Label className="text-xs text-muted-foreground mb-2 block">
 							{data.get(
@@ -367,29 +377,36 @@ export default function ModernBehaviourTab() {
 						</Label>
 						<Input
 							type="number"
-							value={behaviour.idle.timeout}
-							onChange={(e) => set("idle.timeout", e.target.value)}
-							className="h-9 bg-white/5"
+							value={behaviour.idle?.timeout || 60000}
+							onChange={(e) => set("idle.timeout", Number(e.target.value))}
+							className="h-10 bg-input/50 border-border/50 shadow-sm"
 							placeholder="60000"
 						/>
 					</div>
 				)}
-				<Separator className="my-1" />
+				<Separator className="my-1 bg-border/30" />
 				<SettingRow
 					label={
 						data.get(lang, "settings.behaviour.sections.misc.options.evoker") ||
-						"Show Settings Button"
+						"Settings Button"
 					}
+					description="Show, show on hover, or hide the settings button"
 				>
-					<Switch
-						checked={behaviour.evoker}
-						onCheckedChange={() => toggle("evoker")}
-					/>
+					<Select value={evokerValue} onValueChange={(v) => set("evoker", v)}>
+						<SelectTrigger className="w-32 h-10 bg-input/50 border-border/50 shadow-sm">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent className="no-wall-change">
+							<SelectItem value="show">Always</SelectItem>
+							<SelectItem value="hover">On Hover</SelectItem>
+							<SelectItem value="hide">Hidden</SelectItem>
+						</SelectContent>
+					</Select>
 				</SettingRow>
 			</SettingSection>
 
 			{/* Danger Zone */}
-			<Card className="mb-4 bg-destructive/10 border-destructive/20">
+			<Card className="mb-4 bg-destructive/10 border-destructive/30 shadow-md">
 				<CardHeader className="pb-3">
 					<CardTitle className="text-base text-destructive">
 						{data.get(lang, "settings.danger.title") || "Danger Zone"}
@@ -403,7 +420,7 @@ export default function ModernBehaviourTab() {
 					<Button
 						variant="destructive"
 						onClick={handleClearStorage}
-						className="w-full"
+						className="w-full shadow-md"
 					>
 						{data.get(lang, "buttons.delete_local") || "Clear Local Storage"}
 					</Button>

@@ -11,7 +11,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { cn } from "@/js/lib/utils";
-import { Button } from "@/js/Components/ui/button";
 import { Badge } from "@/js/Components/ui/badge";
 import {
 	Card,
@@ -184,7 +183,7 @@ function ThemeCard({ theme, onApply, isActive }) {
 		<Card
 			className={cn(
 				"cursor-pointer transition-all duration-300 hover:scale-[1.02]",
-				"bg-white/5 border-white/10 hover:border-primary/50",
+				"bg-sidebar/30 border-sidebar-border/50 hover:border-primary/50 shadow-md",
 				isActive && "ring-2 ring-primary border-primary",
 			)}
 			onClick={() => onApply(theme)}
@@ -193,16 +192,16 @@ function ThemeCard({ theme, onApply, isActive }) {
 				{/* Color Preview */}
 				<div className="flex gap-2 mb-3">
 					<div
-						className="flex-1 h-12 rounded-lg"
+						className="flex-1 h-12 rounded-lg border border-border/20"
 						style={{ backgroundColor: theme.preview.background }}
 					>
 						<div className="h-full flex items-center justify-center gap-2 px-2">
 							<div
-								className="w-6 h-6 rounded-full"
+								className="w-6 h-6 rounded-full shadow-sm"
 								style={{ backgroundColor: theme.preview.primary }}
 							/>
 							<div
-								className="w-4 h-4 rounded-full"
+								className="w-4 h-4 rounded-full shadow-sm"
 								style={{ backgroundColor: theme.preview.secondary }}
 							/>
 						</div>
@@ -212,7 +211,9 @@ function ThemeCard({ theme, onApply, isActive }) {
 				{/* Theme Info */}
 				<div className="flex items-start justify-between">
 					<div>
-						<h4 className="font-medium text-sm">{theme.name}</h4>
+						<h4 className="font-medium text-sm text-foreground">
+							{theme.name}
+						</h4>
 						<p className="text-xs text-muted-foreground">{theme.description}</p>
 					</div>
 					{isActive && (
@@ -230,9 +231,9 @@ export default function ModernThemesTab() {
 	const dispatch = useDispatch();
 	const [activeTheme, setActiveTheme] = useState(null);
 
-	const { lang } = useSelector((state) => ({
-		lang: state.settings.behaviour.language,
-	}));
+	const lang = useSelector(
+		(state) => state.settings?.behaviour?.language || "english",
+	);
 
 	const applyTheme = (theme) => {
 		Object.entries(theme.settings).forEach(([key, value]) => {
@@ -248,13 +249,13 @@ export default function ModernThemesTab() {
 	};
 
 	return (
-		<div className="space-y-4">
-			<Card className="bg-white/5 border-white/10">
+		<div className="space-y-4 pb-4">
+			<Card className="bg-sidebar/30 border-sidebar-border/50 shadow-md">
 				<CardHeader className="pb-3">
-					<CardTitle className="text-base">
+					<CardTitle className="text-base text-foreground">
 						{data.get(lang, "settings.themes.presets") || "Theme Presets"}
 					</CardTitle>
-					<CardDescription>
+					<CardDescription className="text-muted-foreground">
 						{data.get(lang, "settings.themes.description") ||
 							"Choose a preset theme or customize your own in the Style tab"}
 					</CardDescription>
@@ -274,10 +275,10 @@ export default function ModernThemesTab() {
 			</Card>
 
 			{/* Custom Theme Hint */}
-			<Card className="bg-gradient-to-br from-primary/10 to-purple-500/10 border-primary/20">
+			<Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20 shadow-md">
 				<CardContent className="p-4">
 					<div className="flex items-center gap-4">
-						<div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+						<div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center shadow-sm">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="24"
@@ -300,7 +301,7 @@ export default function ModernThemesTab() {
 							</svg>
 						</div>
 						<div className="flex-1">
-							<h4 className="font-medium text-sm">
+							<h4 className="font-medium text-sm text-foreground">
 								{data.get(lang, "settings.themes.custom_hint.title") ||
 									"Create Custom Theme"}
 							</h4>

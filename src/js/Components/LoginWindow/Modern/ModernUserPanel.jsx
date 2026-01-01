@@ -21,7 +21,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/js/Components/ui/select";
-// Separator import removed - not currently used
 import { data } from "@/lang";
 import { getUserImage, getSessions } from "@/js/Greeter/Operations";
 import { types, notify } from "@/js/Greeter/ModernNotifications";
@@ -133,24 +132,48 @@ export default function ModernUserPanel({ onRecenter }) {
 	const [shake, setShake] = useState(false);
 
 	// Use individual selectors to avoid creating new object references
-	const user = useSelector((state) => state.runtime?.user || { username: 'user', display_name: 'User' });
-	const session = useSelector((state) => state.runtime?.session || { key: 'plasma', name: 'Plasma' });
-	const lang = useSelector((state) => state.settings?.behaviour?.language || 'english');
-	const dateEnabled = useSelector((state) => state.settings?.behaviour?.date?.enabled ?? true);
-	const dateFormat = useSelector((state) => state.settings?.behaviour?.date?.format || '%B %D, %Y');
-	const showAvatar = useSelector((state) => state.settings?.behaviour?.avatar ?? true);
-	const inactive = useSelector((state) => state.runtime?.events?.inactivity ?? false);
+	const user = useSelector(
+		(state) =>
+			state.runtime?.user || { username: "user", display_name: "User" },
+	);
+	const session = useSelector(
+		(state) => state.runtime?.session || { key: "plasma", name: "Plasma" },
+	);
+	const lang = useSelector(
+		(state) => state.settings?.behaviour?.language || "english",
+	);
+	const dateEnabled = useSelector(
+		(state) => state.settings?.behaviour?.date?.enabled ?? true,
+	);
+	const dateFormat = useSelector(
+		(state) => state.settings?.behaviour?.date?.format || "%B %D, %Y",
+	);
+	const showAvatar = useSelector(
+		(state) => state.settings?.behaviour?.avatar ?? true,
+	);
+	const showUser = useSelector(
+		(state) => state.settings?.behaviour?.user ?? true,
+	);
+	const showSession = useSelector(
+		(state) => state.settings?.behaviour?.session ?? true,
+	);
+	const inactive = useSelector(
+		(state) => state.runtime?.events?.inactivity ?? false,
+	);
 
 	const sessions = getSessions();
 
 	// Keep rendering directly from store 'user' so UI updates mirror Redux state
 	// (removed localUser workaround)
 
-
 	// Get users from lightdm or provide debug fallback
 	const users = window.__is_debug
-		? (typeof lightdm !== 'undefined' ? lightdm.users : [{ username: 'user', display_name: 'User' }])
-		: (typeof lightdm !== 'undefined' ? lightdm.users : []);
+		? typeof lightdm !== "undefined"
+			? lightdm.users
+			: [{ username: "user", display_name: "User" }]
+		: typeof lightdm !== "undefined"
+			? lightdm.users
+			: [];
 
 	const [currentDate, setCurrentDate] = useState("");
 
@@ -166,7 +189,7 @@ export default function ModernUserPanel({ onRecenter }) {
 	}, []);
 
 	useEffect(() => {
-		console.info('ModernUserPanel observed user change', user);
+		console.info("ModernUserPanel observed user change", user);
 	}, [user]);
 
 	// LightDM authentication handler
@@ -231,7 +254,12 @@ export default function ModernUserPanel({ onRecenter }) {
 			direction === "next"
 				? (currentIndex + 1) % users.length
 				: (currentIndex - 1 + users.length) % users.length;
-		console.debug('ModernUserPanel: switching user', {currentIndex, newIndex, from: user, to: users[newIndex]});
+		console.debug("ModernUserPanel: switching user", {
+			currentIndex,
+			newIndex,
+			from: user,
+			to: users[newIndex],
+		});
 		dispatch({ type: "Switch_User", value: users[newIndex] });
 		setPassword("");
 	};
@@ -270,11 +298,18 @@ export default function ModernUserPanel({ onRecenter }) {
 				type="button"
 				className="login-handle absolute top-0 left-0 right-0 h-12 flex items-center justify-center cursor-grab active:cursor-grabbing group"
 				onDoubleClick={onRecenter}
-				onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onRecenter(); } }}
+				onKeyDown={(e) => {
+					if (e.key === "Enter" || e.key === " ") {
+						e.preventDefault();
+						onRecenter();
+					}
+				}}
 			>
-				<div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+				<div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-muted/50 hover:bg-muted/70 opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-sm">
 					<GripIcon />
-					<span className="text-xs text-muted-foreground">Drag to move</span>
+					<span className="text-sm text-foreground font-medium">
+						Drag to move
+					</span>
 				</div>
 			</button>
 
@@ -295,13 +330,13 @@ export default function ModernUserPanel({ onRecenter }) {
 
 					{showAvatar && (
 						<div className="relative group">
-							<div className="absolute inset-0 bg-primary/40 rounded-full blur-2xl group-hover:bg-primary/60 transition-all duration-300" />
-							<Avatar className="w-28 h-28 ring-4 ring-white/20 group-hover:ring-primary/50 transition-all duration-300">
+							<div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300" />
+							<Avatar className="w-28 h-28 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-primary/10">
 								<AvatarImage
 									src={getUserImage(user)}
 									alt={user?.display_name}
 								/>
-								<AvatarFallback className="text-3xl bg-gradient-to-br from-primary/30 to-purple-500/30">
+								<AvatarFallback className="text-3xl bg-gradient-to-br from-primary/20 to-accent/20">
 									{userInitials}
 								</AvatarFallback>
 							</Avatar>
@@ -321,15 +356,16 @@ export default function ModernUserPanel({ onRecenter }) {
 				</div>
 
 				{/* User Info */}
-				<div className="text-center mb-8">
-					<h2 className="text-2xl font-semibold text-gradient mb-1">
-				{user?.display_name || user?.username || "Unknown User"}
-				</h2>
-				<p className="text-sm text-muted-foreground">
-					@{user?.username || "unknown"}
-					</p>
-				</div>
-
+				{showUser && (
+					<div className="text-center mb-8">
+						<h2 className="text-4xl font-semibold text-foreground mb-1">
+							{user?.display_name || user?.username || "Unknown User"}
+						</h2>
+						<p className="text-base font-medium text-foreground/90">
+							@{user?.username || "unknown"}
+						</p>
+					</div>
+				)}
 				{/* Password Input */}
 				<div
 					className={cn(
@@ -338,10 +374,10 @@ export default function ModernUserPanel({ onRecenter }) {
 					)}
 				>
 					<div className="relative group">
-						<div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 to-purple-500/50 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+						<div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
 						<div className="relative flex items-center">
 							<div
-								className="absolute left-4 text-muted-foreground"
+								className="absolute left-4 text-foreground/80 group-focus-within:text-primary transition-colors"
 								aria-hidden
 							>
 								<LockIcon />
@@ -360,12 +396,13 @@ export default function ModernUserPanel({ onRecenter }) {
 								aria-label={data.get(lang, "login.password") || "Password"}
 								placeholder={data.get(lang, "login.password") || "Password"}
 								className={cn(
-									"w-full h-14 pl-16 pr-4 rounded-xl py-2 leading-normal",
-									"bg-card border-default",
-									"text-foreground placeholder:text-muted-foreground",
-									"focus:outline-none focus-ring",
+									"w-full h-16 pl-16 pr-4 rounded-xl py-2 leading-normal text-lg",
+									"bg-card/70 border border-border/30 hover:border-border/50",
+									"text-foreground placeholder:text-foreground/70",
+									"focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary",
 									"transition-all duration-300",
-									"disabled:opacity-50 disabled:cursor-not-allowed",
+									"disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-card/60",
+									"shadow-sm hover:shadow-md group-focus-within:shadow-lg group-focus-within:shadow-primary/20",
 								)}
 							/>
 						</div>
@@ -375,59 +412,74 @@ export default function ModernUserPanel({ onRecenter }) {
 				<Button
 					onClick={handleLogin}
 					disabled={!password || isLoading}
+					size="lg"
 					className={cn(
-						"w-full max-w-sm h-12 text-base font-medium",
-						"bg-gradient-to-r from-primary to-primary/80",
-						"hover:from-primary/90 hover:to-primary/70",
-						"shadow-lg shadow-primary/25 hover:shadow-primary/40",
+						"w-full max-w-sm h-14 text-lg font-medium",
+						"bg-primary hover:bg-primary/90 text-primary-foreground disabled:text-foreground/80",
+						"shadow-lg shadow-primary/25 hover:shadow-lg hover:shadow-primary/40",
 						"transition-all duration-300",
+						"disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-card/60",
 						isLoading && "animate-pulse",
 					)}
 				>
 					{isLoading ? (
 						<div className="flex items-center gap-2">
-							<div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-							<span>
+							<div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+							<span className="font-medium text-primary-foreground">
 								{data.get(lang, "login.logging_in") || "Signing in..."}
 							</span>
 						</div>
 					) : (
 						<div className="flex items-center gap-2">
 							<UnlockIcon />
-							<span>{data.get(lang, "login.button") || "Sign In"}</span>
+							<span className="font-medium ">
+								{data.get(lang, "login.button") || "Sign In"}
+							</span>
 						</div>
 					)}
 				</Button>
 
 				{/* Session Selector */}
-				<div className="mt-8 w-full max-w-sm">
-					<Select value={session?.key} onValueChange={handleSessionChange}>
-						<SelectTrigger className="w-full h-11 bg-card border-default px-4 rounded-xl">
-							<SelectValue
-								placeholder={
-									data.get(lang, "login.session") || "Select session"
-								}
-							/>
-						</SelectTrigger>
-						<SelectContent>
-							{sessions.map((s) => (
-							<SelectItem key={s.key} value={s.key} aria-label={`${s.type?.toUpperCase() || "X11"} ${s.name}`}>
-								<span className="inline-flex items-center gap-2" aria-hidden>
-									<Badge variant="outline" className="text-[10px]">
-										{s.type?.toUpperCase() || "X11"}
-									</Badge>{'\u00A0'}
-									<span>{s.name}</span>
-								</span>
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</div>
+				{showSession && (
+					<div className="mt-8 w-full max-w-sm">
+						<Select value={session?.key} onValueChange={handleSessionChange}>
+							<SelectTrigger className="w-full h-12 text-lg bg-card/80 border-input hover:border-input/80 px-4 rounded-xl transition-colors text-foreground">
+								<SelectValue
+									placeholder={
+										data.get(lang, "login.session") || "Select session"
+									}
+								/>
+							</SelectTrigger>
+							<SelectContent>
+								{sessions.map((s) => (
+									<SelectItem
+										key={s.key}
+										value={s.key}
+										aria-label={`${s.type?.toUpperCase() || "X11"} ${s.name}`}
+									>
+										<span
+											className="inline-flex items-center gap-2"
+											aria-hidden
+										>
+											<Badge variant="outline" className="text-[10px]">
+												{s.type?.toUpperCase() || "X11"}
+											</Badge>
+											{"\u00A0"}
+											<span className="text-base text-foreground font-medium">
+												{s.name}
+											</span>
+										</span>
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				)}
 			</div>
 
 			{/* Bottom Bar */}
-			<div className="px-8 py-4 border-t border-white/10 flex items-center justify-between">
-				<div className="text-xs text-muted-foreground">
+			<div className="px-8 py-4 border-t border-border/30 flex items-center justify-between bg-muted/20">
+				<div className="text-sm text-foreground font-medium">
 					{users.length > 1 && (
 						<span>
 							{users.length} {data.get(lang, "login.users") || "users"}
@@ -436,10 +488,9 @@ export default function ModernUserPanel({ onRecenter }) {
 				</div>
 
 				{dateEnabled && (
-					<div className="text-sm text-muted-foreground">{currentDate}</div>
+					<div className="text-sm text-foreground">{currentDate}</div>
 				)}
 			</div>
-
 			{/* CSS for shake animation */}
 			<style>{`
         @keyframes shake {

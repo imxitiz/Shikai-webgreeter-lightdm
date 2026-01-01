@@ -106,25 +106,21 @@ const commandOptions = [
 		key: "sleep",
 		icon: SleepIcon,
 		func: sleep,
-		color: "text-blue-400 hover:text-blue-300",
 	},
 	{
 		key: "reboot",
 		icon: RestartIcon,
 		func: restart,
-		color: "text-amber-400 hover:text-amber-300",
 	},
 	{
 		key: "shutdown",
 		icon: PowerIcon,
 		func: shutdown,
-		color: "text-red-400 hover:text-red-300",
 	},
 	{
 		key: "hibernate",
 		icon: HibernateIcon,
 		func: hibernate,
-		color: "text-purple-400 hover:text-purple-300",
 	},
 ];
 
@@ -155,6 +151,13 @@ export default function ModernSidebar() {
 	const darkMode = useSelector(
 		(state) => state.settings?.behaviour?.dark_mode ?? true,
 	);
+	// Respect behaviour toggles
+	const showLogo = useSelector(
+		(state) => state.settings?.behaviour?.logo ?? true,
+	);
+	const showHostname = useSelector(
+		(state) => state.settings?.behaviour?.hostname ?? true,
+	);
 
 	useEffect(() => {
 		if (!clockEnabled) return;
@@ -172,26 +175,28 @@ export default function ModernSidebar() {
 	return (
 		<div
 			ref={sidebarRef}
-			className="relative w-[280px] h-full flex flex-col p-6 bg-gradient-to-b from-white/5 to-transparent border-r border-white/10 no-wall-change"
+			className="relative w-[280px] h-full flex flex-col p-6 bg-card/40 border-r border-border/30 no-wall-change backdrop-blur-sm"
 		>
 			{/* Logo Section */}
-			<div className="flex items-center justify-center py-8">
-				<div className="relative">
-					<div className="absolute inset-0 bg-primary/30 rounded-full blur-xl" />
-					<img
-						src={logoSrc || "/assets/media/logos/shikai.png"}
-						alt="Logo"
-						className="relative w-20 h-20 object-contain drop-shadow-2xl"
-					/>
+			{showLogo && (
+				<div className="flex items-center justify-center py-8">
+					<div className="relative">
+						<div className="absolute inset-0 bg-primary/30 rounded-full blur-xl" />
+						<img
+							src={logoSrc || "/assets/media/logos/shikai.png"}
+							alt="Logo"
+							className="relative w-20 h-20 object-contain drop-shadow-2xl"
+						/>
+					</div>
 				</div>
-			</div>
-
+			)}
 			{/* Branding */}
 			<div className="text-center mb-8">
-				<h1 className="text-xl font-bold text-gradient">Shikai</h1>
-				<p className="text-xs text-muted-foreground mt-1">Modern Greeter</p>
+				<h1 className="text-2xl font-semibold text-gradient">Shikai</h1>
+				<p className="text-sm text-foreground mt-1">Modern Greeter</p>
 				<div className="mt-3 flex items-center justify-center gap-2">
-					<span className="text-xs text-muted-foreground">Theme</span>
+					<span className="text-sm text-foreground font-medium">Theme</span>
+
 					<Switch
 						checked={darkMode}
 						onCheckedChange={() => {
@@ -204,7 +209,7 @@ export default function ModernSidebar() {
 
 			{/* Quick Actions */}
 			<div className="flex-1">
-				<p className="text-xs text-muted-foreground uppercase tracking-wider m-4">
+				<p className="text-sm text-foreground uppercase tracking-wider m-4">
 					{data.get(lang, "commands.title") || "Quick Actions"}
 				</p>
 
@@ -216,17 +221,18 @@ export default function ModernSidebar() {
 								<Tooltip key={cmd.key}>
 									<TooltipTrigger asChild>
 										<Button
-											variant="glass"
+											variant="outline"
 											size="icon"
 											className={cn(
 												"w-full h-14 flex flex-col gap-1 transition-all duration-300",
 												"hover:scale-105 active:scale-95",
-												cmd.color,
+												"bg-muted/50 hover:bg-muted border-border/50 hover:border-primary/50",
+												"text-foreground hover:text-primary",
 											)}
 											onClick={cmd.func}
 										>
 											<cmd.icon />
-											<span className="text-[10px] opacity-80">
+											<span className="text-[12px] opacity-90">
 												{data.get(lang, `commands.names.${cmd.key}`)}
 											</span>
 										</Button>
@@ -242,14 +248,15 @@ export default function ModernSidebar() {
 
 			{/* Bottom Info Section */}
 			<div className="mt-auto space-y-4">
-				<Separator />
+				<Separator className="bg-border/30" />
 
 				{/* Hostname */}
-				<div className="flex items-center justify-between text-sm">
-					<span className="text-muted-foreground">Host</span>
-					<span className="font-mono text-foreground/80">{hostname}</span>
-				</div>
-
+				{showHostname && (
+					<div className="flex items-center justify-between text-sm">
+						<span className="text-foreground font-medium">Host</span>
+						<span className="font-mono text-foreground">{hostname}</span>
+					</div>
+				)}
 				{/* Clock */}
 				{clockEnabled && (
 					<div className="text-center">

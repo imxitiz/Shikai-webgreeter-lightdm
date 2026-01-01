@@ -40,12 +40,20 @@ const getWindowSize = () => {
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = getWindowSize();
 
-function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+function clamp(v, a, b) {
+	return Math.max(a, Math.min(b, v));
+}
 
 export default function ModernLoginWindow() {
 	// safe screen sizes (greeter env may not expose full screen.* info)
-	const availWidth = (typeof screen !== 'undefined' && screen.availWidth) ? screen.availWidth : (window.innerWidth || 800);
-	const availHeight = (typeof screen !== 'undefined' && screen.availHeight) ? screen.availHeight : (window.innerHeight || 600);
+	const availWidth =
+		typeof screen !== "undefined" && screen.availWidth
+			? screen.availWidth
+			: window.innerWidth || 800;
+	const availHeight =
+		typeof screen !== "undefined" && screen.availHeight
+			? screen.availHeight
+			: window.innerHeight || 600;
 
 	const bounds = {
 		left: -(availWidth / 2 - WINDOW_WIDTH / 2),
@@ -62,27 +70,41 @@ export default function ModernLoginWindow() {
 				const x = Number(parsed.x) || 0;
 				const y = Number(parsed.y) || 0;
 				// clamp into bounds to avoid off-screen positions
-				return { x: clamp(x, bounds.left, bounds.right), y: clamp(y, bounds.top, bounds.bottom) };
+				return {
+					x: clamp(x, bounds.left, bounds.right),
+					y: clamp(y, bounds.top, bounds.bottom),
+				};
 			}
 		} catch (err) {
-			console.warn('Failed to read LoginDrag from storage, using default position', err);
+			console.warn(
+				"Failed to read LoginDrag from storage, using default position",
+				err,
+			);
 		}
 		return { x: 0, y: 0 };
 	});
 
 	const [isAnimating, setIsAnimating] = useState(false);
 
+	const handleDrag = useCallback(
+		(_, data) => {
+			setPosition({
+				x: clamp(data.x, bounds.left, bounds.right),
+				y: clamp(data.y, bounds.top, bounds.bottom),
+			});
+		},
+		[bounds.left, bounds.right, bounds.top, bounds.bottom],
+	);
 
-	const handleDrag = useCallback((_, data) => {
-		setPosition({ x: clamp(data.x, bounds.left, bounds.right), y: clamp(data.y, bounds.top, bounds.bottom) });
-	}, [bounds.left, bounds.right, bounds.top, bounds.bottom]);
-
-	const handleDragStop = useCallback((_, data) => {
-		const x = clamp(data.x, bounds.left, bounds.right);
-		const y = clamp(data.y, bounds.top, bounds.bottom);
-		localStorage.setItem("LoginDrag", JSON.stringify({ x, y }));
-		setPosition({ x, y });
-	}, [bounds.left, bounds.right, bounds.top, bounds.bottom]);
+	const handleDragStop = useCallback(
+		(_, data) => {
+			const x = clamp(data.x, bounds.left, bounds.right);
+			const y = clamp(data.y, bounds.top, bounds.bottom);
+			localStorage.setItem("LoginDrag", JSON.stringify({ x, y }));
+			setPosition({ x, y });
+		},
+		[bounds.left, bounds.right, bounds.top, bounds.bottom],
+	);
 
 	const handleRecenter = useCallback(() => {
 		setIsAnimating(true);
@@ -94,8 +116,14 @@ export default function ModernLoginWindow() {
 	// Keep position clamped after resize (some greeter environments change viewport)
 	useEffect(() => {
 		const onResize = () => {
-			const availW = (typeof screen !== 'undefined' && screen.availWidth) ? screen.availWidth : (window.innerWidth || 800);
-			const availH = (typeof screen !== 'undefined' && screen.availHeight) ? screen.availHeight : (window.innerHeight || 600);
+			const availW =
+				typeof screen !== "undefined" && screen.availWidth
+					? screen.availWidth
+					: window.innerWidth || 800;
+			const availH =
+				typeof screen !== "undefined" && screen.availHeight
+					? screen.availHeight
+					: window.innerHeight || 600;
 			const left = -(availW / 2 - WINDOW_WIDTH / 2);
 			const right = availW / 2 - WINDOW_WIDTH / 2;
 			const top = -(availH / 2 - WINDOW_HEIGHT / 2);
@@ -107,8 +135,8 @@ export default function ModernLoginWindow() {
 				localStorage.setItem("LoginDrag", JSON.stringify({ x, y }));
 			}
 		};
-		window.addEventListener('resize', onResize);
-		return () => window.removeEventListener('resize', onResize);
+		window.addEventListener("resize", onResize);
+		return () => window.removeEventListener("resize", onResize);
 	}, [position]);
 
 	// Dynamic corner radius based on position
@@ -138,7 +166,7 @@ export default function ModernLoginWindow() {
 		>
 			<div
 				className={cn(
-					"fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50",
+					"fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 no-wall-change",
 					isAnimating && "transition-transform duration-400 ease-out",
 				)}
 				style={{ width: WINDOW_WIDTH, height: WINDOW_HEIGHT }}
@@ -146,16 +174,17 @@ export default function ModernLoginWindow() {
 				{/* Main Window Container */}
 				<div
 					className={cn(
-						"relative w-full h-full flex overflow-hidden",
-						"rounded-3xl glass shadow-2xl",
-						"border border-white/10",
+						"relative w-full h-full flex overflow-hidden text-base",
+						"rounded-3xl shadow-2xl",
+						"border border-border/50",
+						"bg-card/70 backdrop-blur-sm",
 						"animate-scale-in",
 					)}
 					style={getCornerRadius()}
 				>
 					{/* Ambient Glow Effects */}
-					<div className="absolute -top-32 -left-32 w-64 h-64 bg-primary/20 rounded-full blur-[100px] pointer-events-none" />
-					<div className="absolute -bottom-32 -right-32 w-64 h-64 bg-purple-500/20 rounded-full blur-[100px] pointer-events-none" />
+					<div className="absolute -top-32 -left-32 w-64 h-64 -z-10 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+					<div className="absolute -bottom-32 -right-32 w-64 h-64 -z-10 bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
 					{/* Sidebar */}
 					<ModernSidebar />

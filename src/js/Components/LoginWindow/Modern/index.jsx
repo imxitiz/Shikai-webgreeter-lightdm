@@ -177,7 +177,7 @@ export default function ModernLoginWindow() {
 						"relative w-full h-full flex overflow-hidden text-base",
 						"rounded-3xl shadow-2xl",
 						"border border-border/50",
-						"bg-card/70 backdrop-blur-sm",
+						"bg-card/70",
 						"animate-scale-in",
 					)}
 					style={getCornerRadius()}

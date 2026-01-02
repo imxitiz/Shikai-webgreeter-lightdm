@@ -25,6 +25,7 @@ import { data } from "@/lang";
 import { getUserImage, getSessions } from "@/js/Greeter/Operations";
 import { types, notify } from "@/js/Greeter/ModernNotifications";
 import { date } from "@/js/Tools/Formatter";
+import { ScrollArea } from "../../ui/scroll-area";
 
 // Icons
 const LockIcon = () => (
@@ -188,10 +189,6 @@ export default function ModernUserPanel({ onRecenter }) {
 		passwordRef.current?.focus();
 	}, []);
 
-	useEffect(() => {
-		console.info("ModernUserPanel observed user change", user);
-	}, [user]);
-
 	// LightDM authentication handler
 	// biome-ignore lint/correctness/useExhaustiveDependencies: ...
 	useEffect(() => {
@@ -231,7 +228,7 @@ export default function ModernUserPanel({ onRecenter }) {
 
 	const handleLoginSuccess = () => {
 		notify(
-			data.get(lang, "notifications.logged_in") + " " + user.username + "!",
+			`${data.get(lang, "notifications.logged_in")} ${user.username}!`,
 			types.Success,
 		);
 		dispatch({ type: "Start_Event", key: "loginSuccess" });
@@ -254,12 +251,7 @@ export default function ModernUserPanel({ onRecenter }) {
 			direction === "next"
 				? (currentIndex + 1) % users.length
 				: (currentIndex - 1 + users.length) % users.length;
-		console.debug("ModernUserPanel: switching user", {
-			currentIndex,
-			newIndex,
-			from: user,
-			to: users[newIndex],
-		});
+
 		dispatch({ type: "Switch_User", value: users[newIndex] });
 		setPassword("");
 	};
@@ -315,166 +307,168 @@ export default function ModernUserPanel({ onRecenter }) {
 
 			{/* Main Content */}
 			<div className="flex-1 flex flex-col items-center justify-center px-12 py-8">
-				{/* User Avatar & Navigation */}
-				<div className="flex items-center gap-6 mb-6">
-					{users?.length > 1 && (
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={() => handleUserSwitch("prev")}
-							className="opacity-60 hover:opacity-100"
-						>
-							<ChevronLeftIcon />
-						</Button>
-					)}
-
-					{showAvatar && (
-						<div className="relative group">
-							<div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300" />
-							<Avatar className="w-28 h-28 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-primary/10">
-								<AvatarImage
-									src={getUserImage(user)}
-									alt={user?.display_name}
-								/>
-								<AvatarFallback className="text-3xl bg-gradient-to-br from-primary/20 to-accent/20">
-									{userInitials}
-								</AvatarFallback>
-							</Avatar>
-						</div>
-					)}
-
-					{users.length > 1 && (
-						<Button
-							variant="ghost"
-							size="icon"
-							onClick={() => handleUserSwitch("next")}
-							className="opacity-60 hover:opacity-100"
-						>
-							<ChevronRightIcon />
-						</Button>
-					)}
-				</div>
-
-				{/* User Info */}
-				{showUser && (
-					<div className="text-center mb-8">
-						<h2 className="text-4xl font-semibold text-foreground mb-1">
-							{user?.display_name || user?.username || "Unknown User"}
-						</h2>
-						<p className="text-base font-medium text-foreground/90">
-							@{user?.username || "unknown"}
-						</p>
-					</div>
-				)}
-				{/* Password Input */}
-				<div
-					className={cn(
-						"w-full max-w-sm mb-6",
-						shake && "animate-[shake_0.5s_ease-in-out]",
-					)}
-				>
-					<div className="relative group">
-						<div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
-						<div className="relative flex items-center">
-							<div
-								className="absolute left-4 text-foreground/80 group-focus-within:text-primary transition-colors"
-								aria-hidden
+				<ScrollArea>
+					{/* User Avatar & Navigation */}
+					<div className="flex items-center justify-center gap-6 mb-8">
+						{users?.length > 1 && (
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => handleUserSwitch("prev")}
+								className="opacity-60 hover:opacity-100"
 							>
-								<LockIcon />
+								<ChevronLeftIcon />
+							</Button>
+						)}
+
+						{showAvatar && (
+							<div className="relative group">
+								<div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300" />
+								<Avatar className="w-28 h-28 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-primary/10">
+									<AvatarImage
+										src={getUserImage(user)}
+										alt={user?.display_name}
+									/>
+									<AvatarFallback className="text-3xl bg-gradient-to-br from-primary/20 to-accent/20">
+										{userInitials}
+									</AvatarFallback>
+								</Avatar>
 							</div>
-							<label className="sr-only" htmlFor="password-input">
-								{data.get(lang, "login.password") || "Password"}
-							</label>
-							<input
-								id="password-input"
-								ref={passwordRef}
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								onKeyDown={handleKeyDown}
-								disabled={inactive || isLoading}
-								aria-label={data.get(lang, "login.password") || "Password"}
-								placeholder={data.get(lang, "login.password") || "Password"}
-								className={cn(
-									"w-full h-16 pl-16 pr-4 rounded-xl py-2 leading-normal text-lg",
-									"bg-card/70 border border-border/30 hover:border-border/50",
-									"text-foreground placeholder:text-foreground/70",
-									"focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary",
-									"transition-all duration-300",
-									"disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-card/60",
-									"shadow-sm hover:shadow-md group-focus-within:shadow-lg group-focus-within:shadow-primary/20",
-								)}
-							/>
-						</div>
+						)}
+
+						{users.length > 1 && (
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => handleUserSwitch("next")}
+								className="opacity-60 hover:opacity-100"
+							>
+								<ChevronRightIcon />
+							</Button>
+						)}
 					</div>
-				</div>
 
-				<Button
-					onClick={handleLogin}
-					disabled={!password || isLoading}
-					size="lg"
-					className={cn(
-						"w-full max-w-sm h-14 text-lg font-medium",
-						"bg-primary hover:bg-primary/90 text-primary-foreground disabled:text-foreground/80",
-						"shadow-lg shadow-primary/25 hover:shadow-lg hover:shadow-primary/40",
-						"transition-all duration-300",
-						"disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-card/60",
-						isLoading && "animate-pulse",
-					)}
-				>
-					{isLoading ? (
-						<div className="flex items-center gap-2">
-							<div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-							<span className="font-medium text-primary-foreground">
-								{data.get(lang, "login.logging_in") || "Signing in..."}
-							</span>
-						</div>
-					) : (
-						<div className="flex items-center gap-2">
-							<UnlockIcon />
-							<span className="font-medium ">
-								{data.get(lang, "login.button") || "Sign In"}
-							</span>
+					{/* User Info */}
+					{showUser && (
+						<div className="text-center mb-8">
+							<h2 className="text-4xl font-semibold text-foreground mb-1">
+								{user?.display_name || user?.username || "Unknown User"}
+							</h2>
+							<p className="text-base font-medium text-foreground/90">
+								@{user?.username || "unknown"}
+							</p>
 						</div>
 					)}
-				</Button>
-
-				{/* Session Selector */}
-				{showSession && (
-					<div className="mt-8 w-full max-w-sm">
-						<Select value={session?.key} onValueChange={handleSessionChange}>
-							<SelectTrigger className="w-full h-12 text-lg bg-card/80 border-input hover:border-input/80 px-4 rounded-xl transition-colors text-foreground">
-								<SelectValue
-									placeholder={
-										data.get(lang, "login.session") || "Select session"
-									}
+					{/* Password Input */}
+					<div
+						className={cn(
+							"w-full max-w-sm mb-6",
+							shake && "animate-[shake_0.5s_ease-in-out]",
+						)}
+					>
+						<div className="relative group">
+							<div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
+							<div className="relative flex items-center">
+								<div
+									className="absolute left-4 text-foreground/80 group-focus-within:text-primary transition-colors"
+									aria-hidden
+								>
+									<LockIcon />
+								</div>
+								<label className="sr-only" htmlFor="password-input">
+									{data.get(lang, "login.password") || "Password"}
+								</label>
+								<input
+									id="password-input"
+									ref={passwordRef}
+									type="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+									onKeyDown={handleKeyDown}
+									disabled={inactive || isLoading}
+									aria-label={data.get(lang, "login.password") || "Password"}
+									placeholder={data.get(lang, "login.password") || "Password"}
+									className={cn(
+										"w-full h-16 pl-16 pr-4 rounded-xl py-2 leading-normal text-lg",
+										"bg-card/70 border border-border/30 hover:border-border/50",
+										"text-foreground placeholder:text-foreground/70",
+										"focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary",
+										"transition-all duration-300",
+										"disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-card/60",
+										"shadow-sm hover:shadow-md group-focus-within:shadow-lg group-focus-within:shadow-primary/20",
+									)}
 								/>
-							</SelectTrigger>
-							<SelectContent>
-								{sessions.map((s) => (
-									<SelectItem
-										key={s.key}
-										value={s.key}
-										aria-label={`${s.type?.toUpperCase() || "X11"} ${s.name}`}
-									>
-										<span
-											className="inline-flex items-center gap-2"
-											aria-hidden
-										>
-											<Badge variant="outline" className="text-[10px]">
-												{s.type?.toUpperCase() || "X11"}
-											</Badge>
-											{"\u00A0"}
-											<span className="text-base text-foreground font-medium">
-												{s.name}
-											</span>
-										</span>
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+							</div>
+						</div>
 					</div>
-				)}
+
+					<Button
+						onClick={handleLogin}
+						disabled={!password || isLoading}
+						size="lg"
+						className={cn(
+							"w-full max-w-sm h-14 text-lg font-medium",
+							"bg-primary hover:bg-primary/90 text-primary-foreground disabled:text-foreground/80",
+							"shadow-lg shadow-primary/25 hover:shadow-lg hover:shadow-primary/40",
+							"transition-all duration-300",
+							"disabled:opacity-80 disabled:cursor-not-allowed disabled:bg-card/60",
+							isLoading && "animate-pulse",
+						)}
+					>
+						{isLoading ? (
+							<div className="flex items-center gap-2">
+								<div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+								<span className="font-medium text-primary-foreground">
+									{data.get(lang, "login.logging_in") || "Signing in..."}
+								</span>
+							</div>
+						) : (
+							<div className="flex items-center gap-2">
+								<UnlockIcon />
+								<span className="font-medium ">
+									{data.get(lang, "login.button") || "Sign In"}
+								</span>
+							</div>
+						)}
+					</Button>
+
+					{/* Session Selector */}
+					{showSession && (
+						<div className="mt-8 w-full max-w-sm">
+							<Select value={session?.key} onValueChange={handleSessionChange}>
+								<SelectTrigger className="w-full h-12 text-lg bg-card/80 border-input hover:border-input/80 px-4 rounded-xl transition-colors text-foreground">
+									<SelectValue
+										placeholder={
+											data.get(lang, "login.session") || "Select session"
+										}
+									/>
+								</SelectTrigger>
+								<SelectContent>
+									{sessions.map((s) => (
+										<SelectItem
+											key={s.key}
+											value={s.key}
+											aria-label={`${s.type?.toUpperCase() || "X11"} ${s.name}`}
+										>
+											<span
+												className="inline-flex items-center gap-2"
+												aria-hidden
+											>
+												<Badge variant="outline" className="text-[10px]">
+													{s.type?.toUpperCase() || "X11"}
+												</Badge>
+												{"\u00A0"}
+												<span className="text-base text-foreground font-medium">
+													{s.name}
+												</span>
+											</span>
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
+					)}
+				</ScrollArea>
 			</div>
 
 			{/* Bottom Bar */}

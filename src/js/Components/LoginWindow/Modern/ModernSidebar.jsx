@@ -23,6 +23,7 @@ import {
 import { data } from "@/lang";
 import { shutdown, restart, sleep, hibernate } from "@/js/Greeter/Commands";
 import { time } from "@/js/Tools/Formatter";
+import { ScrollArea } from "../../ui/scroll-area";
 
 // Icons (using lucide-react style SVGs)
 const PowerIcon = () => (
@@ -175,114 +176,119 @@ export default function ModernSidebar() {
 	return (
 		<div
 			ref={sidebarRef}
-			className="relative w-[320px] h-full flex flex-col p-6 bg-card/40 border-r border-border/30 no-wall-change backdrop-blur-sm"
+			className="relative w-[320px] h-full flex flex-col p-6 bg-card/40 border-r border-border/30 no-wall-change"
 		>
-			{/* Logo Section */}
-			{showLogo && (
-				<div className="flex items-center justify-center py-8">
-					<div className="relative">
-						<div className="absolute inset-0 bg-primary/30 rounded-full blur-xl" />
-						<img
-							src={logoSrc || "/assets/media/logos/shikai.png"}
-							alt="Logo"
-							className="relative w-32 h-32 object-contain drop-shadow-2xl"
-						/>
-					</div>
-				</div>
-			)}
-			{/* Branding */}
-			<div className="text-center mb-8">
-				<h1 className="text-4xl font-semibold text-gradient">Shikai</h1>
-				<p className="text-lg text-foreground mt-1">Modern Greeter</p>
-				<p className="text-sm text-foreground mt-1">
-					Made with{" "}
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						viewBox="0 0 16 16"
-						fill="currentColor"
-						className="inline w-4 h-4 text-red-500 mx-1"
-						aria-hidden="true"
-					>
-						<path
-							fillRule="evenodd"
-							d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-						/>
-					</svg>{" "}
-					by imxitiz
-				</p>
-				<div className="mt-3 flex items-center justify-center gap-2">
-					<span className="text-lg text-foreground font-medium">
-						{darkMode ? "Dark Mode" : "Light Mode"}
-					</span>
-					<Switch
-						checked={darkMode}
-						onCheckedChange={() => {
-							dispatch({ type: "Setting_Toggle", key: "behaviour.dark_mode" });
-							dispatch({ type: "Settings_Save" });
-						}}
-					/>
-				</div>
-			</div>
-
-			{/* Quick Actions */}
-			<div className="flex-1">
-				<p className="text-lm text-foreground uppercase tracking-wider m-4">
-					{data.get(lang, "commands.title") || "Quick Actions"}
-				</p>
-
-				<TooltipProvider delayDuration={200}>
-					<div className="grid grid-cols-2 gap-3">
-						{commandOptions
-							.filter((cmd) => commands[cmd.key])
-							.map((cmd) => (
-								<Tooltip key={cmd.key}>
-									<TooltipTrigger asChild>
-										<Button
-											variant="outline"
-											size="icon"
-											className={cn(
-												"w-full h-16 flex flex-col gap-1 transition-all duration-300",
-												"hover:scale-105 active:scale-95",
-												"bg-muted/50 hover:bg-muted border-border/50 hover:border-primary/50",
-												"text-foreground hover:text-primary",
-											)}
-											onClick={cmd.func}
-										>
-											<cmd.icon />
-											<span className="text-[14px] font-[1000] capitalize">
-												{data.get(lang, `commands.names.${cmd.key}`)}
-											</span>
-										</Button>
-									</TooltipTrigger>
-									<TooltipContent side="right">
-										<p>{data.get(lang, `commands.names.${cmd.key}`)}</p>
-									</TooltipContent>
-								</Tooltip>
-							))}
-					</div>
-				</TooltipProvider>
-			</div>
-
-			{/* Bottom Info Section */}
-			<div className="mt-auto space-y-4">
-				<Separator className="bg-border/30" />
-
-				{/* Hostname */}
-				{showHostname && (
-					<div className="flex items-center justify-between text-sm">
-						<span className="text-foreground font-medium">Host</span>
-						<span className="font-mono text-foreground">{hostname}</span>
-					</div>
-				)}
-				{/* Clock */}
-				{clockEnabled && (
-					<div className="text-center">
-						<div className="text-3xl font-light tracking-wide text-gradient">
-							{currentTime}
+			<ScrollArea className="absolute inset-0">
+				{/* Logo Section */}
+				{showLogo && (
+					<div className="flex items-center justify-center py-8">
+						<div className="relative">
+							<div className="absolute inset-0 bg-primary/30 rounded-full blur-xl" />
+							<img
+								src={logoSrc || "/assets/media/logos/shikai.png"}
+								alt="Logo"
+								className="relative w-32 h-32 object-contain drop-shadow-2xl"
+							/>
 						</div>
 					</div>
 				)}
-			</div>
+				{/* Branding */}
+				<div className="text-center mb-8">
+					<h1 className="text-4xl font-semibold text-gradient">Shikai</h1>
+					<p className="text-lg text-foreground mt-1">Modern Greeter</p>
+					<p className="text-sm text-foreground mt-1">
+						Made with{" "}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 16 16"
+							fill="currentColor"
+							className="inline w-4 h-4 text-red-500 mx-1"
+							aria-hidden="true"
+						>
+							<path
+								fillRule="evenodd"
+								d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+							/>
+						</svg>{" "}
+						by imxitiz
+					</p>
+					<div className="mt-3 flex items-center justify-center gap-2">
+						<span className="text-lg text-foreground font-medium">
+							{darkMode ? "Dark Mode" : "Light Mode"}
+						</span>
+						<Switch
+							checked={darkMode}
+							onCheckedChange={() => {
+								dispatch({
+									type: "Setting_Toggle",
+									key: "behaviour.dark_mode",
+								});
+								dispatch({ type: "Settings_Save" });
+							}}
+						/>
+					</div>
+				</div>
+
+				{/* Quick Actions */}
+				<div className="flex-1">
+					<p className="text-lm text-foreground uppercase tracking-wider m-4">
+						{data.get(lang, "commands.title") || "Quick Actions"}
+					</p>
+
+					<TooltipProvider delayDuration={200}>
+						<div className="grid grid-cols-2 gap-3">
+							{commandOptions
+								.filter((cmd) => commands[cmd.key])
+								.map((cmd) => (
+									<Tooltip key={cmd.key}>
+										<TooltipTrigger asChild>
+											<Button
+												variant="outline"
+												size="icon"
+												className={cn(
+													"w-full h-16 flex flex-col gap-1 transition-all duration-300",
+													"hover:scale-105 active:scale-95",
+													"bg-muted/50 hover:bg-muted border-border/50 hover:border-primary/50",
+													"text-foreground hover:text-primary",
+												)}
+												onClick={cmd.func}
+											>
+												<cmd.icon />
+												<span className="text-[14px] font-[1000] capitalize">
+													{data.get(lang, `commands.names.${cmd.key}`)}
+												</span>
+											</Button>
+										</TooltipTrigger>
+										<TooltipContent side="right">
+											<p>{data.get(lang, `commands.names.${cmd.key}`)}</p>
+										</TooltipContent>
+									</Tooltip>
+								))}
+						</div>
+					</TooltipProvider>
+				</div>
+
+				{/* Bottom Info Section */}
+				<div className="mt-auto space-y-4">
+					<Separator className="bg-border/30" />
+
+					{/* Hostname */}
+					{showHostname && (
+						<div className="flex items-center justify-between text-sm">
+							<span className="text-foreground font-medium">Host</span>
+							<span className="font-mono text-foreground">{hostname}</span>
+						</div>
+					)}
+					{/* Clock */}
+					{clockEnabled && (
+						<div className="text-center">
+							<div className="text-3xl font-light tracking-wide text-gradient">
+								{currentTime}
+							</div>
+						</div>
+					)}
+				</div>
+			</ScrollArea>
 		</div>
 	);
 }

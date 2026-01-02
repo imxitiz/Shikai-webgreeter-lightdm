@@ -1,29 +1,19 @@
-/**
- * @license Shikai
- * LoginWindow/Modern/ModernSidebar.jsx
- *
- * Copyright (c) 2026, imxitiz.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-import { useState, useEffect, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Switch } from "@/js/Components/ui/switch";
-import { cn } from "@/js/lib/utils";
-import { Button } from "@/js/Components/ui/button";
-import { Separator } from "@/js/Components/ui/separator";
+import { useState, useEffect, useRef } from "react"
+import { useStore } from "@/js/State/store"
+import { Switch } from "@/js/Components/ui/switch"
+import { cn } from "@/js/lib/utils"
+import { Button } from "@/js/Components/ui/button"
+import { Separator } from "@/js/Components/ui/separator"
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 	TooltipProvider,
-} from "@/js/Components/ui/tooltip";
-import { data } from "@/lang";
-import { shutdown, restart, sleep, hibernate } from "@/js/Greeter/Commands";
-import { time } from "@/js/Tools/Formatter";
-import { ScrollArea } from "../../ui/scroll-area";
+} from "@/js/Components/ui/tooltip"
+import { data } from "@/lang"
+import { shutdown, restart, sleep, hibernate } from "@/js/Greeter/Commands"
+import { time } from "@/js/Tools/Formatter"
+import { ScrollArea } from "../../ui/scroll-area"
 
 // Icons (using lucide-react style SVGs)
 const PowerIcon = () => (
@@ -126,39 +116,19 @@ const commandOptions = [
 ];
 
 export default function ModernSidebar() {
-	const [currentTime, setCurrentTime] = useState("--:--");
-	// Prevent wallpaper changes when clicking inside the sidebar
-	const sidebarRef = useRef(null);
+	const [currentTime, setCurrentTime] = useState("--:--")
+	const sidebarRef = useRef(null)
 
-	// Use individual selectors to avoid creating new object references
-	const dispatch = useDispatch();
-	const commands = useSelector(
-		(state) => state.settings?.behaviour?.commands || {},
-	);
-	const clockEnabled = useSelector(
-		(state) => state.settings?.behaviour?.clock?.enabled ?? true,
-	);
-	const clockFormat = useSelector(
-		(state) => state.settings?.behaviour?.clock?.format || "%H:%K:%S",
-	);
-	const lang = useSelector(
-		(state) => state.settings?.behaviour?.language || "english",
-	);
-	const logoSrc = useSelector(
-		(state) =>
-			state.settings?.style?.sidebar?.logo ||
-			"./assets/media/logos/archlinux.png",
-	);
-	const darkMode = useSelector(
-		(state) => state.settings?.behaviour?.dark_mode ?? true,
-	);
-	// Respect behaviour toggles
-	const showLogo = useSelector(
-		(state) => state.settings?.behaviour?.logo ?? true,
-	);
-	const showHostname = useSelector(
-		(state) => state.settings?.behaviour?.hostname ?? true,
-	);
+	const commands = useStore((state) => state.settings?.behaviour?.commands || {})
+	const clockEnabled = useStore((state) => state.settings?.behaviour?.clock?.enabled ?? true)
+	const clockFormat = useStore((state) => state.settings?.behaviour?.clock?.format || "%H:%K:%S")
+	const lang = useStore((state) => state.settings?.behaviour?.language || "english")
+	const logoSrc = useStore((state) => state.settings?.style?.sidebar?.logo || "./assets/media/logos/archlinux.png")
+	const darkMode = useStore((state) => state.settings?.behaviour?.dark_mode ?? true)
+	const showLogo = useStore((state) => state.settings?.behaviour?.logo ?? true)
+	const showHostname = useStore((state) => state.settings?.behaviour?.hostname ?? true)
+	const toggleSetting = useStore((state) => state.toggleSetting)
+	const saveSettings = useStore((state) => state.saveSettings)
 
 	useEffect(() => {
 		if (!clockEnabled) return;
@@ -219,11 +189,8 @@ export default function ModernSidebar() {
 						<Switch
 							checked={darkMode}
 							onCheckedChange={() => {
-								dispatch({
-									type: "Setting_Toggle",
-									key: "behaviour.dark_mode",
-								});
-								dispatch({ type: "Settings_Save" });
+								toggleSetting("behaviour.dark_mode")
+								saveSettings()
 							}}
 						/>
 					</div>

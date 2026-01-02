@@ -1,6 +1,6 @@
 {
 	"name": "shikai",
-	"version": "1.6.0",
+	"version": "2.0.0",
 	"description": "Modern lightdm webkit2 theme",
 	"type": "module",
 	"keywords": [
@@ -11,28 +11,31 @@
 		"webkit",
 		"login"
 	],
-	"homepage": "https://github.com/TheWisker/Shikai",
-	"bugs": "https://github.com/TheWisker/Shikai/issues",
-	"license": "GPL-3.0",
-	"author": "TheWisker (https://github.com/TheWisker)",
+	"homepage": "https://github.com/imxitiz/Shikai-webgreeter-lightdm",
+	"bugs": "https://github.com/imxitiz/Shikai-webgreeter-lightdm/issues",
+	"author": "imxitiz (https://github.com/imxitiz)",
 	"main": "./dist/index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/TheWisker/Shikai.git"
+		"url": "git+https://github.com/imxitiz/Shikai-webgreeter-lightdm.git"
 	},
 	"scripts": {
-		"build": "bun --bun vite build",
-		"dev": "bun --bun vite build --mode development",
-		"watch": "bun --bun vite build --watch",
-		"server": "bun --bun vite",
-		"preview": "bun --bun vite preview",
-		"install-theme": "./scripts/install.sh"
+		"build": "vite build",
+		"dev": "vite build --mode development",
+		"watch": "vite build --watch",
+		"server": "vite",
+		"preview": "vite preview",
+		"install-theme": "./scripts/install.sh",
+		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
 		"@types/node": "^25.0.3",
+		"@types/react": "^18.3.18",
+		"@types/react-dom": "^18.3.5",
 		"@vitejs/plugin-react": "^4.3.4",
 		"sass-embedded": "^1.83.1",
 		"terser": "^5.37.0",
+		"typescript": "^5.7.3",
 		"vite": "^6.0.7",
 		"vite-plugin-svgr": "^4.3.0"
 	},
@@ -59,11 +62,10 @@
 		"react-dom": "^18.3.1",
 		"react-draggable": "^4.4.6",
 		"react-dropdown": "^1.11.0",
-		"react-redux": "^9.2.0",
-		"redux": "^5.0.1",
 		"tailwind-merge": "^3.4.0",
 		"tailwindcss": "^4.1.18",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"zustand": "^5.0.3"
 	},
 	"browserslist": [
 		"last 5 version"

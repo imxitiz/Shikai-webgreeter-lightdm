@@ -1,12 +1,8 @@
 /**
- * @license Shikai
  * ModernNotifications.js
  *
  * Modern toast notification system with Tailwind CSS
- * Copyright (c) 2026, imxitiz.
  *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
  */
 
 export const types = {

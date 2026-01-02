@@ -1,35 +1,25 @@
-/**
- * @license Shikai
- * SettingsWindow/Modern/tabs/ModernBehaviourTab.jsx
- *
- * Copyright (c) 2026, imxitiz.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-import { useSelector, useDispatch } from "react-redux";
-import { Label } from "@/js/Components/ui/label";
-import { Switch } from "@/js/Components/ui/switch";
-import { Button } from "@/js/Components/ui/button";
-import { Input } from "@/js/Components/ui/input";
-import { Separator } from "@/js/Components/ui/separator";
+import { useStore } from "@/js/State/store"
+import { Label } from "@/js/Components/ui/label"
+import { Switch } from "@/js/Components/ui/switch"
+import { Button } from "@/js/Components/ui/button"
+import { Input } from "@/js/Components/ui/input"
+import { Separator } from "@/js/Components/ui/separator"
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/js/Components/ui/select";
+} from "@/js/Components/ui/select"
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 	CardDescription,
-} from "@/js/Components/ui/card";
-import { data, names as languageNames } from "@/lang";
-import { types, notify } from "@/js/Greeter/Notifications";
+} from "@/js/Components/ui/card"
+import { data, names as languageNames } from "@/lang"
+import { types, notify } from "@/js/Greeter/ModernNotifications"
 
 function SettingRow({ label, description, children }) {
 	return (
@@ -62,20 +52,21 @@ function SettingSection({ title, description, children }) {
 }
 
 export default function ModernBehaviourTab() {
-	const dispatch = useDispatch();
-
-	const behaviour = useSelector((state) => state.settings?.behaviour || {});
-	const lang = behaviour.language || "english";
+	const behaviour = useStore((state) => state.settings?.behaviour || {})
+	const toggleSetting = useStore((state) => state.toggleSetting)
+	const setSetting = useStore((state) => state.setSetting)
+	const saveSettings = useStore((state) => state.saveSettings)
+	const lang = behaviour.language || "english"
 
 	const toggle = (key) => {
-		dispatch({ type: "Setting_Toggle", key: `behaviour.${key}` });
-		dispatch({ type: "Settings_Save" });
-	};
+		toggleSetting(`behaviour.${key}`)
+		saveSettings()
+	}
 
 	const set = (key, value) => {
-		dispatch({ type: "Setting_Set", key: `behaviour.${key}`, value });
-		dispatch({ type: "Settings_Save" });
-	};
+		setSetting(`behaviour.${key}`, value)
+		saveSettings()
+	}
 
 	const handleClearStorage = () => {
 		localStorage.clear();

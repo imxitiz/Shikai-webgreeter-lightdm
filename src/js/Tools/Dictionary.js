@@ -1,12 +1,7 @@
 /**
- * @license Shikai
  * Dictionary.js
  *
- * Copyright (c) 2024, TheWisker.
- * Copyright (c) 2026, imxitiz.
  *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
  */
 
 export function update(object, key, value) {

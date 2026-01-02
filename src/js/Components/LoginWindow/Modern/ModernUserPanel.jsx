@@ -1,31 +1,21 @@
-/**
- * @license Shikai
- * LoginWindow/Modern/ModernUserPanel.jsx
- *
- * Copyright (c) 2026, imxitiz.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-import { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { cn } from "@/js/lib/utils";
-import { Button } from "@/js/Components/ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "@/js/Components/ui/avatar";
-import { Badge } from "@/js/Components/ui/badge";
+import { useState, useRef, useEffect } from "react"
+import { useStore } from "@/js/State/store"
+import { cn } from "@/js/lib/utils"
+import { Button } from "@/js/Components/ui/button"
+import { Avatar, AvatarImage, AvatarFallback } from "@/js/Components/ui/avatar"
+import { Badge } from "@/js/Components/ui/badge"
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/js/Components/ui/select";
-import { data } from "@/lang";
-import { getUserImage, getSessions } from "@/js/Greeter/Operations";
-import { types, notify } from "@/js/Greeter/ModernNotifications";
-import { date } from "@/js/Tools/Formatter";
-import { ScrollArea } from "../../ui/scroll-area";
+} from "@/js/Components/ui/select"
+import { data } from "@/lang"
+import { getUserImage, getSessions } from "@/js/Greeter/Operations"
+import { types, notify } from "@/js/Greeter/ModernNotifications"
+import { date } from "@/js/Tools/Formatter"
+import { ScrollArea } from "../../ui/scroll-area"
 
 // Icons
 const LockIcon = () => (
@@ -126,41 +116,23 @@ const GripIcon = () => (
 );
 
 export default function ModernUserPanel({ onRecenter }) {
-	const dispatch = useDispatch();
-	const passwordRef = useRef(null);
-	const [password, setPassword] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [shake, setShake] = useState(false);
+	const passwordRef = useRef(null)
+	const [password, setPassword] = useState("")
+	const [isLoading, setIsLoading] = useState(false)
+	const [shake, setShake] = useState(false)
 
-	// Use individual selectors to avoid creating new object references
-	const user = useSelector(
-		(state) =>
-			state.runtime?.user || { username: "user", display_name: "User" },
-	);
-	const session = useSelector(
-		(state) => state.runtime?.session || { key: "plasma", name: "Plasma" },
-	);
-	const lang = useSelector(
-		(state) => state.settings?.behaviour?.language || "english",
-	);
-	const dateEnabled = useSelector(
-		(state) => state.settings?.behaviour?.date?.enabled ?? true,
-	);
-	const dateFormat = useSelector(
-		(state) => state.settings?.behaviour?.date?.format || "%B %D, %Y",
-	);
-	const showAvatar = useSelector(
-		(state) => state.settings?.behaviour?.avatar ?? true,
-	);
-	const showUser = useSelector(
-		(state) => state.settings?.behaviour?.user ?? true,
-	);
-	const showSession = useSelector(
-		(state) => state.settings?.behaviour?.session ?? true,
-	);
-	const inactive = useSelector(
-		(state) => state.runtime?.events?.inactivity ?? false,
-	);
+	const user = useStore((state) => state.runtime?.user || { username: "user", display_name: "User" })
+	const session = useStore((state) => state.runtime?.session || { key: "plasma", name: "Plasma" })
+	const lang = useStore((state) => state.settings?.behaviour?.language || "english")
+	const dateEnabled = useStore((state) => state.settings?.behaviour?.date?.enabled ?? true)
+	const dateFormat = useStore((state) => state.settings?.behaviour?.date?.format || "%B %D, %Y")
+	const showAvatar = useStore((state) => state.settings?.behaviour?.avatar ?? true)
+	const showUser = useStore((state) => state.settings?.behaviour?.user ?? true)
+	const showSession = useStore((state) => state.settings?.behaviour?.session ?? true)
+	const inactive = useStore((state) => state.runtime?.events?.inactivity ?? false)
+	const switchUser = useStore((state) => state.switchUser)
+	const switchSession = useStore((state) => state.switchSession)
+	const startEvent = useStore((state) => state.startEvent)
 
 	const sessions = getSessions();
 
@@ -230,38 +202,38 @@ export default function ModernUserPanel({ onRecenter }) {
 		notify(
 			`${data.get(lang, "notifications.logged_in")} ${user.username}!`,
 			types.Success,
-		);
-		dispatch({ type: "Start_Event", key: "loginSuccess" });
-		setIsLoading(false);
-	};
+		)
+		startEvent("loginSuccess")
+		setIsLoading(false)
+	}
 
 	const handleLoginFailure = () => {
-		notify(data.get(lang, "notifications.wrong_password"), types.Error);
-		dispatch({ type: "Start_Event", key: "loginFailure" });
-		setPassword("");
-		setShake(true);
-		setTimeout(() => setShake(false), 500);
-		setIsLoading(false);
-		passwordRef.current?.focus();
-	};
+		notify(data.get(lang, "notifications.wrong_password"), types.Error)
+		startEvent("loginFailure")
+		setPassword("")
+		setShake(true)
+		setTimeout(() => setShake(false), 500)
+		setIsLoading(false)
+		passwordRef.current?.focus()
+	}
 
 	const handleUserSwitch = (direction) => {
-		const currentIndex = users.findIndex((u) => u.username === user.username);
+		const currentIndex = users.findIndex((u) => u.username === user.username)
 		const newIndex =
 			direction === "next"
 				? (currentIndex + 1) % users.length
-				: (currentIndex - 1 + users.length) % users.length;
+				: (currentIndex - 1 + users.length) % users.length
 
-		dispatch({ type: "Switch_User", value: users[newIndex] });
-		setPassword("");
-	};
+		switchUser(users[newIndex])
+		setPassword("")
+	}
 
 	const handleSessionChange = (sessionKey) => {
-		const newSession = sessions.find((s) => s.key === sessionKey);
+		const newSession = sessions.find((s) => s.key === sessionKey)
 		if (newSession) {
-			dispatch({ type: "Switch_Session", value: newSession });
+			switchSession(newSession)
 		}
-	};
+	}
 
 	const handleKeyDown = (e) => {
 		if (e.key === "Enter") {

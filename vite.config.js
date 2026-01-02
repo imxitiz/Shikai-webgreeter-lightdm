@@ -1,43 +1,19 @@
-/**
- * @license Shikai
- * vite.config.js
- *
- * Copyright (c) 2024, TheWisker.
- * Copyright (c) 2026, imxitiz.
- *
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import svgr from 'vite-plugin-svgr'
+import tailwindcss from '@tailwindcss/vite'
+import { resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import fs from 'node:fs'
 
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
-import tailwindcss from '@tailwindcss/vite';
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import fs from 'node:fs';
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
-
-const licenseBanner = `/**
- * ${pkg.name} ${pkg.version} distribution
- *
- * Copyright (c) 2024, ${pkg.author}
- * All rights reserved.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * License information can be found in the LICENSE.shikai file.
- */`;
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
+const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
 
 export default defineConfig(({ mode }) => {
-  const isDev = mode === 'development';
+  const isDev = mode === 'development'
 
   return {
-    base: './',  // Use relative paths for LightDM greeter compatibility
+    base: './',
     plugins: [
       tailwindcss(),
       react(),
@@ -57,7 +33,7 @@ export default defineConfig(({ mode }) => {
             return {
               code: `export default ${JSON.stringify(code)}`,
               map: null,
-            };
+            }
           }
         },
       },
@@ -72,8 +48,6 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: {
           index: resolve(__dirname, 'src/index.html'),
-          app: resolve(__dirname, 'src/app.html'),
-          modern: resolve(__dirname, 'src/modern.html'),
           monitor: resolve(__dirname, 'src/monitor.html'),
         },
         output: {
@@ -81,14 +55,13 @@ export default defineConfig(({ mode }) => {
           chunkFileNames: '[name].js',
           assetFileNames: (assetInfo) => {
             if (assetInfo.name?.endsWith('.css')) {
-              return '[name][extname]';
+              return '[name][extname]'
             }
             if (/\.(woff|woff2|eot|ttf|otf)$/i.test(assetInfo.name || '')) {
-              return 'assets/fonts/[name][extname]';
+              return 'assets/fonts/[name][extname]'
             }
-            return 'assets/[name][extname]';
+            return 'assets/[name][extname]'
           },
-          banner: licenseBanner,
         },
       },
       terserOptions: {
@@ -104,7 +77,7 @@ export default defineConfig(({ mode }) => {
         '@css': resolve(__dirname, 'src/css'),
         '@lang': resolve(__dirname, 'src/lang'),
       },
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     },
     css: {
       preprocessorOptions: {
@@ -117,5 +90,5 @@ export default defineConfig(({ mode }) => {
       port: 3000,
       open: true,
     },
-  };
-});
+  }
+})

@@ -1,32 +1,22 @@
-/**
- * @license Shikai
- * SettingsWindow/Modern/tabs/ModernStyleTab.jsx
- *
- * Copyright (c) 2026, imxitiz.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-import { useSelector, useDispatch } from "react-redux";
-import { Label } from "@/js/Components/ui/label";
-import { Input } from "@/js/Components/ui/input";
-import { Separator } from "@/js/Components/ui/separator";
+import { useStore } from "@/js/State/store"
+import { Label } from "@/js/Components/ui/label"
+import { Input } from "@/js/Components/ui/input"
+import { Separator } from "@/js/Components/ui/separator"
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/js/Components/ui/select";
+} from "@/js/Components/ui/select"
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 	CardDescription,
-} from "@/js/Components/ui/card";
-import { data } from "@/lang";
+} from "@/js/Components/ui/card"
+import { data } from "@/lang"
 
 function ColorPicker({ label, value, onChange }) {
 	return (
@@ -82,18 +72,16 @@ function SettingSection({ title, description, children }) {
 }
 
 export default function ModernStyleTab() {
-	const dispatch = useDispatch();
-
-	const style = useSelector((state) => state.settings?.style || {});
-	const lang = useSelector(
-		(state) => state.settings?.behaviour?.language || "english",
-	);
-	const logos = useSelector((state) => state.runtime?.logos || []);
+	const style = useStore((state) => state.settings?.style || {})
+	const lang = useStore((state) => state.settings?.behaviour?.language || "english")
+	const logos = useStore((state) => state.runtime?.logos || [])
+	const setSetting = useStore((state) => state.setSetting)
+	const saveSettings = useStore((state) => state.saveSettings)
 
 	const set = (key, value) => {
-		dispatch({ type: "Setting_Set", key: `style.${key}`, value });
-		dispatch({ type: "Settings_Save" });
-	};
+		setSetting(`style.${key}`, value)
+		saveSettings()
+	}
 
 	const currentLogoName =
 		style.sidebar?.logo

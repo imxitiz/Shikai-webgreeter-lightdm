@@ -1,11 +1,7 @@
 /**
- * @license Shikai
  * LoginWindow/Modern/index.jsx
  *
- * Copyright (c) 2026, imxitiz.
  *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
  */
 
 import { useState, useCallback, useEffect } from "react";

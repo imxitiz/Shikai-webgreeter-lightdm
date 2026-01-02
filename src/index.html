@@ -1,44 +1,152 @@
-<!--
- @license Shikai
- index.html
-
- Copyright (c) 2024, TheWisker.
- Copyright (c) 2024, imxitiz.
-
- This source code is licensed under the GNU license found in the
- LICENSE file in the root directory of this source tree.
--->
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Shikai Theme</title>
-        <link rel="icon" type="image/x-icon" href="./assets/media/icon.png">
-        <meta name="viewport"
-            content="width=device-width, viewport-fit=cover, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <meta charset="utf-8">
-        <script>
-            window.__is_debug = true;
-            if (window.__is_debug) {
-                lightdm = {
-                    lock_hint: false,
-                    can_shutdown: true,
-                    can_restart: true,
-                    can_suspend: true,
-                    can_hibernate: true,
-                    select_user_hint: undefined,
-                    users: [{username: "Username1", session: "awesome"}, {username: "Username2", session: "openbox"}],
-                    sessions: [{name: "awesome"}, {name: "i3"}, {name: "openbox"}],
-                    default_session: "awesome"
-                };
-                greeter_comm = false;
-                greeter_config = false;
-            }
-        </script>
-    </head>
-    <body>
-        <div id="notificationroot" class="notificationwindow"></div>
-        <div id="settingroot"></div>
-        <div id="loginroot" class="loginwindow"></div>
-        <script type="module" src="./js/index.jsx"></script>
-    </body>
+<html lang="en" class="dark">
+
+<head>
+  <title>Shikai - Modern Greeter</title>
+  <link rel="icon" type="image/x-icon" href="./assets/media/icon.png">
+  <meta name="viewport"
+    content="width=device-width, viewport-fit=cover, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <meta name="description" content="Modern Linux display manager greeter theme">
+  <meta name="theme-color" content="#0a0a0a">
+
+  <script>
+    window.__is_debug = true;
+    if (window.__is_debug) {
+      lightdm = {
+        lock_hint: false,
+        can_shutdown: true,
+        can_restart: true,
+        can_suspend: true,
+        can_hibernate: true,
+        select_user_hint: undefined,
+        is_authenticated: false,
+        users: [
+          {
+            username: "user",
+            display_name: "John Doe",
+            session: "plasma",
+            image: ""
+          },
+          {
+            username: "admin",
+            display_name: "Administrator",
+            session: "gnome",
+            image: ""
+          }
+        ],
+        sessions: [
+          { name: "Plasma (Wayland)", key: "plasmawayland", type: "wayland" },
+          { name: "GNOME", key: "gnome", type: "wayland" },
+          { name: "KDE Plasma", key: "plasma", type: "x11" },
+          { name: "i3", key: "i3", type: "x11" },
+          { name: "Hyprland", key: "hyprland", type: "wayland" }
+        ],
+        default_session: "plasma",
+        hostname: "archlinux",
+        authenticate: function (username) {
+          console.log("Authenticating:", username);
+        },
+        cancel_authentication: function () {
+          console.log("Authentication cancelled");
+        },
+        respond: function (password) {
+          console.log("Password response received");
+        },
+        start_session: function (session) {
+          console.log("Starting session:", session);
+        },
+        shutdown: function () {
+          console.log("Shutdown requested");
+        },
+        restart: function () {
+          console.log("Restart requested");
+        },
+        suspend: function () {
+          console.log("Suspend requested");
+        },
+        hibernate: function () {
+          console.log("Hibernate requested");
+        },
+        show_prompt: {
+          connect: function (callback) {
+            this._callback = callback;
+          },
+          disconnect: function () {
+            this._callback = null;
+          }
+        }
+      };
+      greeter_comm = {
+        broadcast: function (data) {
+          console.log("Broadcasting:", data);
+        }
+      };
+      greeter_config = {
+        branding: {
+          background_images_dir: "/usr/share/backgrounds",
+          logo_image: "",
+          user_image: ""
+        },
+        greeter: {
+          default_user: null,
+          default_session: "plasma"
+        }
+      };
+    }
+  </script>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0a0a0a;
+      color: #fafafa;
+      font-family: "Inter", system-ui, sans-serif;
+    }
+
+    body {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    #root {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .loading-spinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="notificationroot" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
+  <div id="root">
+    <div class="loading-spinner"></div>
+  </div>
+  <script type="module" src="./js/index.tsx"></script>
+</body>
+
 </html>

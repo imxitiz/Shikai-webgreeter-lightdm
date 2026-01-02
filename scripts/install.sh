@@ -11,6 +11,8 @@ cp -r ./dist ../shikai
 # Disable debug mode
 cd ../shikai
 sed -i 's/window.__is_debug = true/window.__is_debug = false/g' index.html
+sed -i 's/window.__is_debug = true/window.__is_debug = false/g' app.html
+sed -i 's/window.__is_debug = true/window.__is_debug = false/g' modern.html
 sed -i 's/window.__is_debug = true/window.__is_debug = false/g' monitor.html
 
 # Install to system

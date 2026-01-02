@@ -16,14 +16,14 @@ import ModernUserPanel from "./ModernUserPanel";
 import { cn } from "@/js/lib/utils";
 
 // Define your desired aspect ratio (3:2 = 1.5)
-const ASPECT_RATIO = 920 / 620; // 1.4838...
+const ASPECT_RATIO = 1944 / 1296; // 1.4838...
 
 const getWindowSize = () => {
 	const screenWidth = screen?.availWidth || 1024;
 	const screenHeight = screen?.availHeight || 768;
 
-	// 1. Determine target width (90% of screen, capped at 920)
-	let width = Math.min(920, Math.floor(screenWidth * 0.9));
+	// 1. Determine target width (90% of screen, capped at 1944)
+	let width = Math.min(1944, Math.floor(screenWidth * 0.6));
 
 	// 2. Calculate height based on the ratio
 	let height = Math.floor(width / ASPECT_RATIO);

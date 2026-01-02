@@ -175,7 +175,7 @@ export default function ModernSidebar() {
 	return (
 		<div
 			ref={sidebarRef}
-			className="relative w-[280px] h-full flex flex-col p-6 bg-card/40 border-r border-border/30 no-wall-change backdrop-blur-sm"
+			className="relative w-[320px] h-full flex flex-col p-6 bg-card/40 border-r border-border/30 no-wall-change backdrop-blur-sm"
 		>
 			{/* Logo Section */}
 			{showLogo && (
@@ -185,18 +185,35 @@ export default function ModernSidebar() {
 						<img
 							src={logoSrc || "/assets/media/logos/shikai.png"}
 							alt="Logo"
-							className="relative w-20 h-20 object-contain drop-shadow-2xl"
+							className="relative w-32 h-32 object-contain drop-shadow-2xl"
 						/>
 					</div>
 				</div>
 			)}
 			{/* Branding */}
 			<div className="text-center mb-8">
-				<h1 className="text-2xl font-semibold text-gradient">Shikai</h1>
-				<p className="text-sm text-foreground mt-1">Modern Greeter</p>
+				<h1 className="text-4xl font-semibold text-gradient">Shikai</h1>
+				<p className="text-lg text-foreground mt-1">Modern Greeter</p>
+				<p className="text-sm text-foreground mt-1">
+					Made with{" "}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 16 16"
+						fill="currentColor"
+						className="inline w-4 h-4 text-red-500 mx-1"
+						aria-hidden="true"
+					>
+						<path
+							fillRule="evenodd"
+							d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
+						/>
+					</svg>{" "}
+					by imxitiz
+				</p>
 				<div className="mt-3 flex items-center justify-center gap-2">
-					<span className="text-sm text-foreground font-medium">Theme</span>
-
+					<span className="text-lg text-foreground font-medium">
+						{darkMode ? "Dark Mode" : "Light Mode"}
+					</span>
 					<Switch
 						checked={darkMode}
 						onCheckedChange={() => {
@@ -209,7 +226,7 @@ export default function ModernSidebar() {
 
 			{/* Quick Actions */}
 			<div className="flex-1">
-				<p className="text-sm text-foreground uppercase tracking-wider m-4">
+				<p className="text-lm text-foreground uppercase tracking-wider m-4">
 					{data.get(lang, "commands.title") || "Quick Actions"}
 				</p>
 
@@ -224,7 +241,7 @@ export default function ModernSidebar() {
 											variant="outline"
 											size="icon"
 											className={cn(
-												"w-full h-14 flex flex-col gap-1 transition-all duration-300",
+												"w-full h-16 flex flex-col gap-1 transition-all duration-300",
 												"hover:scale-105 active:scale-95",
 												"bg-muted/50 hover:bg-muted border-border/50 hover:border-primary/50",
 												"text-foreground hover:text-primary",
@@ -232,7 +249,7 @@ export default function ModernSidebar() {
 											onClick={cmd.func}
 										>
 											<cmd.icon />
-											<span className="text-[12px] opacity-90">
+											<span className="text-[14px] font-[1000] capitalize">
 												{data.get(lang, `commands.names.${cmd.key}`)}
 											</span>
 										</Button>

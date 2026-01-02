@@ -9,25 +9,31 @@
  */
 
 import Copy from "../../Tools/Copy"
-import {saveThemes, getThemes} from "../../Greeter/Storage";
+import { saveThemes, getThemes } from "../../Greeter/Storage";
 
-export default function Themes(state, action) {
+export default function Themes(state = {}, action) {
     switch (action.type) {
         case "Theme_Purge": return [];
-        case "Theme_Add":
-            var themes = Copy(state.themes);
-            themes.push({name: action.value, settings: Copy(state.settings)});
+        case "Theme_Add": {
+            const themes = Copy(state.themes || []);
+            themes.push({ name: action.value, settings: Copy(state.settings || {}) });
             return themes;
-        case "Theme_Remove":
-            var themes = Copy(state.themes);
-            if (themes.length > action.key) {themes.splice(action.key, 1);}
+        }
+        case "Theme_Remove": {
+            const themes = Copy(state.themes || []);
+            if (themes.length > action.key) { themes.splice(action.key, 1); }
             return themes;
-        case "Themes_Save":
-            return saveThemes(state.themes);
-        case "Themes_Update":
-            let value = getThemes();
-            return (value == null) ? state.themes : value;
+        }
+        case "Themes_Save":{
+            // Persist themes but ensure reducer returns the themes slice
+            saveThemes(state.themes || []);
+            return state.themes || [];
+        }
+        case "Themes_Update": {
+            const value = getThemes();
+            return (value == null) ? (state.themes || []) : value;
+        }
         default:
-            return state.themes;
+            return state.themes || [];
     }
 }

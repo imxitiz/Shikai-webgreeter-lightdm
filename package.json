@@ -30,9 +30,12 @@
 	},
 	"devDependencies": {
 		"@types/node": "^25.0.3",
+		"@types/react": "^18.3.12",
+		"@types/react-dom": "^18.3.1",
 		"@vitejs/plugin-react": "^4.3.4",
 		"sass-embedded": "^1.83.1",
 		"terser": "^5.37.0",
+		"typescript": "^5.6.3",
 		"vite": "^6.0.7",
 		"vite-plugin-svgr": "^4.3.0"
 	},
@@ -59,11 +62,10 @@
 		"react-dom": "^18.3.1",
 		"react-draggable": "^4.4.6",
 		"react-dropdown": "^1.11.0",
-		"react-redux": "^9.2.0",
-		"redux": "^5.0.1",
 		"tailwind-merge": "^3.4.0",
 		"tailwindcss": "^4.1.18",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"zustand": "^5.0.2"
 	},
 	"browserslist": [
 		"last 5 version"

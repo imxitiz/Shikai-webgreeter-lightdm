@@ -25,7 +25,7 @@ function getSessions() {
     return lightdm.sessions || [];
 }
 
-export default function Runtime(state, action) {
+export default function Runtime(state = {}, action) {
     const users = getUsers();
     const sessions = getSessions();
     
@@ -54,12 +54,12 @@ export default function Runtime(state, action) {
             return {...state, session: sessions[sessionIndex + 1]};
         }
         case "Start_Event": {
-            const events = {...state.events};
+            const events = {...(state.events || {})};
             events[action.key] = true;
             return {...state, events: events};
         }
         case "Stop_Event": {
-            const events = {...state.events};
+            const events = {...(state.events || {})};
             events[action.key] = false;
             return {...state, events: events};
         }

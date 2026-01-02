@@ -22,8 +22,23 @@ export default function(default_state) {
                 return {...state, settings: Copy(state.themes[action.key].settings)};
             case "Set_Logos":
                 return {...state, runtime: {...state.runtime, logos: action.payload}};
-            default:
-                return {...state, runtime: Runtime(state.runtime, action), settings: Settings(state.settings, action), themes: Themes(state, action)}
+            default: {
+                const newRuntime = Runtime(state.runtime, action);
+                const newSettings = Settings(state.settings, action);
+                const newThemes = Themes(state, action);
+
+                // Validate returned slice shapes to avoid reducers accidentally returning non-objects
+                const runtimeSafe = (newRuntime && typeof newRuntime === 'object') ? newRuntime : state.runtime;
+                const settingsSafe = (newSettings && typeof newSettings === 'object' && !Array.isArray(newSettings)) ? newSettings : state.settings;
+                const themesSafe = Array.isArray(newThemes) ? newThemes : state.themes;
+
+                return {
+                    ...state,
+                    runtime: runtimeSafe,
+                    settings: settingsSafe,
+                    themes: themesSafe
+                };
+            }
         }
     }
 }

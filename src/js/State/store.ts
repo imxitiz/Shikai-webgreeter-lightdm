@@ -196,8 +196,18 @@ function updateNested<T extends object>(object: T, key: string, value: unknown):
   const copy = deepClone(object)
   let iter: Record<string, unknown> = copy as Record<string, unknown>
 
+  // Guard against prototype pollution
+  const dangerousKeys = ['__proto__', 'constructor', 'prototype']
+
   for (let i = 0; i < keys.length; i++) {
     const k = keys[i]
+    
+    // Prevent prototype pollution attacks
+    if (dangerousKeys.includes(k)) {
+      console.warn('Attempted prototype pollution via key:', k)
+      return object
+    }
+
     if (i === keys.length - 1) {
       iter[k] = value
     } else {

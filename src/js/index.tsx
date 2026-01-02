@@ -182,20 +182,17 @@ function launch(): void {
     useStore.getState().setLogos(dt)
   )
 
-  const idle = new Idle((action: { type: string; key?: string }) => {
-    if (action.type === 'Start_Event' && action.key) {
-      useStore.getState().startEvent(action.key as 'inactivity')
-    } else if (action.type === 'Stop_Event' && action.key) {
-      useStore.getState().stopEvent(action.key as 'inactivity')
-    }
+  const idle = new Idle({
+    startInactivity: () => useStore.getState().startEvent('inactivity'),
+    stopInactivity: () => useStore.getState().stopEvent('inactivity')
   })
   idle.changeTimeout(useStore.getState().settings.behaviour.idle.timeout)
   if (useStore.getState().settings.behaviour.idle.enabled) {
     idle.start()
   }
 
-  let lastLang: string
-  let idleTimeout: number
+  let lastLang: string = useStore.getState().settings.behaviour.language
+  let idleTimeout: number = useStore.getState().settings.behaviour.idle.timeout
   let idleEnabled = useStore.getState().settings.behaviour.idle.enabled
 
   useStore.subscribe((state) => {

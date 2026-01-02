@@ -256,6 +256,7 @@ The *repo* comes with some **scripts** to **facilitate** the **development proce
 - To *package* the **production** *version* run `npm run build` or `./scripts/production.sh`
 - To *package* the **development** *version* on source **change** run `npm run watch` or `./scripts/watch.sh`
 - To *package* the **development** *version* on source **change** and **serve** said package **locally** run `npm run server` or `./scripts/server.sh`
+- For CI, instant local dev feedback, and deploy instructions see `docs/CI.md`
 
 > [!NOTE]
 > Scripts **must** be *run* from the repo's **root directory**

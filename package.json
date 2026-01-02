@@ -26,6 +26,8 @@
 		"watch": "bun --bun vite build --watch",
 		"server": "bun --bun vite",
 		"preview": "bun --bun vite preview",
+		"dev-ci": "bash ./scripts/dev-ci.sh",
+		"dev-ci:launch": "bash ./scripts/dev-ci.sh --launch-greeter",
 		"install-theme": "./scripts/install.sh"
 	},
 	"devDependencies": {

@@ -1,26 +1,16 @@
-/**
- * @license Shikai
- * SettingsWindow/Modern/tabs/ModernThemesTab.jsx
- *
- * Copyright (c) 2026, imxitiz.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { cn } from "@/js/lib/utils";
-import { Badge } from "@/js/Components/ui/badge";
+import { useState } from "react"
+import { useStore } from "@/js/State/store"
+import { cn } from "@/js/lib/utils"
+import { Badge } from "@/js/Components/ui/badge"
 import {
 	Card,
 	CardContent,
 	CardHeader,
 	CardTitle,
 	CardDescription,
-} from "@/js/Components/ui/card";
-import { data } from "@/lang";
-import { types, notify } from "@/js/Greeter/Notifications";
+} from "@/js/Components/ui/card"
+import { data } from "@/lang"
+import { types, notify } from "@/js/Greeter/ModernNotifications"
 
 // Preset themes
 const presetThemes = [
@@ -228,25 +218,22 @@ function ThemeCard({ theme, onApply, isActive }) {
 }
 
 export default function ModernThemesTab() {
-	const dispatch = useDispatch();
-	const [activeTheme, setActiveTheme] = useState(null);
-
-	const lang = useSelector(
-		(state) => state.settings?.behaviour?.language || "english",
-	);
+	const [activeTheme, setActiveTheme] = useState(null)
+	const lang = useStore((state) => state.settings?.behaviour?.language || "english")
+	const setSetting = useStore((state) => state.setSetting)
+	const saveSettings = useStore((state) => state.saveSettings)
 
 	const applyTheme = (theme) => {
 		Object.entries(theme.settings).forEach(([key, value]) => {
-			dispatch({ type: "Setting_Set", key: `style.${key}`, value });
-		});
-		setActiveTheme(theme.id);
-		// Persist applied theme immediately
-		dispatch({ type: "Settings_Save" });
+			setSetting(`style.${key}`, value)
+		})
+		setActiveTheme(theme.id)
+		saveSettings()
 		notify(
 			`${theme.name} ${data.get(lang, "notifications.theme_applied") || "theme applied!"}`,
 			types.Success,
-		);
-	};
+		)
+	}
 
 	return (
 		<div className="space-y-4 pb-4">

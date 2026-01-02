@@ -1,13 +1,3 @@
-/**
- * @license Shikai
- * _general.scss
- *
- * Copyright (c) 2024, TheWisker.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 @mixin flex($direction: row) {
     display: flex;
     flex-direction: $direction;

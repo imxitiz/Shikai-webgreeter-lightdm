@@ -1,30 +1,20 @@
-/**
- * @license Shikai
- * SettingsWindow/Modern/index.jsx
- *
- * Copyright (c) 2026, imxitiz.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import Draggable from "react-draggable";
-import { cn } from "@/js/lib/utils";
-import { Button } from "@/js/Components/ui/button";
+import { useState, useEffect, useRef, useCallback } from "react"
+import { useStore } from "@/js/State/store"
+import Draggable from "react-draggable"
+import { cn } from "@/js/lib/utils"
+import { Button } from "@/js/Components/ui/button"
 import {
 	Tabs,
 	TabsContent,
 	TabsList,
 	TabsTrigger,
-} from "@/js/Components/ui/tabs";
-import { ScrollArea } from "@/js/Components/ui/scroll-area";
-import { data } from "@/lang";
+} from "@/js/Components/ui/tabs"
+import { ScrollArea } from "@/js/Components/ui/scroll-area"
+import { data } from "@/lang"
 
-import ModernBehaviourTab from "./tabs/ModernBehaviourTab";
-import ModernStyleTab from "./tabs/ModernStyleTab";
-import ModernThemesTab from "./tabs/ModernThemesTab";
+import ModernBehaviourTab from "./tabs/ModernBehaviourTab"
+import ModernStyleTab from "./tabs/ModernStyleTab"
+import ModernThemesTab from "./tabs/ModernThemesTab"
 
 // Settings Icon
 const SettingsIcon = ({ className }) => (
@@ -95,26 +85,17 @@ function clamp(v, a, b) {
 }
 
 export default function ModernSettings() {
-	const dispatch = useDispatch();
-	const [open, setOpen] = useState(false);
-	const [activeTab, setActiveTab] = useState("behaviour");
-	const [isHovering, setIsHovering] = useState(false);
-	const nodeRef = useRef(null);
+	const [open, setOpen] = useState(false)
+	const [activeTab, setActiveTab] = useState("behaviour")
+	const [isHovering, setIsHovering] = useState(false)
+	const nodeRef = useRef(null)
+	const [position, setPosition] = useState({ x: 0, y: 0 })
 
-	// Draggable position state
-	const [position, setPosition] = useState({ x: 0, y: 0 });
-
-	// Use individual selectors to avoid creating new object references
-	const inactive = useSelector(
-		(state) => state.runtime?.events?.inactivity ?? false,
-	);
-	// evoker can be: true/"show" (always show), "hover" (show on hover), false/"hide" (never show)
-	const evokerSetting = useSelector(
-		(state) => state.settings?.behaviour?.evoker ?? true,
-	);
-	const lang = useSelector(
-		(state) => state.settings?.behaviour?.language ?? "english",
-	);
+	const inactive = useStore((state) => state.runtime?.events?.inactivity ?? false)
+	const evokerSetting = useStore((state) => state.settings?.behaviour?.evoker ?? true)
+	const lang = useStore((state) => state.settings?.behaviour?.language ?? "english")
+	const loadSettings = useStore((state) => state.loadSettings)
+	const saveSettings = useStore((state) => state.saveSettings)
 
 	// Normalize evoker setting
 	const evokerMode =
@@ -161,8 +142,8 @@ export default function ModernSettings() {
 
 	// Update settings from storage on mount
 	useEffect(() => {
-		dispatch({ type: "Settings_Update" });
-	}, [dispatch]);
+		loadSettings()
+	}, [loadSettings])
 
 	const handleDrag = (_, dragData) => {
 		setPosition({ x: dragData.x, y: dragData.y });
@@ -190,9 +171,9 @@ export default function ModernSettings() {
 	};
 
 	const handleClose = () => {
-		setOpen(false);
-		dispatch({ type: "Settings_Save" });
-	};
+		setOpen(false)
+		saveSettings()
+	}
 
 	const handleOpen = () => {
 		if (!inactive) {

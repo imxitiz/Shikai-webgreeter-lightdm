@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { cn } from '@/js/lib/utils'
 import { Button } from '@/js/Components/ui/button'
 import { Avatar, AvatarImage, AvatarFallback } from '@/js/Components/ui/avatar'
 import { Badge } from '@/js/Components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/js/Components/ui/select'
 import { data } from '@/lang'
+import type { LightDMUser } from '@/js/State/types'
 import { getUserImage, getSessions } from '@/js/Greeter/Operations'
 import { types, notify } from '@/js/Greeter/ModernNotifications'
 import { date } from '@/js/Tools/Formatter'
@@ -12,11 +13,28 @@ import { ScrollArea } from '../../ui/scroll-area'
 import useStore from '@/js/State/store'
 
 declare global {
+  interface Lightdm {
+    users?: { username?: string; display_name?: string }[]
+    authenticate?: (user?: string | null) => void
+    cancel_authentication?: () => void
+    respond?: (password: string) => void
+    authenticate_as_guest?: () => void
+    is_authenticated?: boolean
+    has_guest_account?: boolean
+    show_prompt?: { connect: (fn: () => void) => void; disconnect: (fn: () => void) => void }
+    authentication_complete?: { connect: (fn: () => void) => void; disconnect: (fn: () => void) => void }
+    start_session?: (key?: string | null) => void
+  }
+
   interface Window {
     __is_debug?: boolean
+    accounts?: { guestUser?: { username?: string }; getDefaultAccount?: () => { username?: string } }
+    sessions?: { getSelectedSession?: () => { key?: string } }
+    wait?: (ms: number) => Promise<void>
   }
-  const lightdm: any
+
 }
+
 
 interface ModernUserPanelProps {
   onRecenter: () => void
@@ -119,11 +137,26 @@ const GripIcon = () => (
   </svg>
 )
 
+const EyeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="Show">
+    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+)
+
+const EyeOffIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" role="img" aria-label="Hide">
+    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.86 21.86 0 0 1 5.06-6.94" />
+    <path d="M1 1l22 22" />
+  </svg>
+)
+
 export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
   const passwordRef = useRef<HTMLInputElement>(null)
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [shake, setShake] = useState(false)
+  const [passwordVisible, setPasswordVisible] = useState(false)
 
   const user = useStore((state) => state.runtime.user)
   const session = useStore((state) => state.runtime.session)
@@ -140,12 +173,12 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
 
   const sessions = getSessions()
 
-  const users = window.__is_debug
+  const users: { username?: string; display_name?: string }[] = window.__is_debug
     ? typeof lightdm !== 'undefined'
-      ? lightdm.users
+      ? lightdm.users ?? []
       : [{ username: 'user', display_name: 'User' }]
     : typeof lightdm !== 'undefined'
-      ? lightdm.users
+      ? lightdm.users ?? []
       : []
 
   const [currentDate, setCurrentDate] = useState('')
@@ -161,21 +194,38 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
     passwordRef.current?.focus()
   }, [])
 
+  // small helper for waits
+  const wait = useCallback((ms: number) => new Promise((res) => setTimeout(res, ms)), [])
+
+  const doRespond = useCallback(() => {
+    if (!passwordRef.current) return
+    const currentUser = user
+
+    passwordRef.current.blur()
+    passwordRef.current.disabled = true
+
+    if (currentUser === window.accounts?.guestUser && window.lightdm?.has_guest_account) {
+      window.lightdm.authenticate_as_guest()
+    } else {
+      window.lightdm?.respond(password)
+    }
+  }, [user, password])
+
+  const startAuthentication = useCallback(() => {
+    window.lightdm?.cancel_authentication()
+    const currentUser = user
+    if (currentUser === window.accounts?.guestUser && window.lightdm?.has_guest_account) return
+    window.lightdm?.authenticate(currentUser?.username ?? '')
+  }, [user])
+
+
   useEffect(() => {
     if (window.__is_debug) return
-
-    const handlePrompt = () => {
-      lightdm.respond(password)
-      setTimeout(() => {
-        if (!lightdm.is_authenticated) {
-          handleLoginFailure()
-        }
-      }, 250)
+    startAuthentication()
+    return () => {
+      window.lightdm?.cancel_authentication()
     }
-
-    lightdm?.show_prompt?.connect(handlePrompt)
-    return () => lightdm?.show_prompt?.disconnect(handlePrompt)
-  }, [password])
+  }, [startAuthentication])
 
   const handleLogin = () => {
     if (isLoading || !password) return
@@ -191,26 +241,53 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
         }
       }, 1000)
     } else {
-      lightdm.cancel_authentication()
-      lightdm.authenticate(user?.username || '')
+      doRespond()
     }
   }
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = useCallback(() => {
     notify(`${data.get(lang, 'notifications.logged_in')} ${user?.username}!`, types.Success)
     startEvent('loginSuccess')
     setIsLoading(false)
-  }
+  }, [lang, user?.username, startEvent])
 
-  const handleLoginFailure = () => {
+  const handleLoginFailure = useCallback(() => {
     notify(data.get(lang, 'notifications.wrong_password'), types.Error)
     startEvent('loginFailure')
     setPassword('')
     setShake(true)
     setTimeout(() => setShake(false), 500)
     setIsLoading(false)
-    passwordRef.current?.focus()
-  }
+    if (passwordRef.current) {
+      passwordRef.current.disabled = false
+      passwordRef.current.focus()
+    }
+  }, [lang, startEvent])
+
+  useEffect(() => {
+    if (window.__is_debug) return
+
+    const onAuthComplete = () => {
+      if (lightdm?.is_authenticated) {
+        ;(async () => {
+          handleLoginSuccess()
+          const form = document.querySelector('#login-form')
+          form?.classList.add('success')
+          await wait(500)
+          const defSession = window.sessions?.getSelectedSession?.()
+          const body = document.querySelector('body')
+          if (body) body.style.opacity = '0'
+          await wait(1000)
+          window.lightdm?.start_session(defSession?.key ?? null)
+        })()
+      } else {
+        handleLoginFailure()
+      }
+    }
+
+    lightdm?.authentication_complete?.connect(onAuthComplete)
+    return () => lightdm?.authentication_complete?.disconnect(onAuthComplete)
+  }, [handleLoginFailure, handleLoginSuccess, wait])
 
   const handleUserSwitch = (direction: 'next' | 'prev') => {
     const currentIndex = users.findIndex((u) => u.username === user?.username)
@@ -219,8 +296,10 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
         ? (currentIndex + 1) % users.length
         : (currentIndex - 1 + users.length) % users.length
 
-    switchUser(users[newIndex])
+    switchUser(users[newIndex] as unknown as LightDMUser)
     setPassword('')
+    // restart auth flow for the newly selected user
+    if (!window.__is_debug) startAuthentication()
   }
 
   const handleSessionChange = (sessionKey: string) => {
@@ -284,7 +363,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300" />
                 <Avatar className="w-28 h-28 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-primary/10">
-                  <AvatarImage src={getUserImage(user!)} alt={user?.display_name} />
+                  <AvatarImage src={user ? getUserImage(user) : ''} alt={user?.display_name} />
                   <AvatarFallback className="text-3xl bg-gradient-to-br from-primary/20 to-accent/20">
                     {userInitials}
                   </AvatarFallback>
@@ -333,7 +412,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                 <input
                   id="password-input"
                   ref={passwordRef}
-                  type="password"
+                  type={passwordVisible ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -341,7 +420,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                   aria-label={data.get(lang, 'login.password') || 'Password'}
                   placeholder={data.get(lang, 'login.password') || 'Password'}
                   className={cn(
-                    'w-full h-16 pl-16 pr-4 rounded-xl py-2 leading-normal text-lg',
+                    'w-full h-16 pl-16 pr-12 rounded-xl py-2 leading-normal text-lg',
                     'bg-card/70 border border-border/30 hover:border-border/50',
                     'text-foreground placeholder:text-foreground/70',
                     'focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-primary',
@@ -350,6 +429,17 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                     'shadow-sm hover:shadow-md group-focus-within:shadow-lg group-focus-within:shadow-primary/20'
                   )}
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasswordVisible((v) => !v)
+                    passwordRef.current?.focus()
+                  }}
+                  className="absolute right-4 text-foreground/70 hover:text-foreground/90"
+                  aria-label={passwordVisible ? 'Hide password' : 'Show password'}
+                >
+                  {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
+                </button>
               </div>
             </div>
           </div>

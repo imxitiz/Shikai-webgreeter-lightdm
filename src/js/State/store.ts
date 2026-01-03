@@ -1,6 +1,7 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import type { AppState, RuntimeState, SettingsState, Theme, LightDMUser, LightDMSession } from './types'
+import { devtools, persist, subscribeWithSelector, createJSONStorage } from 'zustand/middleware'
+import { immer } from 'zustand/middleware/immer'
+import type { AppState, RuntimeEvents, SettingsState, Theme, LightDMUser, LightDMSession } from './types'
 import * as Operations from '../Greeter/Operations'
 import { saveSettings, getSettings, saveThemes, getThemes } from '../Greeter/Storage'
 import { update, query } from '../Tools/Dictionary'
@@ -330,7 +331,7 @@ function createStore() {
       user: getInitialUser(),
       session: getInitialSession(),
       hostname: Operations.getHostname(),
-      logos: window.__is_debug ? Operations.getLogos(Operations.getLogosDir()) : '',
+      logos: window.__is_debug ? (Operations.getLogos(Operations.getLogosDir()) ?? '') : '',
       events: {
         loginSuccess: false,
         loginFailure: false,
@@ -342,195 +343,191 @@ function createStore() {
   }
 
   return create<StoreState>()(
-    persist(
-      (set, get) => ({
-        ...initialState,
+    subscribeWithSelector(
+      devtools(
+        persist(
+          immer((set, get) => ({
+            ...initialState,
 
-        // Runtime actions
-        switchUser: (value) => {
-          if (value) {
-            set((state) => ({
-              runtime: { ...state.runtime, user: value }
-            }))
-            return
-          }
-
-          const users = typeof lightdm !== 'undefined' && lightdm?.users
-            ? lightdm.users
-            : [{ username: 'user', display_name: 'User', session: 'plasma', image: '' }]
-
-          const currentUser = get().runtime.user
-          const userIndex = users.findIndex((u) => u.username === currentUser?.username)
-
-          if (userIndex === users.length - 1 || userIndex === -1) {
-            set((state) => ({
-              runtime: { ...state.runtime, user: users[0] }
-            }))
-          } else {
-            set((state) => ({
-              runtime: { ...state.runtime, user: users[userIndex + 1] }
-            }))
-          }
-        },
-
-        switchSession: (value) => {
-          if (value) {
-            set((state) => ({
-              runtime: { ...state.runtime, session: value }
-            }))
-            return
-          }
-
-          const sessions = typeof lightdm !== 'undefined' && lightdm?.sessions
-            ? lightdm.sessions
-            : [{ name: 'Plasma', key: 'plasma', type: 'x11' }]
-
-          const currentSession = get().runtime.session
-          const sessionIndex = sessions.findIndex((s) => s.key === currentSession?.key)
-
-          if (sessionIndex === sessions.length - 1 || sessionIndex === -1) {
-            set((state) => ({
-              runtime: { ...state.runtime, session: sessions[0] }
-            }))
-          } else {
-            set((state) => ({
-              runtime: { ...state.runtime, session: sessions[sessionIndex + 1] }
-            }))
-          }
-        },
-
-        startEvent: (key) => {
-          set((state) => ({
-            runtime: {
-              ...state.runtime,
-              events: { ...state.runtime.events, [key]: true }
-            }
-          }))
-        },
-
-        stopEvent: (key) => {
-          set((state) => ({
-            runtime: {
-              ...state.runtime,
-              events: { ...state.runtime.events, [key]: false }
-            }
-          }))
-        },
-
-        setLogos: (logos) => {
-          set((state) => ({
-            runtime: { ...state.runtime, logos }
-          }))
-        },
-
-        // Settings actions
-        setSetting: (key, value) => {
-          set((state) => ({
-            settings: update(state.settings, key, value)
-          }))
-        },
-
-        toggleSetting: (key) => {
-          set((state) => {
-            const currentValue = query(state.settings, key)
-            return {
-              settings: update(state.settings, key, !currentValue)
-            }
-          })
-        },
-
-        saveSettings: () => {
-          const settings = get().settings
-          saveSettings(settings)
-        },
-
-        updateSettings: () => {
-          const loaded = getSettings()
-          if (loaded != null) {
-            set({ settings: loaded })
-          }
-        },
-
-        // Theme actions
-        activateTheme: (key) => {
-          const themes = get().themes
-          if (themes[key]) {
-            set({ settings: Copy(themes[key].settings) })
-          }
-        },
-
-        addTheme: (name) => {
-          set((state) => {
-            const newTheme: Theme = {
-              name,
-              settings: Copy(state.settings)
-            }
-            return {
-              themes: [...state.themes, newTheme]
-            }
-          })
-        },
-
-        removeTheme: (key) => {
-          set((state) => {
-            const themes = [...state.themes]
-            if (themes.length > key) {
-              themes.splice(key, 1)
-            }
-            return { themes }
-          })
-        },
-
-        saveThemes: () => {
-          const themes = get().themes
-          saveThemes(themes)
-        },
-
-        updateThemes: () => {
-          const loaded = getThemes()
-          if (loaded != null) {
-            set({ themes: loaded })
-          }
-        },
-
-        purgeThemes: () => {
-          set({ themes: [] })
-        }
-      }),
-      {
-        name: 'shikai-store',
-        storage: createJSONStorage(() => ({
-          getItem: (key: string) => {
-            try {
-              const item = localStorage.getItem(key)
-              if (item && item !== 'null' && item !== 'undefined' && item !== '') {
-                return JSON.parse(item)
+            // Runtime actions
+            switchUser: (value) => {
+              if (value) {
+                set((state) => {
+                  state.runtime.user = value
+                }, undefined, 'runtime/switchUser')
+                return
               }
-            } catch (err) {
-              console.warn('Failed to get item from storage', key, err)
+
+              const users: LightDMUser[] = typeof lightdm !== 'undefined' && lightdm?.users
+                ? (lightdm.users as LightDMUser[])
+                : [{ username: 'user', display_name: 'User', session: 'plasma', image: '' }]
+
+              const currentUser = get().runtime.user
+              const userIndex = users.findIndex((u: LightDMUser) => u.username === currentUser?.username)
+
+              if (userIndex === users.length - 1 || userIndex === -1) {
+                set((state) => {
+                  state.runtime.user = users[0]
+                }, undefined, 'runtime/switchUser')
+              } else {
+                set((state) => {
+                  state.runtime.user = users[userIndex + 1]
+                }, undefined, 'runtime/switchUser')
+              }
+            },
+
+            switchSession: (value) => {
+              if (value) {
+                set((state) => {
+                  state.runtime.session = value
+                }, undefined, 'runtime/switchSession')
+                return
+              }
+
+              const sessions: LightDMSession[] = typeof lightdm !== 'undefined' && lightdm?.sessions
+                ? (lightdm.sessions as LightDMSession[])
+                : [{ name: 'Plasma', key: 'plasma', type: 'x11' }]
+
+              const currentSession = get().runtime.session
+              const sessionIndex = sessions.findIndex((s: LightDMSession) => s.key === currentSession?.key)
+
+              if (sessionIndex === sessions.length - 1 || sessionIndex === -1) {
+                set((state) => {
+                  state.runtime.session = sessions[0]
+                }, undefined, 'runtime/switchSession')
+              } else {
+                set((state) => {
+                  state.runtime.session = sessions[sessionIndex + 1]
+                }, undefined, 'runtime/switchSession')
+              }
+            },
+
+            startEvent: (key) => {
+              set((state) => {
+                state.runtime.events[key as keyof RuntimeEvents] = true
+              }, undefined, `runtime/startEvent:${String(key)}`)
+            },
+
+            stopEvent: (key) => {
+              set((state) => {
+                state.runtime.events[key as keyof RuntimeEvents] = false
+              }, undefined, `runtime/stopEvent:${String(key)}`)
+            },
+
+            setLogos: (logos) => {
+              set((state) => {
+                // logos can be string or array
+                state.runtime.logos = logos
+              }, undefined, 'runtime/setLogos')
+            },
+
+            // Settings actions
+            setSetting: (key, value) => {
+              set((state) => {
+                state.settings = update(state.settings, key, value)
+              }, undefined, `settings/set:${String(key)}`)
+            },
+
+            toggleSetting: (key) => {
+              set((state) => {
+                const currentValue = query(state.settings, key)
+                state.settings = update(state.settings, key, !currentValue)
+              }, undefined, `settings/toggle:${String(key)}`)
+            },
+
+            saveSettings: () => {
+              const settings = get().settings
+              saveSettings(settings)
+            },
+
+            updateSettings: () => {
+              const loaded = getSettings()
+              if (loaded != null) {
+                set({ settings: loaded }, undefined, 'settings/updateSettings')
+              }
+            },
+
+            // Theme actions
+            activateTheme: (key) => {
+              const themes = get().themes
+              if (themes[key]) {
+                set({ settings: Copy(themes[key].settings) }, undefined, `themes/activate:${key}`)
+              }
+            },
+
+            addTheme: (name) => {
+              set((state) => {
+                const newTheme: Theme = {
+                  name,
+                  settings: Copy(state.settings)
+                }
+                state.themes = [...state.themes, newTheme]
+              }, undefined, `themes/add:${name}`)
+            },
+
+            removeTheme: (key) => {
+              set((state) => {
+                const themes = [...state.themes]
+                if (themes.length > key) {
+                  themes.splice(key, 1)
+                }
+                state.themes = themes
+              }, undefined, `themes/remove:${key}`)
+            },
+
+            saveThemes: () => {
+              const themes = get().themes
+              saveThemes(themes)
+            },
+
+            updateThemes: () => {
+              const loaded = getThemes()
+              if (loaded != null) {
+                set({ themes: loaded }, undefined, 'themes/updateThemes')
+              }
+            },
+
+            purgeThemes: () => {
+              set({ themes: [] }, undefined, 'themes/purge')
             }
-            return null
-          },
-          setItem: (key: string, value: string) => {
-            try {
-              localStorage.setItem(key, value)
-            } catch (err) {
-              console.warn('Failed to set item in storage', key, err)
-            }
-          },
-          removeItem: (key: string) => {
-            try {
-              localStorage.removeItem(key)
-            } catch (err) {
-              console.warn('Failed to remove item from storage', key, err)
-            }
+          })),
+          {
+            name: 'shikai-store',
+            storage: createJSONStorage(() => ({
+              getItem: (key: string) => {
+                try {
+                  const item = localStorage.getItem(key)
+                  if (item && item !== 'null' && item !== 'undefined' && item !== '') {
+                    return JSON.parse(item)
+                  }
+                } catch (err) {
+                  console.warn('Failed to get item from storage', key, err)
+                }
+                return null
+              },
+              setItem: (key: string, value: string) => {
+                try {
+                  localStorage.setItem(key, value)
+                } catch (err) {
+                  console.warn('Failed to set item in storage', key, err)
+                }
+              },
+              removeItem: (key: string) => {
+                try {
+                  localStorage.removeItem(key)
+                } catch (err) {
+                  console.warn('Failed to remove item from storage', key, err)
+                }
+              }
+            })),
+            partialize: (state) => ({
+              settings: state.settings,
+              themes: state.themes
+            })
           }
-        })),
-        partialize: (state) => ({
-          settings: state.settings,
-          themes: state.themes
-        })
-      }
+        ),
+        { name: 'shikai-store', enabled: process.env.NODE_ENV !== 'production' }
+      )
     )
   )
 }

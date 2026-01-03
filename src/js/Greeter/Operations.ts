@@ -116,12 +116,14 @@ export function getLogosDir(): string {
   if (window.__is_debug === true) {
     return './assets/media/logos/'
   }
-  return typeof greeter_config !== 'undefined' && greeter_config?.branding?.logo_image
+  return greeter_config?.branding?.logo_image
     ? greeter_config.branding.logo_image
     : './assets/media/logos/'
 }
 
-export function getLogos(dir: string, callback?: (logos: Array<[string, string]>) => void): Array<[string, string]> | void {
+export function getLogos(dir: string, callback?: (logos: Array<[string, string]>) => void): Array<[string, string]> | undefined {
+  const DEFAULT_LOGOS_DIR = './assets/media/logos/'
+
   if (window.__is_debug === true) {
     const result: Array<[string, string]> = [
       ['archlinux', './assets/media/logos/archlinux.png'],
@@ -136,8 +138,20 @@ export function getLogos(dir: string, callback?: (logos: Array<[string, string]>
     }
     return result
   }
+
+  // Try the provided dir first, fall back to bundled assets if nothing is found
   theme_utils.dirlist(dir, true, (r: string[]) => {
     const result = r.map((o) => [o.split('/').pop()?.replace(/\.[^/.]+$/, '') || '', o] as [string, string])
+
+    if ((!result || result.length === 0) && dir !== DEFAULT_LOGOS_DIR) {
+      // fallback to bundled logos
+      theme_utils.dirlist(DEFAULT_LOGOS_DIR, true, (fallback: string[]) => {
+        const fallbackResult = fallback.map((o) => [o.split('/').pop()?.replace(/\.[^/.]+$/, '') || '', o] as [string, string])
+        callback?.(fallbackResult)
+      })
+      return
+    }
+
     callback?.(result)
   })
 }

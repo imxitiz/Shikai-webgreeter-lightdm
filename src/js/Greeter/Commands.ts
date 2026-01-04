@@ -3,10 +3,11 @@ import { types as modernTypes, notify as modernNotify } from './ModernNotificati
 import { get_lang, data } from '../../lang'
 
 declare global {
-  const lightdm: any
   interface Window {
     __is_debug?: boolean
+    lightdm?: any
   }
+  // If a global 'lightdm' var is present it should be available on window
 }
 
 function getNotifySystem() {
@@ -21,10 +22,23 @@ function execute(bool: boolean, message: string, callback: () => void) {
   const { types, notify } = getNotifySystem()
   if (bool) {
     notify(message, types.Info)
-    if (window.__is_debug != true) {
-      setTimeout(() => {
-        callback()
-      }, 1000)
+    const run = () => {
+      try {
+        if (typeof callback === 'function') {
+          callback()
+        } else {
+          console.warn('Command callback is not a function')
+        }
+      } catch (e) {
+        console.error('Command execution failed', e)
+      }
+    }
+
+    if (window.__is_debug !== true) {
+      setTimeout(run, 1000)
+    } else {
+      // In debug mode call immediately so devs can see the output right away
+      run()
     }
   } else {
     notify(data.get(get_lang(), 'commands.messages.unavailable'), types.Warning)
@@ -32,14 +46,22 @@ function execute(bool: boolean, message: string, callback: () => void) {
 }
 
 export function sleep() {
-  return execute(lightdm.can_suspend, data.get(get_lang(), 'commands.messages.sleep'), lightdm.suspend)
+  return execute(lightdm?.can_suspend, data.get(get_lang(), 'commands.messages.sleep'), () => {
+    if (typeof lightdm?.suspend === 'function') lightdm.suspend()
+  })
 }
 export function restart() {
-  return execute(lightdm.can_restart, data.get(get_lang(), 'commands.messages.reboot'), lightdm.restart)
+  return execute(lightdm?.can_restart, data.get(get_lang(), 'commands.messages.reboot'), () => {
+    if (typeof lightdm?.restart === 'function') lightdm.restart()
+  })
 }
 export function shutdown() {
-  return execute(lightdm.can_shutdown, data.get(get_lang(), 'commands.messages.shutdown'), lightdm.shutdown)
+  return execute(lightdm?.can_shutdown, data.get(get_lang(), 'commands.messages.shutdown'), () => {
+    if (typeof lightdm?.shutdown === 'function') lightdm.shutdown()
+  })
 }
 export function hibernate() {
-  return execute(lightdm.can_hibernate, data.get(get_lang(), 'commands.messages.hibernate'), lightdm.hibernate)
+  return execute(lightdm?.can_hibernate, data.get(get_lang(), 'commands.messages.hibernate'), () => {
+    if (typeof lightdm?.hibernate === 'function') lightdm.hibernate()
+  })
 }

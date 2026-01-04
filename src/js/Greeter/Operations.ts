@@ -121,22 +121,24 @@ export function getLogosDir(): string {
     : './assets/media/logos/'
 }
 
+// Centralized built-in default logos. Use this across the app instead of duplicating the list.
+export const DEFAULT_LOGOS: Array<[string, string]> = [
+  ['archlinux', './assets/media/logos/archlinux.png'],
+  ['ubuntu', './assets/media/logos/ubuntu.png'],
+  ['antergos', './assets/media/logos/antergos.png'],
+  ['debian', './assets/media/logos/debian.png'],
+  ['tux', './assets/media/logos/tux.png']
+]
+
 export function getLogos(dir: string, callback?: (logos: Array<[string, string]>) => void): Array<[string, string]> | undefined {
   const DEFAULT_LOGOS_DIR = './assets/media/logos/'
 
   if (window.__is_debug === true) {
-    const result: Array<[string, string]> = [
-      ['archlinux', './assets/media/logos/archlinux.png'],
-      ['ubuntu', './assets/media/logos/ubuntu.png'],
-      ['antergos', './assets/media/logos/antergos.png'],
-      ['debian', './assets/media/logos/debian.png'],
-      ['tux', './assets/media/logos/tux.png']
-    ]
     if (callback) {
-      callback(result)
+      callback(DEFAULT_LOGOS)
       return
     }
-    return result
+    return DEFAULT_LOGOS
   }
 
   // Try the provided dir first, fall back to bundled assets if nothing is found

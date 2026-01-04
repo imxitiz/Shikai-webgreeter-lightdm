@@ -331,7 +331,7 @@ function createStore() {
       user: getInitialUser(),
       session: getInitialSession(),
       hostname: Operations.getHostname(),
-      logos: window.__is_debug ? (Operations.getLogos(Operations.getLogosDir()) ?? '') : '',
+      logos: Operations.DEFAULT_LOGOS.slice(),
       events: {
         loginSuccess: false,
         loginFailure: false,
@@ -417,7 +417,22 @@ function createStore() {
             setLogos: (logos) => {
               set((state) => {
                 // logos can be string or array
-                state.runtime.logos = logos
+                if (Array.isArray(logos)) {
+                  // Merge incoming logos with DEFAULT_LOGOS so defaults are always present
+                  const mergedMap = new Map<string, string>()
+                  // Start with defaults so they are always included
+                  for (const [name, src] of Operations.DEFAULT_LOGOS) mergedMap.set(name, src)
+                  // Add/override with incoming logos
+                  for (const [name, src] of logos) mergedMap.set(name, src)
+
+                  state.runtime.logos = Array.from(mergedMap.entries()).map(([k, v]) => [k, v] as [string, string])
+                } else if (typeof logos === 'string') {
+                  // preserve legacy behavior
+                  state.runtime.logos = logos
+                } else {
+                  // unknown format: keep defaults
+                  state.runtime.logos = Operations.DEFAULT_LOGOS.slice()
+                }
               }, undefined, 'runtime/setLogos')
             },
 
@@ -532,5 +547,62 @@ function createStore() {
   )
 }
 
-const useStore = createStore()
+const useStore = createStore();
+
+// // Initialize runtime logos after store creation to merge system/bundled logos with debug defaults
+// // Some greeter environments provision `theme_utils` and related globals later during startup,
+// // so we retry a few times with a timeout until the async callback is invoked.
+// (() => {
+//   const maxAttempts = 30
+//   let attempts = 0
+//   const FALLBACK_DIR = './assets/media/logos/'
+
+//   const tryOnce = () => {
+//     attempts++
+//     try {
+//       // Use the DEFAULT_LOGOS immediately so UI has predictable values
+//       useStore.getState().setLogos(Operations.DEFAULT_LOGOS.slice())
+
+//       let called = false
+//       Operations.getLogos(Operations.getLogosDir(), (found) => {
+//         called = true
+//         // Prefer found logos if present, otherwise keep DEFAULT_LOGOS
+//         if (Array.isArray(found) && found.length > 0) {
+//           // merge names from DEFAULT_LOGOS to avoid losing those if needed
+//           const mergedMap = new Map<string, string>()
+//           for (const [name, src] of found) mergedMap.set(name, src)
+//           for (const [name, src] of Operations.DEFAULT_LOGOS) if (!mergedMap.has(name)) mergedMap.set(name, src)
+//           useStore.getState().setLogos(Array.from(mergedMap.entries()).map(([k, v]) => [k, v] as [string, string]))
+//         } else {
+//           // try fallback dir if initial dir returned nothing
+//           Operations.getLogos(FALLBACK_DIR, (fallback) => {
+//             if (Array.isArray(fallback) && fallback.length > 0) {
+//               const mergedMap = new Map<string, string>()
+//               for (const [name, src] of fallback) mergedMap.set(name, src)
+//               for (const [name, src] of Operations.DEFAULT_LOGOS) if (!mergedMap.has(name)) mergedMap.set(name, src)
+//               useStore.getState().setLogos(Array.from(mergedMap.entries()).map(([k, v]) => [k, v] as [string, string]))
+//             } else {
+//               // keep DEFAULT_LOGOS
+//               useStore.getState().setLogos(Operations.DEFAULT_LOGOS.slice())
+//             }
+//           })
+//         }
+//       })
+
+//       // If callback didn't run, schedule another try (likely theme_utils isn't ready yet)
+//       setTimeout(() => {
+//         if (!called && attempts < maxAttempts) {
+//           tryOnce()
+//         }
+//       }, 500)
+//     } catch {
+//       if (attempts < maxAttempts) {
+//         setTimeout(tryOnce, 500 * attempts)
+//       }
+//     }
+//   }
+
+//   tryOnce()
+// })()
+
 export default useStore

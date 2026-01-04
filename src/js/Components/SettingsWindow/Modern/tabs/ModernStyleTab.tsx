@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/js/
 import { data } from '@/lang'
 import useStore from '@/js/State/store'
 
+
 interface ColorPickerProps {
   label: string
   value: string
@@ -101,24 +102,34 @@ export default function ModernStyleTab() {
             </div>
             <div className="flex-1 no-wall-change">
               <Label className="text-sm mb-2 block text-foreground">Logo</Label>
-              <Select
-                value={currentLogoName}
-                onValueChange={(v) => {
-                  const logo = logosArray.find((l: [string, string]) => l[0] === v)
-                  if (logo) set('sidebar.logo', logo[1])
-                }}
-              >
-                <SelectTrigger className="w-full h-10 bg-input/50 border-border/50 shadow-sm no-wall-change">
-                  <SelectValue placeholder="Select a logo" />
-                </SelectTrigger>
-                <SelectContent className="no-wall-change">
-                  {logosArray.map((logo: [string, string]) => (
-                    <SelectItem key={logo[0]} value={logo[0]} className="no-wall-change">
-                      {logo[0]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <p className="text-xs text-muted-foreground mb-2">{logosArray.length} logos available</p>
+              {logosArray.length === 0 ? (
+                <div className="w-full h-10 bg-input/50 border-border/50 shadow-sm rounded-xl flex items-center justify-between px-4 text-muted-foreground">
+                  <span>No logos found</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 opacity-60" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+                </div>
+              ) : (
+                <Select
+                  value={currentLogoName}
+                  onValueChange={(v: string) => {
+                    const logo = logosArray.find((l: [string, string]) => l[0] === v)
+                    if (logo) set('sidebar.logo', logo[1])
+                  }}
+                >
+                  <SelectTrigger className="w-full h-10 bg-input/50 border-border/50 shadow-sm no-wall-change">
+                    <SelectValue placeholder="Select a logo" />
+                  </SelectTrigger>
+                  <SelectContent className="no-wall-change">
+                    {logosArray.map((logo: [string, string]) => (
+                      <SelectItem key={logo[0]} value={logo[0]} className="no-wall-change">
+                        {/* can we also show small preview images here? */}
+                        <img src={logo[1]} alt={logo[0]} className="w-6 h-6 object-contain inline-block mr-2" />
+                        {logo[0]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
           </div>
         </div>
@@ -209,7 +220,7 @@ export default function ModernStyleTab() {
             </Label>
             <Input
               value={style.userbar?.password?.border?.radius || '8px'}
-              onChange={(e) => set('userbar.password.border.radius', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('userbar.password.border.radius', e.target.value)}
               className="h-10 bg-input/50 border-border/50 shadow-sm"
               placeholder="8px"
             />
@@ -220,7 +231,7 @@ export default function ModernStyleTab() {
             </Label>
             <Input
               value={style.userbar?.session?.radius || '8px'}
-              onChange={(e) => set('userbar.session.radius', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('userbar.session.radius', e.target.value)}
               className="h-10 bg-input/50 border-border/50 shadow-sm"
               placeholder="8px"
             />
@@ -232,7 +243,7 @@ export default function ModernStyleTab() {
               </Label>
               <Input
                 value={style.userbar?.password?.caret?.left || '>'}
-                onChange={(e) => set('userbar.password.caret.left', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('userbar.password.caret.left', e.target.value)}
                 className="h-10 bg-input/50 border-border/50 shadow-sm"
               />
             </div>
@@ -242,7 +253,7 @@ export default function ModernStyleTab() {
               </Label>
               <Input
                 value={style.userbar?.password?.caret?.right || '<'}
-                onChange={(e) => set('userbar.password.caret.right', e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('userbar.password.caret.right', e.target.value)}
                 className="h-10 bg-input/50 border-border/50 shadow-sm"
               />
             </div>

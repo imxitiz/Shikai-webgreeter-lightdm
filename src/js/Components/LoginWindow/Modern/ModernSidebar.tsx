@@ -177,7 +177,7 @@ export default function ModernSidebar() {
         </div>
 
         <div className="flex-1">
-          <p className="text-lm text-foreground uppercase tracking-wider m-4">
+          <p className="text-sm text-foreground uppercase tracking-wider m-4">
             {data.get(lang, 'commands.title') || 'Quick Actions'}
           </p>
 

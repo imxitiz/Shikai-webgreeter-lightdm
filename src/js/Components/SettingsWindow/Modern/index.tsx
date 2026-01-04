@@ -88,6 +88,23 @@ export default function ModernSettings() {
 
   const [position, setPosition] = useState({ x: 0, y: 0 })
 
+  useEffect(() => {
+    try {
+      if (open) {
+        document.body.classList.add('settings-open')
+      } else {
+        document.body.classList.remove('settings-open')
+      }
+    } catch {
+      // ignore (e.g., server-side rendering)
+    }
+    return () => {
+      try {
+        document.body.classList.remove('settings-open')
+      } catch {}
+    }
+  }, [open])
+
   const inactive = useStore((state) => state.runtime.events.inactivity)
   const evokerSetting = useStore((state) => state.settings.behaviour.evoker)
   const lang = useStore((state) => state.settings.behaviour.language)
@@ -214,7 +231,7 @@ export default function ModernSettings() {
       )}
 
       {open && !inactive && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
           <Draggable
             nodeRef={nodeRef}
             axis="both"
@@ -228,7 +245,7 @@ export default function ModernSettings() {
               ref={nodeRef}
               aria-label="Settings Panel"
               className={cn(
-                'relative z-50 no-wall-change',
+                'relative z-50 no-wall-change pointer-events-auto',
                 'rounded-2xl',
                 'flex flex-col',
                 'shadow-2xl',

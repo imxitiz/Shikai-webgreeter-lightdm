@@ -143,21 +143,16 @@ function launch() {
       const extendedEvent = e as ExtendedEvent
       const path = extendedEvent.composedPath ? extendedEvent.composedPath() : (extendedEvent.path || [])
       const isInteractive =
-        ((e.target as HTMLElement)?.closest &&
-          (e.target as HTMLElement).closest('button, a, input, textarea, select, label, [role="button"]')) ||
-        (path &&
-          path.some(
-            (el) =>
-              el && (el as Element).nodeType === 1 && (el as Element).matches && (el as Element).matches('button, a, input, textarea, select, label, [role="button"]')
-          ))
+        (e.target as HTMLElement)?.closest?.('button, a, input, textarea, select, label, [role="button"]') ||
+        path?.some((el) => (el as Element)?.nodeType === 1 && (el as Element)?.matches?.('button, a, input, textarea, select, label, [role="button"]'))
+
+      try {
+        if (document.body.classList.contains('settings-open')) return
+      } catch {}
 
       const inNoWall =
-        ((e.target as HTMLElement)?.closest && (e.target as HTMLElement).closest('.no-wall-change')) ||
-        (path &&
-          path.some(
-            (el) =>
-              el && (el as Element).nodeType === 1 && (el as Element).classList && (el as Element).classList.contains && (el as Element).classList.contains('no-wall-change')
-          ))
+        (e.target as HTMLElement)?.closest?.('.no-wall-change') ||
+        path?.some((el) => (el as Element)?.nodeType === 1 && (el as Element)?.classList?.contains?.('no-wall-change'))
 
       if (!isInteractive && !inNoWall) {
         const wallpaper = wallpapers[Math.floor(Math.random() * wallpapers.length)]
@@ -171,7 +166,7 @@ function launch() {
         } catch {
           /* ignore */
         }
-        if (typeof greeter_comm !== 'undefined' && greeter_comm?.broadcast) {
+        if (greeter_comm?.broadcast) {
           try {
             greeter_comm.broadcast(wallpaper)
           } catch {
@@ -193,7 +188,7 @@ function launch() {
       } catch {
         /* ignore */
       }
-      if (typeof greeter_comm !== 'undefined' && greeter_comm?.broadcast) {
+      if (greeter_comm?.broadcast) {
         try {
           greeter_comm.broadcast(wallpaper)
         } catch {

@@ -23,6 +23,11 @@ declare global {
 function launch() {
 	const wall_callback = (wallpapers: string[]) => {
 		document.body.onclick = (e: MouseEvent) => {
+			// If settings panel is open, don't change wallpaper on body clicks
+			try {
+				if (document.body.classList.contains('settings-open')) return
+			} catch {}
+
 			const target = e.target as HTMLElement | null;
 			const isInteractive = !!target?.closest?.(
 				'button, a, input, textarea, select, label, [role="button"]',

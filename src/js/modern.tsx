@@ -163,7 +163,7 @@ function launch() {
         const wallpaper = wallpapers[Math.floor(Math.random() * wallpapers.length)]
         document.body.style.backgroundImage = `url('${wallpaper}')`
         document.body.style.backgroundSize = 'cover'
-        document.body.style.backgroundPosition = 'center center'
+        // document.body.style.backgroundPosition = 'center center'
         document.body.style.backgroundRepeat = 'no-repeat'
         document.body.classList.add('has-wallpaper')
         try {
@@ -185,7 +185,7 @@ function launch() {
       const wallpaper = wallpapers[Math.floor(Math.random() * wallpapers.length)]
       document.body.style.backgroundImage = `url('${wallpaper}')`
       document.body.style.backgroundSize = 'cover'
-      document.body.style.backgroundPosition = 'center center'
+      // document.body.style.backgroundPosition = 'center center'
       document.body.style.backgroundRepeat = 'no-repeat'
       document.body.classList.add('has-wallpaper')
       try {
@@ -209,7 +209,7 @@ function launch() {
       if (last) {
         document.body.style.backgroundImage = `url('${last}')`
         document.body.style.backgroundSize = 'cover'
-        document.body.style.backgroundPosition = 'center center'
+        // document.body.style.backgroundPosition = 'center center'
         document.body.style.backgroundRepeat = 'no-repeat'
       }
     } catch {
@@ -326,19 +326,24 @@ window.onload = () => {
   }
 }
 
-window.addEventListener('GreeterBroadcastEvent', (e: Event) => {
-  try {
-    document.body.style.backgroundImage = `url('${e.data}')`
-    document.body.style.backgroundSize = 'cover'
-    document.body.style.backgroundPosition = 'center center'
-    document.body.style.backgroundRepeat = 'no-repeat'
-    document.body.classList.add('has-wallpaper')
-    try {
-      localStorage.setItem('CurrentWallpaper', e.data)
-    } catch {
-      /* ignore */
-    }
-  } catch {
-    console.warn('Failed to apply broadcast background')
-  }
-})
+window.addEventListener("GreeterBroadcastEvent", (evt: Event) => {
+	try {
+		const evtAny = evt as unknown as { data?: unknown; detail?: unknown };
+		const maybeUrl =
+			typeof evtAny.data !== "undefined" ? evtAny.data : evtAny.detail;
+		if (typeof maybeUrl !== "string") return;
+		const url = maybeUrl;
+		document.body.style.backgroundImage = `url('${url}')`;
+		document.body.style.backgroundSize = "cover";
+		// document.body.style.backgroundPosition = 'center center'
+		document.body.style.backgroundRepeat = "no-repeat";
+		document.body.classList.add("has-wallpaper");
+		try {
+			localStorage.setItem("CurrentWallpaper", url);
+		} catch {
+			/* ignore */
+		}
+	} catch (err) {
+		console.warn("Failed to apply broadcast background", err);
+	}
+});

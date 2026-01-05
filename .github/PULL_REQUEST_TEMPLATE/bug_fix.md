@@ -3,7 +3,7 @@ name: Bug Fix
 about: Create a pull request about a bug fix
 title: "[BUG] Title"
 labels: bug
-assignees: TheWisker
+assignees: imxitiz
 
 ---
 

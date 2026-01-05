@@ -3,7 +3,7 @@ name: New Feature
 about: Create a pull request about a new feature
 title: "[Enhancement] Title"
 labels: enhancement
-assignees: TheWisker
+assignees: imxitiz
 
 ---
 

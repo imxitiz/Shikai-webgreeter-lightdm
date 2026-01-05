@@ -3,7 +3,7 @@ description: File a bug report
 title: "[BUG] Title"
 labels: ["bug"]
 assignees:
-  - TheWisker
+  - "imxitiz"
 body:
   - type: markdown
     attributes:
@@ -34,6 +34,7 @@ body:
       label: Shikai Version
       description: What version of the theme are you running?
       options:
+        - v2.0.0
         - v1.6.0
         - v1.5.3
         - v1.5.2
@@ -88,7 +89,7 @@ body:
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/TheWisker/Shikai/blob/master/.github/CODE_OF_CONDUCT.md)
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/imxitiz/Shikai-webgreeter-lightdm/blob/main/.github/CODE_OF_CONDUCT.md).  
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true

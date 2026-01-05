@@ -160,7 +160,7 @@ export function getLogos(dir: string, callback?: (logos: Array<[string, string]>
 
 export function getUserImage(user: LightDMUser): string {
   if (window.__is_debug === true) {
-    return './assets/media/profile.jpg'
+    return './assets/media/profile.png'
   }
   return user.image || greeter_config.branding.user_image
 }

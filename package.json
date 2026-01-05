@@ -26,6 +26,7 @@
 		"watch": "bun --bun vite build --watch",
 		"server": "bun --bun vite",
 		"preview": "bun --bun vite preview",
+		"release": "./scripts/make-release.sh",
 		"install-theme": "./scripts/install.sh",
 		"install-theme-dev": "./scripts/install-dev.sh"
 	},

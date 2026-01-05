@@ -205,7 +205,7 @@ export default function ModernSettings() {
           onFocus={() => setIsHovering(true)}
           onBlur={() => setIsHovering(false)}
           onClick={handleOpen}
-          aria-label="Open Settings"
+          aria-label={data.get(lang, 'settings.open') || 'Open Settings'}
         >
           <span
             className={cn(
@@ -294,7 +294,7 @@ export default function ModernSettings() {
                     size="icon-sm"
                     onClick={handleRecenter}
                     className="opacity-60 hover:opacity-100"
-                    title="Recenter"
+                    title={data.get(lang, 'settings.recenter') || 'Recenter'}
                   >
                     <RecenterIcon />
                   </Button>

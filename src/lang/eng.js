@@ -3,6 +3,7 @@
  * eng.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "shutdown",
                 hibernate: "hibernate"
             },
+            title: "Quick Actions",
             messages: {
                 sleep: "Taking a nap...",
                 reboot: "Restarting...",
@@ -48,24 +50,32 @@ export default {
             }
         },
         settings: {
+            title: "Settings",
+            subtitle: "Customize your greeter",
+            open: "Open Settings",
+            recenter: "Recenter",
             behaviour: {
                 name: "Behaviour",
                 sections: {
                     lang: {
-                        name: "Language"
+                        name: "Language",
+                        description: "Select your preferred language"
                     },
                     general: {
                         name: "General",
+                        description: "Configure visibility of UI elements",
                         options: {
                             logo: "Logo enabled",
                             hostname: "Hostname enabled",
                             avatar: "Avatar enabled",
+                            dark_mode: "Dark Mode",
                             username: "Username enabled",
                             session: "Session enabled"
                         }
                     },
                     commands: {
                         name: "Commands",
+                        description: "Enable or disable power commands",
                         options: {
                             shutdown: "Shutdown enabled",
                             reboot: "Reboot enabled",
@@ -75,6 +85,7 @@ export default {
                     },
                     time: {
                         name: "Clock and Date",
+                        description: "Configure clock and date display",
                         options: {
                             clock: {
                                 enabled: "Clock enabled",
@@ -88,21 +99,31 @@ export default {
                     },
                     misc: {
                         name: "Miscellaneous",
+                        description: "Other settings",
+                        evoker_description: "Show, show on hover, or hide the settings button",
                         options: {
                             idle: {
                                 enabled: "Hide on idle",
                                 value: "Idle timeout (s)"
                             },
-                            evoker: "Settings button invisible"
+                            evoker: "Settings button invisible",
+                            evoker_values: {
+                                show: "Always",
+                                hover: "On Hover"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "Style",
+                descriptions: {
+                    colors: "Customize color scheme"
+                },
                 sections: {
                     main: {
                         name: "Main",
+                        description: "Customize the look and feel",
                         options: {
                             avatar: "Avatar color",
                             text: "Text color",
@@ -170,7 +191,31 @@ export default {
             }
         },
         misc: {
-            theme: "Theme"
-        }
+            theme: "Theme",
+            unknown: "Unknown"
+        },
+        modes: {
+            dark: "Dark Mode",
+            light: "Light Mode"
+        },
+        labels: {
+            host: "Host"
+        },
+        footer: {
+            made_with: "Made with",
+            by: "by imxitiz"
+        },
+        login: {
+            button: "Sign In",
+            logging_in: "Signing in...",
+            password: "Password",
+            session: "Select session",
+            users: "users",
+            show_password: "Show password",
+            hide_password: "Hide password",
+            show_password_notification: "Password visible",
+            hide_password_notification: "Password hidden"
+        },
+
     }
 }

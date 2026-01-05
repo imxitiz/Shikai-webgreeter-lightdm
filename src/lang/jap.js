@@ -3,6 +3,7 @@
  * jap.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "電源を切る",
                 hibernate: "冬眠する"
             },
+            title: "クイックアクション",
             messages: {
                 sleep: "昼寝をしている...",
                 reboot: "再起動しています...",
@@ -48,6 +50,10 @@ export default {
             }
         },
         settings: {
+            title: "設定",
+            subtitle: "グリーターをカスタマイズ",
+            open: "設定を開く",
+            recenter: "中央に戻す",
             behaviour: {
                 name: "行動",
                 sections: {
@@ -56,10 +62,12 @@ export default {
                     },
                     general: {
                         name: "一般",
+                        description: "UI要素の表示を構成",
                         options: {
                             logo: "ロゴが有効",
                             hostname: "ホスト名が有効",
                             avatar: "アバター有効",
+                            dark_mode: "ダークモード",
                             username: "ユーザー名が有効",
                             session: "セッションが有効"
                         }
@@ -88,21 +96,29 @@ export default {
                     },
                     misc: {
                         name: "その他",
+                        description: "その他の設定",
+                        evoker_description: "設定ボタンを表示、ホバーで表示、または非表示",
                         options: {
                             idle: {
                                 enabled: "アイドル状態で非表示",
                                 value: "アイドル タイムアウト (秒)"
                             },
-                            evoker: "設定ボタンが見えない"
+                            evoker: "設定ボタンが見えない",
+                            evoker_values: {
+                                show: "常に",
+                                hover: "ホバー時"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "スタイル",
+                descriptions: { colors: "カラースキームをカスタマイズ" },
                 sections: {
                     main: {
                         name: "主要",
+                        description: "外観をカスタマイズ",
                         options: {
                             avatar: "主要",
                             text: "テキストの色",
@@ -119,6 +135,7 @@ export default {
                     },
                     misc: {
                         name: "その他",
+                        description: "スタイルの詳細を微調整",
                         options: {
                             vertical: "パスワードの上下の境界線",
                             horizontal: "パスワードの左右の境界線",
@@ -170,7 +187,30 @@ export default {
             }
         },
         misc: {
-            theme: "テーマ"
-        }
+            theme: "テーマ",
+            unknown: "不明"
+        },
+        modes: {
+            dark: "ダークモード",
+            light: "ライトモード"
+        },
+        labels: {
+            host: "ホスト"
+        },
+        footer: {
+            made_with: "で作成",
+            by: "作成者 imxitiz"
+        },
+        login: {
+            button: "サインイン",
+            logging_in: "サインイン中...",
+            password: "パスワード",
+            session: "セッションを選択",
+            users: "ユーザー",
+            show_password: "パスワードを表示",
+            hide_password: "パスワードを非表示",
+            show_password_notification: "パスワードを表示しました",
+            hide_password_notification: "パスワードを非表示にしました"
+        },
     }
-}
+} 

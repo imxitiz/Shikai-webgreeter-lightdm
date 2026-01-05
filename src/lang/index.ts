@@ -8,8 +8,18 @@ import arab from './arb'
 import german from './ger'
 import french from './fre'
 import portuguese from './por'
+import nepali from './nep'
 
-export const langs = [english, spanish, japanesse, arab, german, french, portuguese]
+export const langs = [
+	english,
+	nepali,
+	spanish,
+	japanesse,
+	arab,
+	german,
+	french,
+	portuguese,
+];
 export const names = langs.map((lang) => lang.names.long)
 export const data = (function () {
   const _data: any = {

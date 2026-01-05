@@ -3,6 +3,7 @@
  * spa.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "apagar",
                 hibernate: "hibernar"
             },
+            title: "Acciones rápidas",
             messages: {
                 sleep: "Tomando una siesta...",
                 reboot: "Reiniciando...",
@@ -48,24 +50,32 @@ export default {
             }
         },
         settings: {
+            title: "Configuración",
+            subtitle: "Personaliza tu greeter",
+            open: "Abrir configuración",
+            recenter: "Recentrar",
             behaviour: {
                 name: "Comportamiento",
                 sections: {
                     lang: {
-                        name: "Idioma"
+                        name: "Idioma",
+                        description: "Selecciona tu idioma preferido"
                     },
                     general: {
                         name: "General",
+                        description: "Configurar la visibilidad de los elementos de la interfaz",
                         options: {
                             logo: "Logotipo habilitado",
                             hostname: "Hostname habilitado",
                             avatar: "Avatar habilitado",
+                            dark_mode: "Modo oscuro",
                             username: "Nombre de usuario habilitado",
                             session: "Sesión habilitada"
                         }
                     },
                     commands: {
                         name: "Comandos",
+                        description: "Habilitar o deshabilitar los comandos de energía",
                         options: {
                             shutdown: "Apagado habilitado",
                             reboot: "Reinicio habilitado",
@@ -75,6 +85,7 @@ export default {
                     },
                     time: {
                         name: "Fecha y Hora",
+                        description: "Configurar la visualización del reloj y la fecha",
                         options: {
                             clock: {
                                 enabled: "Hora habilitada",
@@ -88,21 +99,31 @@ export default {
                     },
                     misc: {
                         name: "Misceláneos",
+                        description: "Otras configuraciones",
+                        evoker_description: "Mostrar, mostrar al pasar, u ocultar el botón de ajustes",
                         options: {
                             idle: {
                                 enabled: "Ocultar en reposo",
                                 value: "Tiempo para entrar en reposo (s)"
                             },
-                            evoker: "Botón de configuración invisible"
+                            evoker: "Botón de configuración invisible",
+                            evoker_values: {
+                                show: "Siempre",
+                                hover: "Al pasar"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "Estilo",
+                descriptions: {
+                    colors: "Personaliza el esquema de color"
+                },
                 sections: {
                     main: {
                         name: "Principal",
+                        description: "Personaliza la apariencia",
                         options: {
                             avatar: "Color del avatar",
                             text: "Color del texto",
@@ -119,6 +140,7 @@ export default {
                     },
                     misc: {
                         name: "Misceláneos",
+                        description: "Ajusta detalles de estilo",
                         options: {
                             vertical: "Bordes superiores e inferiores de la contraseña",
                             horizontal: "Bordes laterales de la contraseña",
@@ -170,7 +192,38 @@ export default {
             }
         },
         misc: {
-            theme: "Tema"
+            theme: "Tema",
+            unknown: "Desconocido"
+        },
+        modes: {
+            dark: "Modo Oscuro",
+            light: "Modo Claro"
+        },
+        labels: {
+            host: "Host"
+        },
+        footer: {
+            made_with: "Hecho con",
+            by: "por imxitiz"
+        },
+        login: {
+            button: "Iniciar sesión",
+            logging_in: "Iniciando sesión...",
+            password: "Contraseña",
+            session: "Seleccionar sesión",
+            users: "usuarios",
+            show_password: "Mostrar contraseña",
+            hide_password: "Ocultar contraseña",
+            show_password_notification: "Contraseña visible",
+            hide_password_notification: "Contraseña oculta"
+        },
+        // Behaviour misc extra description
+        // (kept near the existing misc block above for clarity)
+        // Style descriptions
+        settings_style_extra: {
+            style_colors_description: "Personaliza el esquema de color",
+            style_main_description: "Personaliza la apariencia",
+            style_misc_description: "Ajusta detalles de estilo",
         }
     }
 }

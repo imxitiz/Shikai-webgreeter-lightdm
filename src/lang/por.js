@@ -3,6 +3,7 @@
  * por.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "desligar",
                 hibernate: "hibernar"
             },
+            title: "Ações rápidas",
             messages: {
                 sleep: "A fazer uma sesta...",
                 reboot: "A reiniciar...",
@@ -48,6 +50,10 @@ export default {
             }
         },
         settings: {
+            title: "Configurações",
+            subtitle: "Personalize seu greeter",
+            open: "Abrir configurações",
+            recenter: "Recentralizar",
             behaviour: {
                 name: "Comportamento",
                 sections: {
@@ -60,6 +66,7 @@ export default {
                             logo: "Logótipo activado",
                             hostname: "Hostname activado",
                             avatar: "Avatar activado",
+                            dark_mode: "Modo escuro",
                             username: "Nome de utilizador activado",
                             session: "Sessão activada"
                         }
@@ -88,21 +95,29 @@ export default {
                     },
                     misc: {
                         name: "Miscelânea",
+                        description: "Outras configurações",
+                        evoker_description: "Mostrar, mostrar ao passar ou ocultar o botão de configurações",
                         options: {
                             idle: {
                                 enabled: "Esconder aquando inativo ",
                                 value: "Tempo até ficar inativo (s)"
                             },
-                            evoker: "Botão das configurações invisível"
+                            evoker: "Botão das configurações invisível",
+                            evoker_values: {
+                                show: "Sempre",
+                                hover: "Ao passar"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "Estilo",
+                descriptions: { colors: "Personalize o esquema de cores" },
                 sections: {
                     main: {
                         name: "Principal",
+                        description: "Personalize a aparência",
                         options: {
                             avatar: "Cor do avatar",
                             text: "Cor do texto",
@@ -119,6 +134,7 @@ export default {
                     },
                     misc: {
                         name: "Miscelânea",
+                        description: "Aprimore os detalhes do estilo",
                         options: {
                             vertical: "Contornos superiores e inferiores da palavra-passe",
                             horizontal: "Contornos à esquerda e à direita da palavra-passe",
@@ -170,7 +186,30 @@ export default {
             }
         },
         misc: {
-            theme: "Tema"
-        }
+            theme: "Tema",
+            unknown: "Desconhecido"
+        },
+        modes: {
+            dark: "Modo escuro",
+            light: "Modo claro"
+        },
+        labels: {
+            host: "Host"
+        },
+        footer: {
+            made_with: "Feito com",
+            by: "por imxitiz"
+        },
+        login: {
+            button: "Entrar",
+            logging_in: "Iniciando sessão...",
+            password: "Senha",
+            session: "Selecionar sessão",
+            users: "usuários",
+            show_password: "Mostrar senha",
+            hide_password: "Ocultar senha",
+            show_password_notification: "Senha visível",
+            hide_password_notification: "Senha ocultada"
+        },
     }
-}
+} 

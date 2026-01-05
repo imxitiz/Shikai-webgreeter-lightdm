@@ -67,18 +67,13 @@ export default function ModernBehaviourTab() {
     notify(data.get(lang, 'notifications.delete_local') || 'Local storage cleared!', types.Success)
   }
 
-  const evokerValue =
-    behaviour.evoker === true || behaviour.evoker === 'show'
-      ? 'show'
-      : behaviour.evoker === 'hover'
-        ? 'hover'
-        : 'hide'
+  const evokerValue = behaviour.evoker === 'hover' ? 'hover' : 'show' 
 
   return (
     <div className="space-y-4 pb-4">
       <SettingSection
         title={data.get(lang, 'settings.behaviour.sections.general.name') || 'General'}
-        description="Configure visibility of UI elements"
+        description={data.get(lang, 'settings.behaviour.sections.general.description') || 'Configure visibility of UI elements'}
       >
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.general.options.logo') || 'Show Logo'}
@@ -119,7 +114,7 @@ export default function ModernBehaviourTab() {
 
       <SettingSection
         title={data.get(lang, 'settings.behaviour.sections.lang.name') || 'Language'}
-        description="Select your preferred language"
+        description={data.get(lang, 'settings.behaviour.sections.lang.description') || 'Select your preferred language'}
       >
         <Select value={behaviour.language || 'english'} onValueChange={(v) => set('language', v)}>
           <SelectTrigger className="w-full h-11 bg-input/50 border-border/50 shadow-sm">
@@ -137,7 +132,7 @@ export default function ModernBehaviourTab() {
 
       <SettingSection
         title={data.get(lang, 'settings.behaviour.sections.commands.name') || 'Commands'}
-        description="Enable or disable power commands"
+        description={data.get(lang, 'settings.behaviour.sections.commands.description') || 'Enable or disable power commands'}
       >
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.commands.options.shutdown') || 'Shutdown'}
@@ -178,7 +173,7 @@ export default function ModernBehaviourTab() {
 
       <SettingSection
         title={data.get(lang, 'settings.behaviour.sections.time.name') || 'Time & Date'}
-        description="Configure clock and date display"
+        description={data.get(lang, 'settings.behaviour.sections.time.description') || 'Configure clock and date display'}
       >
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.time.options.clock.enabled') || 'Show Clock'}
@@ -227,7 +222,7 @@ export default function ModernBehaviourTab() {
 
       <SettingSection
         title={data.get(lang, 'settings.behaviour.sections.misc.name') || 'Miscellaneous'}
-        description="Other settings"
+        description={data.get(lang, 'settings.behaviour.sections.misc.description') || 'Other settings'}
       >
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.misc.options.idle.enabled') || 'Enable Idle'}
@@ -254,16 +249,19 @@ export default function ModernBehaviourTab() {
         <Separator className="my-1 bg-border/30" />
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.misc.options.evoker') || 'Settings Button'}
-          description="Show, show on hover, or hide the settings button"
+          description={data.get(lang, 'settings.behaviour.sections.misc.evoker_description') || 'Show, show on hover, or hide the settings button'}
         >
           <Select value={evokerValue} onValueChange={(v) => set('evoker', v)}>
-            <SelectTrigger className="w-32 h-10 bg-input/50 border-border/50 shadow-sm">
+            <SelectTrigger
+              className="w-32 h-10 bg-input/50 border-border/50 shadow-sm"
+              aria-label={data.get(lang, 'settings.behaviour.sections.misc.evoker_description') || 'Show, show on hover, or hide the settings button'}
+              title={data.get(lang, 'settings.behaviour.sections.misc.evoker_description') || 'Show, show on hover, or hide the settings button'}
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="no-wall-change">
-              <SelectItem value="show">Always</SelectItem>
-              <SelectItem value="hover">On Hover</SelectItem>
-              <SelectItem value="hide">Hidden</SelectItem>
+              <SelectItem value="show">{data.get(lang, 'settings.behaviour.sections.misc.evoker_values.show') || 'Always'}</SelectItem>
+              <SelectItem value="hover">{data.get(lang, 'settings.behaviour.sections.misc.evoker_values.hover') || 'On Hover'}</SelectItem>
             </SelectContent>
           </Select>
         </SettingRow>

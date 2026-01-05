@@ -3,6 +3,7 @@
  * ger.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "abschalten",
                 hibernate: "überwintern"
             },
+            title: "Schnellaktionen",
             messages: {
                 sleep: "Ein Nickerchen machen ...",
                 reboot: "Neustart...",
@@ -48,24 +50,32 @@ export default {
             }
         },
         settings: {
+            title: "Einstellungen",
+            subtitle: "Passe deinen Greeter an",
+            open: "Einstellungen öffnen",
+            recenter: "Zentrieren",
             behaviour: {
                 name: "Verhalten",
                 sections: {
                     lang: {
-                        name: "Sprache"
+                        name: "Sprache",
+                        description: "Wähle deine bevorzugte Sprache"
                     },
                     general: {
                         name: "Allgemein",
+                        description: "Sichtbarkeit der UI-Elemente konfigurieren",
                         options: {
                             logo: "Logo aktiviert",
                             hostname: "Hostname aktiviert",
                             avatar: "Avatar aktiviert",
+                            dark_mode: "Dunkelmodus",
                             username: "Benutzername aktiviert",
                             session: "Sitzung aktiviert"
                         }
                     },
                     commands: {
                         name: "Befehle",
+                        description: "Aktiviere oder deaktiviere Energiebefehle",
                         options: {
                             shutdown: "Herunterfahren aktiviert",
                             reboot: "Neustart aktiviert",
@@ -75,6 +85,7 @@ export default {
                     },
                     time: {
                         name: "Uhr und Datum",
+                        description: "Konfiguriere die Anzeige von Uhr und Datum",
                         options: {
                             clock: {
                                 enabled: "Uhr aktiviert",
@@ -88,21 +99,28 @@ export default {
                     },
                     misc: {
                         name: "Sonstig",
+                        description: "Andere Einstellungen",
                         options: {
                             idle: {
                                 enabled: "Im Leerlauf ausblenden",
                                 value: "Leerlauf-Timeout (s)"
                             },
-                            evoker: "Einstellungsschaltfläche unsichtbar"
+                            evoker: "Einstellungsschaltfläche unsichtbar",
+                            evoker_values: {
+                                show: "Immer",
+                                hover: "Beim Schweben"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "Stil",
+                descriptions: { colors: "Passen Sie das Farbschema an" },
                 sections: {
                     main: {
                         name: "Hauptsächlich",
+                        description: "Passen Sie das Aussehen an",
                         options: {
                             avatar: "Avatar-Farbe",
                             text: "Textfarbe",
@@ -119,6 +137,7 @@ export default {
                     },
                     misc: {
                         name: "Sonstig",
+                        description: "Feinabstimmung der Stil-Details",
                         options: {
                             vertical: "Passwörter oben unten Grenzen",
                             horizontal: "Passwort linke rechte Grenzen",
@@ -170,7 +189,30 @@ export default {
             }
         },
         misc: {
-            theme: "Thema"
-        }
+            theme: "Thema",
+            unknown: "Unbekannt"
+        },
+        modes: {
+            dark: "Dunkelmodus",
+            light: "Hellmodus"
+        },
+        labels: {
+            host: "Host"
+        },
+        footer: {
+            made_with: "Gemacht mit",
+            by: "von imxitiz"
+        },
+        login: {
+            button: "Anmelden",
+            logging_in: "Anmeldung...",
+            password: "Passwort",
+            session: "Sitzung wählen",
+            users: "Benutzer",
+            show_password: "Passwort anzeigen",
+            hide_password: "Passwort verbergen",
+            show_password_notification: "Passwort sichtbar",
+            hide_password_notification: "Passwort verborgen"
+        },
     }
-}
+} 

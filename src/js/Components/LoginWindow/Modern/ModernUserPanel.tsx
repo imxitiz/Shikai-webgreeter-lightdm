@@ -436,7 +436,8 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                     passwordRef.current?.focus()
                   }}
                   className="absolute right-4 text-foreground/70 hover:text-foreground/90"
-                  aria-label={passwordVisible ? 'Hide password' : 'Show password'}
+                  aria-label={passwordVisible ? data.get(lang, 'login.hide_password') || 'Hide password' : data.get(lang, 'login.show_password') || 'Show password'}
+                  title={passwordVisible ? data.get(lang, 'login.hide_password') || 'Hide password' : data.get(lang, 'login.show_password') || 'Show password'}
                 >
                   {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
                 </button>

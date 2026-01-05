@@ -89,7 +89,7 @@ export default function ModernStyleTab() {
     <div className="space-y-4 pb-4">
       <SettingSection
         title={data.get(lang, 'settings.style.sections.main.name') || 'Appearance'}
-        description="Customize the look and feel"
+        description={data.get(lang, 'settings.style.sections.main.description') || 'Customize the look and feel'}
       >
         <div className="space-y-4">
           <div className="flex items-center gap-4 p-4 rounded-xl bg-input/30 border border-border/30">
@@ -137,7 +137,7 @@ export default function ModernStyleTab() {
 
       <SettingSection
         title={data.get(lang, 'settings.style.colors') || 'Colors'}
-        description="Customize color scheme"
+        description={data.get(lang, 'settings.style.descriptions.colors') || 'Customize color scheme'}
       >
         <div className="grid grid-cols-2 gap-4">
           <ColorPicker
@@ -211,7 +211,7 @@ export default function ModernStyleTab() {
 
       <SettingSection
         title={data.get(lang, 'settings.style.sections.misc.name') || 'Advanced'}
-        description="Fine-tune styling details"
+        description={data.get(lang, 'settings.style.sections.misc.description') || 'Fine-tune styling details'}
       >
         <div className="space-y-4">
           <div>

@@ -147,7 +147,7 @@ export default function ModernSidebar() {
           <h1 className="text-4xl font-semibold text-gradient">Shikai</h1>
           <p className="text-lg text-foreground mt-1">Modern Greeter</p>
           <p className="text-sm text-foreground mt-1">
-            Made with{' '}
+            {data.get(lang, 'footer.made_with') || 'Made with'}{' '}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
@@ -160,11 +160,11 @@ export default function ModernSidebar() {
                 d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
               />
             </svg>{' '}
-            by imxitiz
+            {data.get(lang, 'footer.by') || 'by imxitiz'}
           </p>
           <div className="mt-3 flex items-center justify-center gap-2">
             <span className="text-lg text-foreground font-medium">
-              {darkMode ? 'Dark Mode' : 'Light Mode'}
+              {darkMode ? data.get(lang, 'modes.dark') || 'Dark Mode' : data.get(lang, 'modes.light') || 'Light Mode'}
             </span>
             <Switch
               checked={darkMode}
@@ -177,7 +177,7 @@ export default function ModernSidebar() {
         </div>
 
         <div className="flex-1">
-          <p className="text-lm text-foreground uppercase tracking-wider m-4">
+          <p className="text-sm text-foreground uppercase tracking-wider m-4">
             {data.get(lang, 'commands.title') || 'Quick Actions'}
           </p>
 
@@ -219,8 +219,8 @@ export default function ModernSidebar() {
 
           {showHostname && (
             <div className="flex items-center justify-between text-sm">
-              <span className="text-foreground font-medium">Host</span>
-              <span className="font-mono text-foreground">{hostname}</span>
+              <span className="text-foreground font-medium">{data.get(lang, 'labels.host') || 'Host'}</span>
+              <span className="font-mono text-foreground">{hostname || (data.get(lang, 'misc.unknown') || 'Unknown')}</span>
             </div>
           )}
           {clockEnabled && (

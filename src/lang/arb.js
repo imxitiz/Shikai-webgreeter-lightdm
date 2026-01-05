@@ -3,6 +3,7 @@
  * arb.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "إطفاء الجهاز",
                 hibernate: "السبات"
             },
+            title: "الإجراءات السريعة",
             messages: {
                 sleep: "...أخذ قسط من الراحة",
                 reboot: "...إعادة التشغيل",
@@ -48,6 +50,10 @@ export default {
             }
         },
         settings: {
+            title: "الإعدادات",
+            subtitle: "قم بتخصيص Greeter الخاص بك",
+            open: "فتح الإعدادات",
+            recenter: "إعادة التمركز",
             behaviour: {
                 name: "السلوك",
                 sections: {
@@ -60,6 +66,7 @@ export default {
                             logo: "إظهار الشعار",
                             hostname: "إظهار اسم المضيف",
                             avatar: "إظهار صورة الحساب الشخصية",
+                            dark_mode: "الوضع الداكن",
                             username: "إظهار اسم الحساب",
                             session: "إظهار اسم الجلسة"
                         }
@@ -88,21 +95,29 @@ export default {
                     },
                     misc: {
                         name: "منوعات",
+                        description: "إعدادات أخرى",
+                        evoker_description: "عرض، العرض عند المرور، أو إخفاء زر الإعدادات",
                         options: {
                             idle: {
                                 enabled: "الإخفاء عند الثبات",
                                 value: "(ثوانٍ) الإخفاء عند"
                             },
-                            evoker: "إخفاء زر الإعدادات"
+                            evoker: "إخفاء زر الإعدادات",
+                            evoker_values: {
+                                show: "دائماً",
+                                hover: "عند المرور"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "الطابع",
+                descriptions: { colors: "تخصيص نظام الألوان" },
                 sections: {
                     main: {
                         name: "الرئيسية",
+                        description: "تخصيص المظهر",
                         options: {
                             avatar: "لون حواف الصورة الشخصية",
                             text: "لون النص",
@@ -119,6 +134,7 @@ export default {
                     },
                     misc: {
                         name: "منوعات",
+                        description: "تحسين تفاصيل النمط",
                         options: {
                             vertical: "حجم حدود كلمة المرور العامودية",
                             horizontal: "حجم حدود كلمة المرور الأفقية",
@@ -170,7 +186,30 @@ export default {
             }
         },
         misc: {
-            theme: "السمة"
-        }
+            theme: "السمة",
+            unknown: "غير معروف"
+        },
+        modes: {
+            dark: "وضع داكن",
+            light: "وضع فاتح"
+        },
+        labels: {
+            host: "المضيف"
+        },
+        footer: {
+            made_with: "مصنوع مع",
+            by: "بواسطة imxitiz"
+        },
+        login: {
+            button: "تسجيل الدخول",
+            logging_in: "تسجيل الدخول...",
+            password: "كلمة المرور",
+            session: "اختر الجلسة",
+            users: "المستخدمون",
+            show_password: "إظهار كلمة المرور",
+            hide_password: "إخفاء كلمة المرور",
+            show_password_notification: "كلمة المرور مرئية",
+            hide_password_notification: "تم إخفاء كلمة المرور"
+        },
     }
-}
+} 

@@ -8,7 +8,7 @@ bun run dev
 rm -rf ../shikai-dev
 cp -r ./dist ../shikai-dev
 
-+# Disable debug mode
+# Disable debug mode
 cd ../shikai-dev
 sed -i 's/window.__is_debug = true/window.__is_debug = false/g' index.html
 sed -i 's/window.__is_debug = true/window.__is_debug = false/g' app.html

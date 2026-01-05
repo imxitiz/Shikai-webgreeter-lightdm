@@ -3,6 +3,7 @@
  * fre.js
  *
  * Copyright (c) 2024, TheWisker.
+ * Copyright (c) 2026, imxitiz.
  *
  * This source code is licensed under the GNU license found in the
  * LICENSE file in the root directory of this source tree.
@@ -39,6 +40,7 @@ export default {
                 shutdown: "fermer",
                 hibernate: "hiberner"
             },
+            title: "Actions rapides",
             messages: {
                 sleep: "Faire une sieste...",
                 reboot: "Redémarrage...",
@@ -48,24 +50,32 @@ export default {
             }
         },
         settings: {
+            title: "Paramètres",
+            subtitle: "Personnalisez votre greeter",
+            open: "Ouvrir les paramètres",
+            recenter: "Recentrer",
             behaviour: {
                 name: "Comportement",
                 sections: {
                     lang: {
-                        name: "Langue"
+                        name: "Langue",
+                        description: "Sélectionnez votre langue préférée"
                     },
                     general: {
                         name: "Général",
+                        description: "Configurer la visibilité des éléments de l'interface",
                         options: {
                             logo: "Logo activé",
                             hostname: "Nom d'hôte activé",
                             avatar: "Avatar activé",
+                            dark_mode: "Mode sombre",
                             username: "Nom d'utilisateur activé",
                             session: "Session activée"
                         }
                     },
                     commands: {
                         name: "Commandes",
+                        description: "Activer ou désactiver les commandes d'alimentation",
                         options: {
                             shutdown: "Arrêt activé",
                             reboot: "Redémarrage activé",
@@ -75,6 +85,7 @@ export default {
                     },
                     time: {
                         name: "Horloge et Date",
+                        description: "Configurer l'affichage de l'horloge et de la date",
                         options: {
                             clock: {
                                 enabled: "Horloge activée",
@@ -88,21 +99,29 @@ export default {
                     },
                     misc: {
                         name: "Divers",
+                        description: "Autres paramètres",
+                        evoker_description: "Afficher, afficher au survol, ou masquer le bouton des paramètres",
                         options: {
                             idle: {
                                 enabled: "Masquer en cas d'inactivité",
                                 value: "Délai d'inactivité (s)"
                             },
-                            evoker: "Bouton paramètres invisible"
+                            evoker: "Bouton paramètres invisible",
+                            evoker_values: {
+                                show: "Toujours",
+                                hover: "Au passage"
+                            }
                         }
                     }
                 }
             },
             style: {
                 name: "Style",
+                descriptions: { colors: "Personnalisez le schéma de couleurs" },
                 sections: {
                     main: {
                         name: "Principal",
+                        description: "Personnalisez l'apparence",
                         options: {
                             avatar: "Couleur de l'avatar",
                             text: "Couleur du texte",
@@ -119,6 +138,7 @@ export default {
                     },
                     misc: {
                         name: "Divers",
+                        description: "Affinez les détails de style",
                         options: {
                             vertical: "Bordure supérieure inférieure du mot de passe",
                             horizontal: "Mot de passe bordures gauche droite",
@@ -170,7 +190,31 @@ export default {
             }
         },
         misc: {
-            theme: "Thème"
-        }
+            theme: "Thème",
+            unknown: "Inconnu"
+        },
+        modes: {
+            dark: "Mode sombre",
+            light: "Mode clair"
+        },
+        labels: {
+            host: "Hôte"
+        },
+        footer: {
+            made_with: "Fait avec",
+            by: "par imxitiz"
+        },
+        login: {
+            button: "Se connecter",
+            logging_in: "Connexion en cours...",
+            password: "Mot de passe",
+            session: "Sélectionner une session",
+            users: "utilisateurs",
+            show_password: "Afficher le mot de passe",
+            hide_password: "Masquer le mot de passe",
+            show_password_notification: "Mot de passe visible",
+            hide_password_notification: "Mot de passe masqué"
+        },
+        // extra style/evoker descriptions
     }
-}
+} 

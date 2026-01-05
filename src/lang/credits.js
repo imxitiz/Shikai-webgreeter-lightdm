@@ -10,6 +10,10 @@ const credits = {
     "Tiago M. Neves": {
         "lang": ["Portuguese"],
         "url": "https://github.com/tiagomneves-pt"
+    },
+    "imxitiz": {
+        "lang": ["English", "Nepali", "Japanese", "Spanish", "German", "French", "Arabic", "Portuguese"],
+        "url": "https://github.com/imxitiz"
     }
 }
 

@@ -1,85 +1,89 @@
 <h1 align="center">Shikai</h1>
 <div align="center">
-    <a href="https://github.com/TheWisker/Shikai">
-        <img width="400" src="./assets/logo.png">
+    <a href="https://github.com/imxitiz/Shikai-webgreeter-lightdm">
+        <img width="400" src="./assets/logo.png" alt="Shikai Logo">
     </a>
 </div>
-<p align="center">Modern lightdm webkit2 theme</p>
+<p align="center">Modern LightDM WebKit2 theme</p>
 
 <h2 align="center">Acknowledgments</h2>
 
-<p align= "center">This page gives credit to the underlying projects in which <b>Shikai</b> is based upon.</p>
+<p align="center">
+    This page credits the projects, tools, and contributors that make <strong>Shikai</strong> possible.<br>
+    The current version (v2.0.0 and beyond) is a heavily rewritten fork, actively migrated and maintained by <strong>imxitiz</strong>.
+</p>
+
+### Original Project
+
+**Shikai** began as a modern LightDM WebKit2 greeter theme created by **[TheWisker](https://github.com/TheWisker/Shikai)**.  
+This fork builds directly on that foundation, preserving core ideas while modernizing the codebase, UI, and tooling.  
+Thanks to TheWisker for the original inspiration and implementation!
 
 ## Acknowledgment Index
 
-- [LightDM][lightdm-hook]
-- [Web Greeter][web-greeter-hook]
-- [HTML and CSS][html-css-hook]
-- [Javascript][javascript-hook]
-- [Webpack][webpack-hook]
-- [AUR][aur-hook]
+- [Original Project][original]
+- [LightDM][lightdm]
+- [Web Greeter Implementations][web-greeter]
+- [HTML & CSS][html-css]
+- [JavaScript / TypeScript Ecosystem][javascript]
+- [Build Tooling (Vite, Bun)][vite]
+- [Packaging / AUR][aur]
 
 ## LightDM [[↑][index]]
 
-**Shikai** is a theme for **[LightDM][lightdm]** so we give our acknowledgments.
+**Shikai** is a theme for **[LightDM](https://github.com/canonical/lightdm)** — thanks to the upstream project and its community for enabling advanced greeter development.
 
-## Web Greeter [[↑][index]]
+## Web Greeter Implementations [[↑][index]]
 
-**Shikai** is based on **[Web Greeter][web-greeter]**, **[Nody Greeter][nody-greeter]** and **[Sea Greeter][sea-greeter]** so we give our acknowledgments.
+**Shikai** ensures compatibility and draws ideas from modern web-based greeters:
 
-## HTML and CSS [[↑][index]]
+- **[Web Greeter](https://github.com/JezerM/web-greeter)**
+- **[Nody Greeter](https://github.com/JezerM/nody-greeter)** (Node.js/Electron-based alternative)
+- **[Sea Greeter](https://github.com/JezerM/sea-greeter)** (WebKit2GTK experimental variant)
 
-**Shikai** makes use of **[HTML][html]** and **[CSS][css]** with some supersets:
+## HTML & CSS [[↑][index]]
 
-- **[SASS][sass]** as a [CSS][css] superset
+Shikai leverages modern web technologies for styling and layout:
 
-## Javascript [[↑][index]]
+- **HTML** and **CSS** (with **Sass** for preprocessing where applicable)
+- **Tailwind CSS** for utility-first, responsive, and modern UI components
 
-**Shikai** makes use of **[Javascript][javascript]** and some tools/libraries:
+## JavaScript / TypeScript Ecosystem [[↑][index]]
 
-- **[NodeJS][nodejs]**
-- **[ReactJS][reactjs]** as a widget library
-- **[ReduxJS][reduxjs]** as a state library
+The project adopts a **TypeScript-first** approach with contemporary libraries:
 
-## Webpack [[↑][index]]
+- **React** for composable UI components
+- **Zustand** (with **immer**) for lightweight, immutable state management
+- Enhanced accessibility and internationalization (i18n) support
 
-**Shikai** makes use of **[Webpack][webpack]** and some plugins for packaging:
+## Build Tooling (Vite, Bun) [[↑][index]]
 
-- **[Babel][babel]** as a transpiler
-- **Other plugins**
+As of v2.0.0, the entire build system was migrated to:
 
-## AUR [[↑][index]]
+- **Vite** for fast, modern bundling and development
+- **Bun** powering dev/release workflows for superior performance and ergonomics
 
-**Shikai** makes use of the **[AUR][aur]** for distribution to [Arch Linux][arch-linux] users.
+---
 
-<h2 align="center">Author</h2>
+<h2 align="center">Current Maintainer</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
-        <img width="200" height="200" src="./assets/profile.png"></img>
+    <a href="https://github.com/imxitiz">
+        <img width="200" height="200" src="./assets/profile.png" alt="imxitiz">
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz — Maintainer since v2.0.0</h4>
 
-[index]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#acknowledgment-index
-[lightdm-hook]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#lightdm-
-[web-greeter-hook]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#web-greeter-
-[html-css-hook]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#html-and-css-
-[javascript-hook]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#javascript-
-[webpack-hook]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#webpack-
-[aur-hook]: https://github.com/TheWisker/Shikai/blob/master/ACKNOWLEDGMENTS.md#aur-
+<small>
+    This project began as <a href="https://github.com/TheWisker/Shikai">TheWisker/Shikai</a>.  
+    The v2.0.0 rewrite and ongoing maintenance are led by imxitiz.
+</small>
 
-[lightdm]: https://github.com/canonical/lightdm
-[web-greeter]: https://github.com/JezerM/web-greeter
-[nody-greeter]: ttps://github.com/JezerM/nody-greeterh
-[sea-greeter]: https://github.com/JezerM/sea-greeter
-[html]: https://developer.mozilla.org/en-US/docs/Web/HTML
-[css]: https://developer.mozilla.org/en-US/docs/Web/CSS
-[sass]: https://sass-lang.com/
-[javascript]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
-[nodejs]: https://nodejs.org/en
-[reactjs]: https://react.dev/
-[reduxjs]: https://redux.js.org/
-[webpack]: https://webpack.js.org/
-[babel]: https://babeljs.io/
-[aur]: https://aur.archlinux.org/
-[arch-linux]: https://archlinux.org/
+
+[index]: #acknowledgment-index
+[original]: #original-project
+[lightdm]: #lightdm
+[web-greeter]: #web-greeter-implementations
+[html-css]: #html--css
+[javascript]: #javascript--typescript-ecosystem
+[vite]: #build-tooling-vite-bun
+[aur]: #packaging--aur

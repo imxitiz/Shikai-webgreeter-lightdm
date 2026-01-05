@@ -24,10 +24,15 @@ Here are the instructions to make a translation:
 
 Thank you for being willing to sacrifice your time to help this project grow!
 
-<h2 align="center">Author</h2>
+<h2 align="center">Current Maintainer</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
-        <img width="200" height="200" src="../assets/profile.png"></img>
+    <a href="https://github.com/imxitiz">
+        <img width="200" height="200" src="./assets/profile.png" alt="imxitiz">
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz — Maintainer since v2.0.0</h4>
+
+<small>
+    This project began as <a href="https://github.com/TheWisker/Shikai">TheWisker/Shikai</a>.  
+    The v2.0.0 rewrite and ongoing maintenance are led by imxitiz.
+</small>

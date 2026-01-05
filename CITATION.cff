@@ -1,8 +1,10 @@
 cff-version: 1.2.0
 message: "If you use this software in your work, or make a fork of it, please cite it using the following metadata."
 authors:
-- given-names: "TheWisker"
+  - given-names: "imxitiz"
+  - given-names: "TheWisker"
+    note: "Original Author"
 title: "Shikai Project"
-version: 1.6.0
-date-released: 2023-03-31
-url: "https://github.com/TheWisker/Shikai"
+version: 2.0.0
+date-released: 2026-01-05
+url: "https://github.com/imxitiz/Shikai-webgreeter-lightdm"

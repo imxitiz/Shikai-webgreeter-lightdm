@@ -1,6 +1,6 @@
 <h1 align="center">Shikai</h1>
 <div align="center">
-    <a href="https://github.com/TheWisker/Shikai">
+    <a href="https://github.com/imxitiz/Shikai-webgreeter-lightdm">
         <img width="400" src="./assets/logo.png">
     </a>
 </div>
@@ -28,22 +28,28 @@ If you want to share a **new idea** for the **Shikai** project, have some **ques
 
 ## Contact [[↑][index]]
 
-If you have been treated in a way that violates our [Code of Conduct][coc] you can contact me trough email:
+If you have been treated in a way that violates our [Code of Conduct][coc] you can contact me through email:
 
-- TheWisker@protonmail.com
+- imxitiz@proton.me
 
-<h2 align="center">Author</h2>
+
+<h2 align="center">Current Maintainer</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
-        <img width="200" height="200" src="./assets/profile.png"></img>
+    <a href="https://github.com/imxitiz">
+        <img width="200" height="200" src="./assets/profile.png" alt="imxitiz">
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz — Maintainer since v2.0.0</h4>
 
-[index]: https://github.com/TheWisker/Shikai/blob/master/SUPPORT.md#support-index
-[issues-hook]: https://github.com/TheWisker/Shikai/blob/master/SUPPORT.md#issues-
-[discussions-hook]: https://github.com/TheWisker/Shikai/blob/master/SUPPORT.md#discussions-
-[contact-hook]: https://github.com/TheWisker/Shikai/blob/master/SUPPORT.md#contact-
-[issues]: https://github.com/TheWisker/Shikai/issues
-[discussions]: https://github.com/TheWisker/Shikai/discussions
+<small>
+    This project began as <a href="https://github.com/TheWisker/Shikai">TheWisker/Shikai</a>.  
+    The v2.0.0 rewrite and ongoing maintenance are led by imxitiz.
+</small>
+
+[index]: #support-index
+[issues-hook]: #issues-
+[discussions-hook]: #discussions-
+[contact-hook]: #contact-
+[issues]: https://github.com/imxitiz/Shikai-webgreeter-lightdm/issues
+[discussions]: https://github.com/imxitiz/Shikai-webgreeter-lightdm/discussions
 [coc]: ./.github/CODE_OF_CONDUCT.md

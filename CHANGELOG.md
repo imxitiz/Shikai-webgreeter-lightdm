@@ -1,6 +1,6 @@
 <h1 align="center">Shikai</h1>
 <div align="center">
-    <a href="https://github.com/TheWisker/Shikai">
+    <a href="https://github.com/imxitiz/Shikai-webgreeter-lightdm">
         <img width="400" src="./assets/logo.png">
     </a>
 </div>
@@ -12,6 +12,42 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.0.0] - 2026-01-05 by imxitiz
+
+A major rewrite and migration. This release upgrades the build toolchain to Vite (Bun-enabled), migrates core code from JavaScript/Redux/Webpack to TypeScript/Zustand/Vite, and introduces a modern Tailwind-based UI. It also includes localization and accessibility improvements, installation scripts, and packaging updates.
+
+### Added
+
+- Modern UI powered by **Tailwind CSS** and **shadcn/ui** (ModernSidebar, ModernUserPanel, etc.).
+- New build scripts and toolchain: **Vite** + **Bun** (use `bun run build`).
+- TypeScript migration for many components (improved type safety).
+- State manager migrated from **Redux** to **Zustand**, with **immer** and devtools integration.
+- Theme installation scripts (`scripts/install.sh`, `scripts/install-dev.sh`) and updated AUR packaging.
+- Localization and accessibility improvements across the UI.
+- Password visibility toggle and improved authentication flow.
+- Centralized logo handling and improved wallpaper/session behavior.
+
+### Changed
+
+- Replaced Webpack + Babel with Vite (Bun-enabled) — build environment changed.
+- Replaced Redux with Zustand and converted large portions of JS to TS.
+- Modern-only UX: the old "classic" mode has been removed (see Breaking Changes).
+- PKGBUILD and packaging updated to reflect new build outputs and versioning.
+
+### Fixed
+
+- Multiple UI/UX fixes (login flow, password input behaviour, debug flags disabled in distributed HTML files).
+- Various minor bug and metrics maintenance fixes.
+
+### Breaking Changes
+
+- Classic mode removed — themes and configurations relying on classic mode must migrate to the Modern UI.
+- Building the project now expects **bun** (or a Vite-compatible environment); CI/workflows should install Bun or adapt accordingly.
+
+### Maintainers
+
+- Project maintenance is now under **imxitiz** (responsible for the changes included in this release).
 
 ## [1.6.0] - 2024-11-17
 
@@ -244,10 +280,16 @@ Multi-monitor support for **Shikai**.
 ### Fixed
 - No fixes
 
-<h2 align="center">Author</h2>
+
+<h2 align="center">Current Maintainer</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
-        <img width="200" height="200" src="./assets/profile.png"></img>
+    <a href="https://github.com/imxitiz">
+        <img width="200" height="200" src="./assets/profile.png" alt="imxitiz">
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz — Maintainer since v2.0.0</h4>
+
+<small>
+    This project began as <a href="https://github.com/TheWisker/Shikai">TheWisker/Shikai</a>.  
+    The v2.0.0 rewrite and ongoing maintenance are led by imxitiz.
+</small>

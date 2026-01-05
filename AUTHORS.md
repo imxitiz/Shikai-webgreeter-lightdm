@@ -1,25 +1,30 @@
 <h1 align="center">Shikai</h1>
 <div align="center">
-    <a href="https://github.com/TheWisker/Shikai">
-        <img width="400" src="./assets/logo.png">
+    <a href="https://github.com/imxitiz/Shikai-webgreeter-lightdm">
+        <img width="400" src="./assets/logo.png" alt="Shikai Logo">
     </a>
 </div>
-<p align="center">Modern lightdm webkit2 theme</p>
+<p align="center">Modern LightDM WebKit2 theme</p>
 
 <h2 align="center">Authors</h2>
 
-- **Main**: [TheWisker](https://github.com/TheWisker) => TheWisker@protonmail.com
+- **Main Author & Maintainer**: [imxitiz](https://github.com/imxitiz) => <imxitiz@proton.me>
 
-    - **Owner** of the **Shikai** repository.
+    Owner and primary developer of this repository since the v2.0.0 rewrite.
 
-**Other contributors** are listed in the [CONTRIBUTORS.md][contributors] file.
+**Historical and other contributors** are listed in the [CONTRIBUTORS.md][contributors] file.
 
-<h2 align="center">Author</h2>
+<h2 align="center">Current Maintainer</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
-        <img width="200" height="200" src="./assets/profile.png"></img>
+    <a href="https://github.com/imxitiz">
+        <img width="200" height="200" src="./assets/profile.png" alt="imxitiz">
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz — Maintainer since v2.0.0</h4>
+
+<small>
+    This project began as <a href="https://github.com/TheWisker/Shikai">TheWisker/Shikai</a>.  
+    The v2.0.0 rewrite and ongoing maintenance are led by imxitiz.
+</small>
 
 [contributors]: ./CONTRIBUTORS.md

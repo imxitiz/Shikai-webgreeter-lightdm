@@ -1,79 +1,90 @@
 <h1 align="center">Shikai</h1>
 <div align="center">
-    <a href="https://github.com/TheWisker/Shikai"> 
-        <img width="400" src="./assets/logo.png">
-    <a>
+    <a href="https://github.com/imxitiz/Shikai-webgreeter-lightdm">
+        <img width="400" src="./assets/logo.png" alt="Shikai Logo">
+    </a>
 </div>
-<p align="center">Modern lightdm webkit2 theme</p>
+<p align="center">Modern LightDM WebKit2 Theme</p>
 
 <h2 align="center">Contributing</h2>
 
-It is great to have you here. Here are a few ways you can help make this project better!
+<p align="center">
+    Thank you for your interest in contributing! Every contribution, big or small, helps improve Shikai.
+</p>
 
 ## Team Members
 
-- Owner: [TheWisker](https://github.com/TheWisker) => TheWisker@protonmail.com
+- **Owner & Maintainer**: [imxitiz](https://github.com/imxitiz) => <imxitiz@proton.me>
 
 ## Contributing Index
 
-- [Adding new features][new-features-hook]
-- [Adding a translation][translation-hook]
-- [Other contributions][other-contributions-hook]
+- [Adding new features][new-features]
+- [Adding a translation][translation]
+- [Other contributions][other]
 
-## Adding new features [[↑][index]]
+## Adding New Features [[↑][index]]
 
-First of all, thank you for taking the time to contribute to this project!
-Here are the **steps** involved when making a contribution:
+Thank you for considering a code contribution!
 
-1.  Make a [fork][fork] of this repository.
-2.  **Clone** the fork locally.
-3.  Make the **changes and additions** desired to the cloned fork.
-4.  **Modify** the [CHANGELOG.md][changelog] file, following its structure.
-5.  **Modify** the [package.json][package] and [CITATION.cff][citation] file, updating their **version number** using [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-6.  Add the following **header** to newly added code files:
+Follow these steps to submit a pull request:
 
-```
-/**
- * @license Shikai
- * filename.ext
- *
- * Copyright (c) 2024, TheWisker.
- *
- * This source code is licensed under the GNU license found in the
- * LICENSE file in the root directory of this source tree.
- */
-```
+1. **Fork** this repository using the [Fork button][fork].
+2. **Clone** your fork locally.
+3. Create a new branch for your changes (`git checkout -b my-feature`).
+4. Make your changes and additions.
+5. Update the [CHANGELOG.md][changelog] file (follow existing structure; add under **Unreleased** if pre-release).
+6. Bump the version in [package.json][package] and [CITATION.cff][citation] following [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+7. **(Optional)** If adding entirely new source files, consider including a brief comment header with the file's purpose and the standard GPLv3 notice (see existing files for examples).
+8. Add yourself to [CONTRIBUTORS.md][contributors] (follow the existing format).
+9. Commit, push to your fork, and open a **Pull Request** against the `master` branch.
+10. Your PR will be reviewed promptly — feel free to ping if needed!
 
-7.  **Add** yourself or your organization to the [CONTRIBUTORS.md][contributors] file, following its structure.
-8.  Git **add**, **commit**, and **push** those changes.
-9.  Open a new pull request, to merge your fork, which will be usually reviewed fast.
+> [!TIP]  
+> Run `bun run build` (or `npm run build`) locally to ensure the theme builds without errors before submitting.
 
-## Adding a translation [[↑][index]]
+## Adding a Translation [[↑][index]]
 
-First of all, thanks for taking the time to contribute to this project!
-Usually, the process of making a translation is quite **similar** to any other contribution, so follow the steps explained [here][new-features-hook].
-The main **difference** are some additional steps in the [/src/lang/CONTRIBUTING.md][lang-contributing] file which explain how to tamper with the translation files and **add** a new **translation**.
+Translations are greatly appreciated!
 
-## Other contributions [[↑][index]]
+The process is similar to feature contributions (steps 1–10 above), with these additional guidelines:
 
-You can even contribute by adding new enhancement and improvement **ideas** to the [ideas discussion][ideas-discussion] or lending someone a hand in the repository!
+- All translation-related instructions are in [`src/lang/CONTRIBUTING.md`][lang-contributing].
+- Add/edit JSON files in `src/lang/locales/`.
+- Update `src/lang/credits.js` with your name and language if desired.
+- Test your translation by changing the browser/language settings in the running theme.
 
-<h2 align="center">Author</h2>
+## Other Contributions [[↑][index]]
+
+You can help in many ways beyond code:
+
+- Report bugs or request features via [Issues](https://github.com/imxitiz/Shikai-webgreeter-lightdm/issues).
+- Share ideas in [Discussions > Ideas](https://github.com/imxitiz/Shikai-webgreeter-lightdm/discussions/categories/ideas).
+- Improve documentation (README, this file, etc.).
+- Help others in Discussions or Issues.
+- Submit screenshots or wallpapers via pull request.
+
+All forms of help are valued!
+
+<h2 align="center">Current Maintainer</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
-        <img width="200" height="200" src="./assets/profile.png"></img>
+    <a href="https://github.com/imxitiz">
+        <img width="200" height="200" src="./assets/profile.png" alt="imxitiz">
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz — Maintainer since v2.0.0</h4>
 
-[index]: https://github.com/TheWisker/Shikai/blob/master/CONTRIBUTING.md#contributing-index
-[fork]: https://github.com/TheWisker/Shikai/fork
+<small>
+    This project began as <a href="https://github.com/TheWisker/Shikai">TheWisker/Shikai</a>.  
+    The v2.0.0 rewrite and ongoing maintenance are led by imxitiz.
+</small>
+
+[index]: #contributing-index
+[new-features]: #adding-new-features-
+[translation]: #adding-a-translation-
+[other]: #other-contributions-
+[fork]: https://github.com/imxitiz/Shikai-webgreeter-lightdm/fork
 [changelog]: ./CHANGELOG.md
 [package]: ./package.json
 [citation]: ./CITATION.cff
 [contributors]: ./CONTRIBUTORS.md
-[new-features-hook]: https://github.com/TheWisker/Shikai/blob/master/CONTRIBUTING.md#adding-new-features-
-[translation-hook]: https://github.com/TheWisker/Shikai/blob/master/CONTRIBUTING.md#adding-a-translation-
-[other-contributions-hook]: https://github.com/TheWisker/Shikai/blob/master/CONTRIBUTING.md#other-contributions-
 [lang-contributing]: ./src/lang/CONTRIBUTING.md
-[ideas-discussion]: https://github.com/TheWisker/Shikai/discussions/new?category=ideas

@@ -1,6 +1,6 @@
 {
 	"name": "shikai",
-	"version": "1.6.0",
+	"version": "2.0.0",
 	"description": "Modern lightdm webkit2 theme",
 	"type": "module",
 	"keywords": [
@@ -11,14 +11,14 @@
 		"webkit",
 		"login"
 	],
-	"homepage": "https://github.com/TheWisker/Shikai",
-	"bugs": "https://github.com/TheWisker/Shikai/issues",
+	"homepage": "https://github.com/imxitiz/Shikai-webgreeter-lightdm",
+	"bugs": "https://github.com/imxitiz/Shikai-webgreeter-lightdm/issues",
 	"license": "GPL-3.0",
-	"author": "TheWisker (https://github.com/TheWisker)",
+	"author": "imxitiz (https://github.com/imxitiz)",
 	"main": "./dist/index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/TheWisker/Shikai.git"
+		"url": "git+https://github.com/imxitiz/Shikai-webgreeter-lightdm.git"
 	},
 	"scripts": {
 		"build": "bun --bun vite build",

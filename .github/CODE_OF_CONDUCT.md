@@ -1,6 +1,6 @@
 <h1 align="center">Shikai</h1>
 <div align="center">
-    <a href="https://github.com/TheWisker/Shikai">
+    <a href="https://github.com/imxitiz/Shikai-webgreeter-lightdm">
         <img width="400" src="../assets/logo.png">
     </a>
 </div>
@@ -68,7 +68,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-TheWisker@protonmail.com.
+imxitiz@proton.me.
 All complaints will be reviewed and investigated promptly and fairly.
 
 All community leaders are obligated to respect the privacy and security of the
@@ -137,8 +137,8 @@ https://www.contributor-covenant.org/translations.
 
 <h2 align="center">Author</h2>
 <div align="center">
-    <a href="https://github.com/TheWisker">
+    <a href="https://github.com/imxitiz">
         <img width="200" height="200" src="../assets/profile.png"></img>
     </a>
 </div>
-<h4 align="center">TheWisker</h4>
+<h4 align="center">imxitiz</h4>

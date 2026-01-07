@@ -12,7 +12,5 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-  // Use class-based dark mode if needed; the theme switches via `html[data-theme]` in code
-  // Tailwind doesn't support data-theme natively; we keep default 'class' but the app uses custom CSS vars
-  darkMode: 'class',
+ darkMode: 'class',
 };

@@ -50,9 +50,9 @@ declare global {
   interface Window {
     __is_debug?: boolean
     __store?: ReturnType<typeof useStore>
-    lightdm?: LightDM
+    // `lightdm` and `greeter_comm` are provided by the host environment; don't redeclare them here.
   }
-  const lightdm: LightDM
+  // const lightdm: LightDM
   const greeter_comm: GreeterComm
 }
 
@@ -136,10 +136,7 @@ function launch() {
 
   const wallCallback = (wallpapers: string[]) => {
     document.body.onclick = (e: MouseEvent) => {
-      interface ExtendedEvent extends MouseEvent {
-        composedPath?: () => EventTarget[]
-        path?: EventTarget[]
-      }
+      type ExtendedEvent = MouseEvent & { composedPath?: () => EventTarget[]; path?: EventTarget[] };
       const extendedEvent = e as ExtendedEvent
       const path = extendedEvent.composedPath ? extendedEvent.composedPath() : (extendedEvent.path || [])
       const isInteractive =
@@ -223,7 +220,13 @@ function launch() {
   }
 
   const setTheme = (isDark: boolean) => {
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')
+    if (isDark) {
+					document.documentElement.classList.add("dark");
+					document.documentElement.setAttribute("data-theme", "dark");
+				} else {
+					document.documentElement.classList.remove("dark");
+					document.documentElement.setAttribute("data-theme", "light");
+				}
   }
   let lastTheme = useStore.getState().settings.behaviour.dark_mode
   setTheme(lastTheme)
@@ -286,7 +289,7 @@ function launch() {
       const hints = data.get(get_lang(), 'demo.hints')
       if (hints && Array.isArray(hints) && hints.length > 0) {
         const hintPrefix = data.get(get_lang(), 'demo.hint') || 'Hint:'
-        notify(hintPrefix + ' ' + hints[Math.floor(Math.random() * hints.length)], types.Info)
+        notify(`${hintPrefix} ${hints[Math.floor(Math.random() * hints.length)]}`, types.Info)
       }
     }, 15 * 1000)
 

@@ -74,6 +74,8 @@ export default defineConfig(({ mode }): UserConfig => {
     },
     resolve: {
       alias: {
+				"@/lib": resolve(__dirname, "src/js/lib"),
+				"@/lib/utils": resolve(__dirname, "src/js/lib/utils.ts"),
         '@': resolve(__dirname, 'src'),
         '@js': resolve(__dirname, 'src/js'),
         '@css': resolve(__dirname, 'src/css'),
@@ -81,15 +83,8 @@ export default defineConfig(({ mode }): UserConfig => {
       },
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler'
-        }
-      }
-    },
     server: {
-      port: 3000,
+      port: 5173,
       // open: true
     }
   }

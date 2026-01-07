@@ -345,58 +345,60 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
         </div>
       </button>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-12 py-8">
+        <div className="flex-1 flex flex-col items-center justify-center px-12 py-8">
         <ScrollArea>
-          <div className="flex items-center justify-center gap-6 mb-8">
-            {users?.length > 1 && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleUserSwitch('prev')}
-                className="opacity-60 hover:opacity-100"
-              >
-                <ChevronLeftIcon />
-              </Button>
-            )}
+          <div className="w-full flex flex-col items-center">
+            <div className="flex items-center justify-center gap-6 mb-8">
+              {users?.length > 1 && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleUserSwitch('prev')}
+                  className="opacity-60 hover:opacity-100"
+                >
+                  <ChevronLeftIcon />
+                </Button>
+              )}
 
-            {showAvatar && (
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300" />
-                <Avatar className="w-28 h-28 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-primary/10">
-                  <AvatarImage src={user ? getUserImage(user) : ''} alt={user?.display_name} />
-                  <AvatarFallback className="text-3xl bg-gradient-to-br from-primary/20 to-accent/20">
-                    {userInitials}
-                  </AvatarFallback>
-                </Avatar>
+              {showAvatar && (
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-2xl group-hover:from-primary/30 group-hover:to-accent/30 transition-all duration-300" />
+                  <Avatar className="w-28 h-28 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300 shadow-lg shadow-primary/10">
+                    <AvatarImage src={user ? getUserImage(user) : ''} alt={user?.display_name} />
+                    <AvatarFallback className="text-3xl bg-gradient-to-br from-primary/20 to-accent/20">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+              )}
+
+              {users.length > 1 && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleUserSwitch('next')}
+                  className="opacity-60 hover:opacity-100"
+                >
+                  <ChevronRightIcon />
+                </Button>
+              )}
+            </div>
+
+            {showUser && (
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-semibold text-foreground mb-1">
+                  {user?.display_name || user?.username || 'Unknown User'}
+                </h2>
+                <p className="text-base font-medium text-foreground/90">@{user?.username || 'unknown'}</p>
               </div>
             )}
 
-            {users.length > 1 && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleUserSwitch('next')}
-                className="opacity-60 hover:opacity-100"
-              >
-                <ChevronRightIcon />
-              </Button>
-            )}
-          </div>
-
-          {showUser && (
-            <div className="text-center mb-8">
-              <h2 className="text-4xl font-semibold text-foreground mb-1">
-                {user?.display_name || user?.username || 'Unknown User'}
-              </h2>
-              <p className="text-base font-medium text-foreground/90">@{user?.username || 'unknown'}</p>
-            </div>
-          )}
-          <div
-            className={cn(
-              'w-full max-w-sm mb-6',
-              shake && 'animate-[shake_0.5s_ease-in-out]'
-            )}
-          >
+            <div
+              className={cn(
+                'max-w-sm w-full mb-6 mx-auto',
+                shake && 'animate-[shake_0.5s_ease-in-out]'
+              )}
+            >
             <div className="relative group">
               <div className="absolute inset-0 -z-10 pointer-events-none bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-300" />
               <div className="relative flex items-center">
@@ -495,6 +497,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
               </Select>
             </div>
           )}
+        </div>
         </ScrollArea>
       </div>
 

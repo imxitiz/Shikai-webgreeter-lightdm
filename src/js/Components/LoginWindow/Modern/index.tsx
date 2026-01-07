@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef } from "react";
 import Draggable from 'react-draggable'
 
 import ModernSidebar from './ModernSidebar'
@@ -64,6 +64,7 @@ export default function ModernLoginWindow() {
   })
 
   const [isAnimating, setIsAnimating] = useState(false)
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   const handleDrag = useCallback(
     (_: unknown, data: { x: number; y: number }) => {
@@ -132,40 +133,41 @@ export default function ModernLoginWindow() {
   }
 
   return (
-    <Draggable
-      axis="both"
-      handle=".login-handle"
-      bounds={bounds}
-      position={position}
-      onDrag={handleDrag}
-      onStop={handleDragStop}
-      id="login-drag"
-    >
-      <div
-        className={cn(
-          'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 no-wall-change',
-          isAnimating && 'transition-transform duration-400 ease-out'
-        )}
-        style={{ width: WINDOW_WIDTH, height: WINDOW_HEIGHT }}
-      >
-        <div
-          className={cn(
-            'relative w-full h-full flex overflow-hidden text-base',
-            'rounded-3xl shadow-2xl',
-            'border border-border/50',
-            'bg-card/70',
-            'animate-scale-in'
-          )}
-          style={getCornerRadius()}
-        >
-          <div className="absolute -top-32 -left-32 w-64 h-64 -z-10 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute -bottom-32 -right-32 w-64 h-64 -z-10 bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+			<Draggable
+				nodeRef={nodeRef}
+				axis="both"
+				handle=".login-handle"
+				bounds={bounds}
+				position={position}
+				onDrag={handleDrag}
+				onStop={handleDragStop}
+			>
+				<div
+					ref={nodeRef}
+					className={cn(
+						"fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 no-wall-change",
+						isAnimating && "transition-transform duration-400 ease-out",
+					)}
+					style={{ width: WINDOW_WIDTH, height: WINDOW_HEIGHT }}
+				>
+					<div
+						className={cn(
+							"relative w-full h-full flex overflow-hidden text-base",
+							"rounded-3xl shadow-2xl",
+							"border border-border/50",
+							"bg-card/70",
+							"animate-scale-in",
+						)}
+						style={getCornerRadius()}
+					>
+						<div className="absolute -top-32 -left-32 w-64 h-64 -z-10 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+						<div className="absolute -bottom-32 -right-32 w-64 h-64 -z-10 bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
-          <ModernSidebar />
+						<ModernSidebar />
 
-          <ModernUserPanel onRecenter={handleRecenter} />
-        </div>
-      </div>
-    </Draggable>
-  )
+						<ModernUserPanel onRecenter={handleRecenter} />
+					</div>
+				</div>
+			</Draggable>
+		);
 }

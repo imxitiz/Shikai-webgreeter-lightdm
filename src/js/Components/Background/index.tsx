@@ -7,15 +7,15 @@ interface ModernBackgroundProps {
 
 export default function ModernBackground({ children }: ModernBackgroundProps) {
   const [mounted, setMounted] = useState(false)
-  const [theme, setTheme] = useState(document.documentElement.getAttribute('data-theme') || 'dark')
+  const [theme, setTheme] = useState(document.documentElement.classList.contains('dark') ? 'dark' : 'light')
 
   useEffect(() => {
     setMounted(true)
 
     const mo = new MutationObserver((mutations) => {
       for (const m of mutations) {
-        if (m.attributeName === 'data-theme') {
-          setTheme(document.documentElement.getAttribute('data-theme') || 'dark')
+        if (m.attributeName === 'class') {
+          setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light')
         }
       }
     })

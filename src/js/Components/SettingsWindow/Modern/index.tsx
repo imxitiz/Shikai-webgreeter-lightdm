@@ -111,12 +111,7 @@ export default function ModernSettings() {
   const updateSettings = useStore((state) => state.updateSettings)
   const saveSettings = useStore((state) => state.saveSettings)
 
-  const evokerMode =
-    evokerSetting === true || evokerSetting === 'show'
-      ? 'show'
-      : evokerSetting === 'hover'
-        ? 'hover'
-        : 'hide'
+  const evokerMode = String(evokerSetting) === 'hover' ? 'hover' : 'show'
 
   const getBounds = useCallback(() => {
     const availW =
@@ -191,7 +186,7 @@ export default function ModernSettings() {
     }
   }
 
-  const evokerVisible = evokerMode !== 'hide'
+  const evokerVisible = true
   const bounds = getBounds()
 
   return (

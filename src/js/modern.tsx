@@ -12,7 +12,7 @@ import ModernBackground from './Components/Background'
 import { TooltipProvider } from './Components/ui/tooltip'
 
 import * as Operations from './Greeter/Operations'
-import revealElement from './BackgroundAnimator'
+import revealTransition from './RevealAnimation'
 import { types, notify } from './Greeter/ModernNotifications'
 import Idle from './Greeter/Idle'
 import { set_lang, data, get_lang } from '@/lang'
@@ -145,9 +145,9 @@ function launch() {
         (e.target as HTMLElement)?.closest?.('button, a, input, textarea, select, label, [role="button"]') ||
         path?.some((el) => (el as Element)?.nodeType === 1 && (el as Element)?.matches?.('button, a, input, textarea, select, label, [role="button"]'))
 
-      try {
-        if (document.body.classList.contains('settings-open')) return
-      } catch {}
+      // try {
+      //   if (document.body.classList.contains('settings-open')) return
+      // } catch {}
 
       const inNoWall =
         (e.target as HTMLElement)?.closest?.('.no-wall-change') ||
@@ -159,13 +159,17 @@ function launch() {
         const clickY = (e as MouseEvent).clientY
         // use CSS-heavy animator; fallback to an immediate set if animation/clip-path unsupported
         try {
-          revealElement(document.body, `url('${wallpaper}')`, { x: clickX, y: clickY }).catch(() => {
-            document.body.style.backgroundImage = `url('${wallpaper}')`
-            document.body.classList.add('has-wallpaper')
-          })
+          revealTransition(() => {
+            document.body.style.backgroundImage = `url('${wallpaper}')`;
+            document.body.classList.add('has-wallpaper');
+            try { localStorage.setItem('CurrentWallpaper', wallpaper) } catch {}
+          }, { x: clickX, y: clickY }).catch(() => {
+            document.body.style.backgroundImage = `url('${wallpaper}')`;
+            document.body.classList.add('has-wallpaper');
+          });
         } catch {
-        document.body.style.backgroundImage = `url('${wallpaper}')`
-        document.body.classList.add('has-wallpaper')
+          document.body.style.backgroundImage = `url('${wallpaper}')`;
+          document.body.classList.add('has-wallpaper');
         }
 
         try {
@@ -341,17 +345,18 @@ window.addEventListener("GreeterBroadcastEvent", (evt: Event) => {
 			typeof evtAny.data !== "undefined" ? evtAny.data : evtAny.detail;
 		if (typeof maybeUrl !== "string") return;
 		const url = maybeUrl;
-revealElement(document.body, `url('${url}')`).catch(() => {
+		revealTransition(() => {
+			document.body.style.backgroundImage = `url('${url}')`;
+			document.body.classList.add("has-wallpaper");
+			try { localStorage.setItem("CurrentWallpaper", url as string) } catch {}
+		}).catch(() => {
 			try {
 		document.body.style.backgroundImage = `url('${url}')`;
 				document.body.classList.add("has-wallpaper");
-				try { 
-          localStorage.setItem("CurrentWallpaper", url as string) 
-        } catch {}
 		} catch (e) {
-				console.warn('Failed to apply broadcast background fallback', e)
+				console.warn("Failed to apply broadcast background fallback", e);
 		}
-})
+		});
 	} catch (err) {
 		console.warn("Failed to apply broadcast background", err);
 	}

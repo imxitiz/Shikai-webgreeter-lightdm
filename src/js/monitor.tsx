@@ -13,7 +13,7 @@ import * as Operations from "./Greeter/Operations";
 
 import "../css/tailwind.css";
 import "../css/style.scss";
-import revealElement from "./BackgroundAnimator";
+import revealTransition from "./RevealAnimation";
 
 declare global {
 	interface Window {
@@ -25,9 +25,9 @@ function launch() {
 	const wall_callback = (wallpapers: string[]) => {
 		document.body.onclick = (e: MouseEvent) => {
 			// If settings panel is open, don't change wallpaper on body clicks
-			try {
-				if (document.body.classList.contains('settings-open')) return
-			} catch {}
+			// try {
+			// 	if (document.body.classList.contains('settings-open')) return
+			// } catch {}
 
 			const target = e.target as HTMLElement | null;
 			const isInteractive = !!target?.closest?.(
@@ -40,10 +40,19 @@ function launch() {
 				const clickY = (e as MouseEvent).clientY;
 				// use CSS-heavy animator; fallback to an immediate set if animation/clip-path unsupported
 				try {
-					revealElement(document.body, `url('${wallpaper}')`, {
-						x: clickX,
-						y: clickY,
-					}).catch(() => {
+					revealTransition(
+						() => {
+							document.body.style.backgroundImage = `url('${wallpaper}')`;
+							document.body.classList.add("has-wallpaper");
+							try {
+								localStorage.setItem("CurrentWallpaper", wallpaper);
+							} catch {}
+						},
+						{
+							x: clickX,
+							y: clickY,
+						},
+					).catch(() => {
 						document.body.style.backgroundImage = `url('${wallpaper}')`;
 						document.body.classList.add("has-wallpaper");
 					});
@@ -104,13 +113,16 @@ window.addEventListener("GreeterBroadcastEvent", (evt: Event) => {
 		if (typeof maybeUrl !== "string") return;
 		const url = maybeUrl;
 
-		revealElement(document.body, `url('${url}')`).catch(() => {
+		revealTransition(() => {
+			document.body.style.backgroundImage = `url('${url}')`;
+			document.body.classList.add("has-wallpaper");
+			try {
+				localStorage.setItem("CurrentWallpaper", url as string);
+			} catch {}
+		}).catch(() => {
 			try {
 				document.body.style.backgroundImage = `url('${url}')`;
 				document.body.classList.add("has-wallpaper");
-				try {
-					localStorage.setItem("CurrentWallpaper", url as string);
-				} catch {}
 			} catch (e) {
 				console.warn("Failed to apply broadcast background fallback", e);
 			}

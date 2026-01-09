@@ -67,7 +67,7 @@ export default function ModernBehaviourTab() {
     notify(data.get(lang, 'notifications.delete_local') || 'Local storage cleared!', types.Success)
   }
 
-  const evokerValue = behaviour.evoker ? 'hover' : 'show' 
+  const evokerValue = String(behaviour.evoker) === 'hover' ? 'hover' : 'show'
 
   return (
     <div className="space-y-4 pb-4">

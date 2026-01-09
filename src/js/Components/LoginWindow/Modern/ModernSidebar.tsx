@@ -7,14 +7,16 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/js/C
 import { data } from '@/lang'
 import { shutdown, restart, sleep, hibernate } from '@/js/Greeter/Commands'
 import { time } from '@/js/Tools/Formatter'
+import revealTransition from '@/js/RevealAnimation'
 import { ScrollArea } from '../../ui/scroll-area'
 import useStore from '@/js/State/store'
+import { useTheme } from "theme-package"
 
 declare global {
   interface Window {
     __is_debug?: boolean
   }
-  const lightdm: any
+  // const lightdm: any
 }
 
 const PowerIcon = () => (
@@ -103,6 +105,7 @@ const commandOptions = [
 export default function ModernSidebar() {
   const [currentTime, setCurrentTime] = useState('--:--')
   const sidebarRef = useRef<HTMLDivElement>(null)
+  const switchRef = useRef<HTMLButtonElement>(null)
 
   const commands = useStore((state) => state.settings.behaviour.commands)
   const clockEnabled = useStore((state) => state.settings.behaviour.clock.enabled)
@@ -114,6 +117,7 @@ export default function ModernSidebar() {
   const showHostname = useStore((state) => state.settings.behaviour.hostname)
   const toggleSetting = useStore((state) => state.toggleSetting)
   const saveSettings = useStore((state) => state.saveSettings)
+  const { setMode } = useTheme();
 
   useEffect(() => {
     if (!clockEnabled) return
@@ -167,10 +171,31 @@ export default function ModernSidebar() {
               {darkMode ? data.get(lang, 'modes.dark') || 'Dark Mode' : data.get(lang, 'modes.light') || 'Light Mode'}
             </span>
             <Switch
+              ref={switchRef}
               checked={darkMode}
               onCheckedChange={() => {
-                toggleSetting('behaviour.dark_mode')
-                saveSettings()
+                // Calculate reveal origin from Switch element center
+                let x = window.innerWidth / 2;
+                let y = window.innerHeight / 2;
+                if (switchRef.current) {
+                  const rect = switchRef.current.getBoundingClientRect();
+                  x = rect.left + rect.width / 2;
+                  y = rect.top + rect.height / 2;
+                }
+
+                revealTransition(
+                  () => {
+                    toggleSetting('behaviour.dark_mode');
+                    saveSettings();
+                    setMode(darkMode ? "light" : "dark");
+                  },
+                  { x, y, duration: 1800, easing: 'cubic-bezier(0.34, 0, 0.66, 1)' }
+                ).catch(() => {
+                  // Fallback: immediate change without animation
+                  toggleSetting('behaviour.dark_mode');
+                  saveSettings();
+                  setMode(darkMode ? "light" : "dark");
+                });
               }}
             />
           </div>

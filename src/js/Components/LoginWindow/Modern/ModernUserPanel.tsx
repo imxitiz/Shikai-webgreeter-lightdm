@@ -348,7 +348,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
         <div className="flex-1 flex flex-col items-center justify-center px-12 py-8">
         <ScrollArea>
           <div className="w-full flex flex-col items-center">
-            <div className="flex items-center justify-center gap-6 mb-8">
+            <div className="flex items-center justify-center gap-6 my-8">
               {users?.length > 1 && (
                 <Button
                   variant="ghost"
@@ -411,6 +411,12 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                 <label className="sr-only" htmlFor="password-input">
                   {data.get(lang, 'login.password') || 'Password'}
                 </label>
+                <input 
+                  hidden
+                  name="username"
+                  value={user?.username || ''}
+                  autoComplete='username'
+                />
                 <input
                   id="password-input"
                   ref={passwordRef}
@@ -421,6 +427,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                   disabled={inactive || isLoading}
                   aria-label={data.get(lang, 'login.password') || 'Password'}
                   placeholder={data.get(lang, 'login.password') || 'Password'}
+                  autoComplete='new-password'
                   className={cn(
                     'w-full h-16 pl-16 pr-12 rounded-xl py-2 leading-normal text-lg',
                     'bg-card/70 border border-border/30 hover:border-border/50',

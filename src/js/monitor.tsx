@@ -13,6 +13,7 @@ import * as Operations from "./Greeter/Operations";
 
 import "../css/tailwind.css";
 import "../css/style.scss";
+import revealElement from "./BackgroundAnimator";
 
 declare global {
 	interface Window {
@@ -35,7 +36,22 @@ function launch() {
 			if (e.target === e.currentTarget || !isInteractive) {
 				const wallpaper =
 					wallpapers[Math.floor(Math.random() * wallpapers.length)];
-				document.body.style.backgroundImage = `url('${wallpaper}')`;
+				const clickX = (e as MouseEvent).clientX;
+				const clickY = (e as MouseEvent).clientY;
+				// use CSS-heavy animator; fallback to an immediate set if animation/clip-path unsupported
+				try {
+					revealElement(document.body, `url('${wallpaper}')`, {
+						x: clickX,
+						y: clickY,
+					}).catch(() => {
+						document.body.style.backgroundImage = `url('${wallpaper}')`;
+						document.body.classList.add("has-wallpaper");
+					});
+				} catch {
+					document.body.style.backgroundImage = `url('${wallpaper}')`;
+					document.body.classList.add("has-wallpaper");
+				}
+				
 				const greeter = (
 					window as unknown as {
 						greeter_comm?: { broadcast?: (s: string) => void };
@@ -87,10 +103,18 @@ window.addEventListener("GreeterBroadcastEvent", (evt: Event) => {
 			typeof evtAny.data !== "undefined" ? evtAny.data : evtAny.detail;
 		if (typeof maybeUrl !== "string") return;
 		const url = maybeUrl;
-		document.body.style.backgroundImage = `url('${url}')`;
-		document.body.style.backgroundSize = "cover";
-		// document.body.style.backgroundPosition = "center center";
-		document.body.style.backgroundRepeat = "no-repeat";
+
+		revealElement(document.body, `url('${url}')`).catch(() => {
+			try {
+				document.body.style.backgroundImage = `url('${url}')`;
+				document.body.classList.add("has-wallpaper");
+				try {
+					localStorage.setItem("CurrentWallpaper", url as string);
+				} catch {}
+			} catch (e) {
+				console.warn("Failed to apply broadcast background fallback", e);
+			}
+		});
 	} catch (err) {
 		console.warn("Failed to apply broadcast background", err);
 	}

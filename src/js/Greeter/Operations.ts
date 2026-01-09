@@ -162,5 +162,9 @@ export function getUserImage(user: LightDMUser): string {
   if (window.__is_debug === true) {
     return './assets/media/profile.png'
   }
-  return user.image || greeter_config.branding.user_image
+  return (
+			user.image ||
+			greeter_config.branding.user_image ||
+			"./assets/media/profile.png"
+		);
 }

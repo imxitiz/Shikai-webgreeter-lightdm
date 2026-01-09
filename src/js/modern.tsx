@@ -12,6 +12,7 @@ import ModernBackground from './Components/Background'
 import { TooltipProvider } from './Components/ui/tooltip'
 
 import * as Operations from './Greeter/Operations'
+import revealElement from './BackgroundAnimator'
 import { types, notify } from './Greeter/ModernNotifications'
 import Idle from './Greeter/Idle'
 import { set_lang, data, get_lang } from '@/lang'
@@ -134,6 +135,7 @@ function launch() {
     scheduleSave()
   })
 
+
   const wallCallback = (wallpapers: string[]) => {
     document.body.onclick = (e: MouseEvent) => {
       type ExtendedEvent = MouseEvent & { composedPath?: () => EventTarget[]; path?: EventTarget[] };
@@ -153,11 +155,19 @@ function launch() {
 
       if (!isInteractive && !inNoWall) {
         const wallpaper = wallpapers[Math.floor(Math.random() * wallpapers.length)]
+        const clickX = (e as MouseEvent).clientX
+        const clickY = (e as MouseEvent).clientY
+        // use CSS-heavy animator; fallback to an immediate set if animation/clip-path unsupported
+        try {
+          revealElement(document.body, `url('${wallpaper}')`, { x: clickX, y: clickY }).catch(() => {
+            document.body.style.backgroundImage = `url('${wallpaper}')`
+            document.body.classList.add('has-wallpaper')
+          })
+        } catch {
         document.body.style.backgroundImage = `url('${wallpaper}')`
-        document.body.style.backgroundSize = 'cover'
-        // document.body.style.backgroundPosition = 'center center'
-        document.body.style.backgroundRepeat = 'no-repeat'
         document.body.classList.add('has-wallpaper')
+        }
+
         try {
           localStorage.setItem('CurrentWallpaper', wallpaper)
         } catch {
@@ -331,16 +341,17 @@ window.addEventListener("GreeterBroadcastEvent", (evt: Event) => {
 			typeof evtAny.data !== "undefined" ? evtAny.data : evtAny.detail;
 		if (typeof maybeUrl !== "string") return;
 		const url = maybeUrl;
+revealElement(document.body, `url('${url}')`).catch(() => {
+			try {
 		document.body.style.backgroundImage = `url('${url}')`;
-		document.body.style.backgroundSize = "cover";
-		// document.body.style.backgroundPosition = 'center center'
-		document.body.style.backgroundRepeat = "no-repeat";
-		document.body.classList.add("has-wallpaper");
-		try {
-			localStorage.setItem("CurrentWallpaper", url);
-		} catch {
-			/* ignore */
+				document.body.classList.add("has-wallpaper");
+				try { 
+          localStorage.setItem("CurrentWallpaper", url as string) 
+        } catch {}
+		} catch (e) {
+				console.warn('Failed to apply broadcast background fallback', e)
 		}
+})
 	} catch (err) {
 		console.warn("Failed to apply broadcast background", err);
 	}

@@ -99,6 +99,32 @@ body {
   }
 }
 
+/* Background / Reveal (View Transition + overlay fallback)
+   Lightweight, plain CSS that works without SCSS. Variables:
+   --x, --y (percent for view transitions), --vt-duration, --vt-easing
+*/
+
+/* Reveal Animation: Works with View Transitions API
+   Usage: Set --x, --y, --reveal-duration, --reveal-easing on :root before VT snapshot
+   Animates any element's background, color, or any CSS property with circular reveal origin
+*/
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+  /* try new things here with mix-blend-mode */
+  /* mix-blend-mode: color-dodge; */
+  /* mix-blend-mode: multiply; */
+}
+::view-transition-new(root) {
+	z-index: 1;
+	animation: reveal var(--reveal-duration, 2000ms) var(--reveal-easing, ease-in-out) forwards;
+}
+@keyframes reveal {
+	from { clip-path: circle(0% at var(--x, 50%) var(--y, 50%)); opacity: 0.8; }
+	to   { clip-path: circle(150% at var(--x, 50%) var(--y, 50%)); opacity: 1; }
+}
+
+
 @utility scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;

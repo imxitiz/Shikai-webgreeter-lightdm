@@ -48,41 +48,41 @@
         ],
         default_session: "plasma",
         hostname: "archlinux",
-        authenticate: function (username) {
+        authenticate: (username) => {
           console.log("Authenticating:", username);
         },
-        cancel_authentication: function () {
+        cancel_authentication: () => {
           console.log("Authentication cancelled");
         },
-        respond: function (password) {
+        respond: (_password) => {
           console.log("Password response received");
         },
-        start_session: function (session) {
+        start_session: (session) => {
           console.log("Starting session:", session);
         },
-        shutdown: function () {
+        shutdown: () => {
           console.log("Shutdown requested");
         },
-        restart: function () {
+        restart: () => {
           console.log("Restart requested");
         },
-        suspend: function () {
+        suspend: () => {
           console.log("Suspend requested");
         },
-        hibernate: function () {
+        hibernate: () => {
           console.log("Hibernate requested");
         },
         show_prompt: {
-          connect: function (callback) {
+          connect: (callback) => {
             this._callback = callback;
           },
-          disconnect: function () {
+          disconnect: () => {
             this._callback = null;
           }
         }
       };
       greeter_comm = {
-        broadcast: function (data) {
+        broadcast: (data) => {
           console.log("Broadcasting:", data);
         }
       };

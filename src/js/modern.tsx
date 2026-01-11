@@ -2,20 +2,33 @@ import '../assets/index.yml'
 import '../css/tailwind.css'
 import '../css/style.scss'
 
-import { useEffect } from 'react'
+import theme from '../assets/theme.json' 
+
+import { useEffect, useRef } from "react";
 import { createRoot } from 'react-dom/client'
 
 import useStore from './State/store'
 import ModernLoginWindow from './Components/LoginWindow/Modern'
 import ModernSettings from './Components/SettingsWindow/Modern'
 import ModernBackground from './Components/Background'
-import { TooltipProvider } from './Components/ui/tooltip'
-
+import { TooltipProvider } from "./Components/ui/tooltip";
+import {
+	ThemePicker,
+	ThemeProvider,
+	ThemeScript,
+	useTheme,
+	applyTheme,
+	slugify,
+	type Theme,
+	useEditorLayout,
+	EditorLayoutProvider,
+} from "theme-package";
 import * as Operations from './Greeter/Operations'
 import revealTransition from './RevealAnimation'
 import { types, notify } from './Greeter/ModernNotifications'
 import Idle from './Greeter/Idle'
 import { set_lang, data, get_lang } from '@/lang'
+import { Button } from "./Components/ui/button";
 
 interface LightDM {
   users?: Array<{ username: string; display_name: string; session: string; image: string; logged_in?: boolean }>
@@ -74,19 +87,97 @@ function hideLoader() {
   }
 }
 
-function ModernApp() {
-  useEffect(() => {
-    hideLoader()
-  }, [])
+function AutoRandomTheme({ themes }: { themes: Theme[] }) {
+	const { addCustomTheme, setTheme, setMode } = useTheme();
+	const randomOnLoad =
+		useStore.getState().settings?.behaviour?.random_theme_on_load ?? true;
+	const ranRef = useRef(false);
 
-  return (
-    <TooltipProvider>
-      <ModernBackground>
-        <ModernLoginWindow />
-        <ModernSettings />
-      </ModernBackground>
-    </TooltipProvider>
-  )
+	useEffect(() => {
+		if (ranRef.current || !randomOnLoad || !themes?.length) return;
+		ranRef.current = true;
+
+		const chosen = themes[Math.floor(Math.random() * themes.length)];
+		if (!chosen) return;
+		const key = slugify(chosen.name);
+    const isDark = useStore.getState().settings?.behaviour?.dark_mode ?? false;
+
+		setTimeout(() => {
+			try {
+				addCustomTheme(key, chosen);
+				applyTheme(chosen, isDark ? 'dark' : 'light');
+				setTheme(key);
+        setMode(isDark ? 'dark' : 'light');
+			} catch (e) {
+				console.warn("Failed to apply random theme", e);
+			}
+		}, 150);
+	}, [themes, addCustomTheme, setTheme, setMode, randomOnLoad]);
+
+	return null;
+}
+
+function AppContent() {
+	const defaultThemes: Theme[] = Array.isArray(theme) ? (theme as Theme[]) : [];
+
+	const { openEditor, isEditorOpen, closeEditor } = useEditorLayout();
+
+	const handleEditTheme = (theme: Theme) => {
+		openEditor(theme, "left");
+	};
+
+	return (
+		<>
+			<AutoRandomTheme themes={defaultThemes} />
+			<TooltipProvider>
+				<ModernBackground>
+					<div
+						className={`fixed flex flex-row gap-2
+              ${window.__is_debug ? "top-20" : "top-6"}
+              right-6 z-5000 pointer-events-auto`}
+					>
+						{isEditorOpen && (
+							<Button
+								variant="outline"
+								size="sm"
+								className="cursor-pointer"
+								onClick={() => closeEditor()}
+								title="Close editor"
+							>
+								✕ Close Editor
+							</Button>
+						)}
+						<div className="hidden h-3 overflow-hidden transition-all duration-200 ease-in-out max-h-0 opacity-0  bg-background" />
+						<div className="hidden group relative transition-all hover:z-10 hover:scale-110 hover:shadow-lg size-6 rounded-none" />
+						<ThemePicker
+							className="no-wall-change"
+							defaultThemes={defaultThemes}
+							onEditTheme={handleEditTheme}
+						/>
+					</div>
+					<ModernLoginWindow />
+					<ModernSettings />
+				</ModernBackground>
+			</TooltipProvider>
+		</>
+	);
+}
+
+function ModernApp() {
+	useEffect(() => {
+		hideLoader();
+	}, []);
+
+	return (
+		<>
+			<ThemeScript />
+			<ThemeProvider>
+				<EditorLayoutProvider className="h-full">
+					<AppContent />
+				</EditorLayoutProvider>
+			</ThemeProvider>
+		</>
+	);
 }
 
 function launch() {
@@ -233,7 +324,7 @@ function launch() {
     wallCallback(['./assets/media/wallpapers/Wallpaper01.jpg'])
   }
 
-  const setTheme = (isDark: boolean) => {
+  const updateDocumentTheme = (isDark: boolean) => {
     if (isDark) {
 					document.documentElement.classList.add("dark");
 					document.documentElement.setAttribute("data-theme", "dark");
@@ -243,7 +334,7 @@ function launch() {
 				}
   }
   let lastTheme = useStore.getState().settings.behaviour.dark_mode
-  setTheme(lastTheme)
+  updateDocumentTheme(lastTheme)
 
   Operations.getLogos(Operations.getLogosDir(), (dt) => {
     useStore.getState().setLogos(dt)
@@ -287,7 +378,7 @@ function launch() {
 
     if (lastTheme !== state.settings.behaviour.dark_mode) {
       lastTheme = state.settings.behaviour.dark_mode
-      setTheme(lastTheme)
+      updateDocumentTheme(lastTheme)
     }
 
     if (state.runtime.events.loginSuccess && !window.__is_debug) {
@@ -351,11 +442,11 @@ window.addEventListener("GreeterBroadcastEvent", (evt: Event) => {
 			try { localStorage.setItem("CurrentWallpaper", url as string) } catch {}
 		}).catch(() => {
 			try {
-		document.body.style.backgroundImage = `url('${url}')`;
+				document.body.style.backgroundImage = `url('${url}')`;
 				document.body.classList.add("has-wallpaper");
-		} catch (e) {
+			} catch (e) {
 				console.warn("Failed to apply broadcast background fallback", e);
-		}
+			}
 		});
 	} catch (err) {
 		console.warn("Failed to apply broadcast background", err);

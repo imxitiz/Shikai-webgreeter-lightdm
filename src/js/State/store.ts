@@ -46,6 +46,8 @@ const defaultSettings: SettingsState = {
       enabled: true,
       timeout: 60
     },
+    // Apply a random theme on every load when true
+		random_theme_on_load: true,
     commands: {
       shutdown: true,
       hibernate: true,

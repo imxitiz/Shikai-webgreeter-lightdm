@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/js/
 import { data, names as languageNames } from '@/lang'
 import { types, notify } from '@/js/Greeter/Notifications'
 import useStore from '@/js/State/store'
+import { useTheme } from "theme-package"
 
 interface SettingRowProps {
   label: string
@@ -62,6 +63,8 @@ export default function ModernBehaviourTab() {
     saveSettings()
   }
 
+  const { setMode } = useTheme()
+
   const handleClearStorage = () => {
     localStorage.clear()
     notify(data.get(lang, 'notifications.delete_local') || 'Local storage cleared!', types.Success)
@@ -96,8 +99,36 @@ export default function ModernBehaviourTab() {
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.general.options.dark_mode') || 'Dark Mode'}
         >
-          <Switch checked={behaviour.dark_mode ?? true} onCheckedChange={() => toggle('dark_mode')} />
+          <Switch
+            checked={behaviour.dark_mode ?? true}
+            onCheckedChange={() => {
+              const newVal = !behaviour.dark_mode
+              set('dark_mode', newVal)
+              try { setMode(newVal ? 'dark' : 'light') } catch {}
+            }}
+          />
         </SettingRow>
+				<Separator className="my-1 bg-border/30" />
+				<SettingRow
+					label={
+						data.get(
+							lang,
+							"settings.behaviour.sections.general.options.random_theme_on_load",
+						) || "Random Theme on Load"
+					}
+					description={
+						data.get(
+							lang,
+							"settings.behaviour.sections.general.options.random_theme_on_load_description",
+						) ||
+						"When enabled, a random theme from the default themes will be applied each time the greeter opens"
+					}
+				>
+					<Switch
+						checked={behaviour.random_theme_on_load ?? true}
+						onCheckedChange={() => toggle("random_theme_on_load")}
+					/>
+				</SettingRow>
         <Separator className="my-1 bg-border/30" />
         <SettingRow
           label={data.get(lang, 'settings.behaviour.sections.general.options.username') || 'Show Username'}

@@ -49,20 +49,22 @@ export interface CommandsSettings {
 }
 
 export interface BehaviourSettings {
-  user: boolean
-  logo: boolean
-  avatar: boolean
-  evoker: boolean
-  session: boolean
-  hostname: boolean
-  draggable: boolean
-  language: string
-  dark_mode: boolean
-  clock: ClockSettings
-  date: DateSettings
-  idle: IdleSettings
-  commands: CommandsSettings
-}
+	user: boolean
+	logo: boolean
+	avatar: boolean
+	evoker: boolean
+	session: boolean
+	hostname: boolean
+	draggable: boolean
+	language: string
+	dark_mode: boolean
+	clock: ClockSettings
+	date: DateSettings
+	idle: IdleSettings
+	commands: CommandsSettings
+	// When true, a random theme from the default themes is applied on each load
+	random_theme_on_load?: boolean
+	}
 
 export interface IconSettings {
   background: string

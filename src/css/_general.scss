@@ -35,10 +35,22 @@ body {
     position: fixed;
     top: 0; bottom: 0;
     left: 0; right: 0;
+    /* Ensure wallpaper always fills the viewport and centers the image */
     background-size: cover;
-    background-color: black;
+    background-position: center center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: black;
     transition: background-image 0.2s ease-in-out;
+}
+
+/* When a wallpaper is applied at runtime we add the `has-wallpaper` class. */
+body.has-wallpaper {
+    /* Force the image to fill and center the viewport even if set inline via JS */
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 input[type="checkbox"] {

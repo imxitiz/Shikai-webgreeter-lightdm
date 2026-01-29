@@ -114,9 +114,11 @@
     }
 
     body {
+      /* Ensure wallpaper always fills the viewport and centers the image */
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
+      background-attachment: fixed;
     }
 
     #root {

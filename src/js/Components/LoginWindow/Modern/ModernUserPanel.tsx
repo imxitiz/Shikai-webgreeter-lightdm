@@ -327,7 +327,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
     '??'
 
   return (
-    <form className="flex-1 flex flex-col relative no-wall-change" aria-label="Login form">
+    <form className="flex-1 h-full flex flex-col relative min-h-0 no-wall-change" aria-label="Login form">
       <button
         type="button"
         className="login-handle absolute top-0 left-0 right-0 h-12 flex items-center justify-center cursor-grab active:cursor-grabbing group"
@@ -345,11 +345,11 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
         </div>
       </button>
 
-        <div className="flex-1 flex flex-col items-center justify-center px-12 py-8">
-        <ScrollArea>
-          <div className="w-full flex flex-col items-center">
-            <div className="flex items-center justify-center gap-6 my-8">
-              {users?.length > 1 && (
+        <ScrollArea className="flex-1 h-full w-full">
+          <div className="flex-1 h-full flex flex-col min-h-0 items-center justify-center px-12 py-8">
+            <div className="w-full flex flex-col items-center">
+              <div className="flex items-center justify-center gap-6 my-8">
+                {users?.length > 1 && (
                 <Button
                   variant="ghost"
                   size="icon"
@@ -453,6 +453,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
               </div>
             </div>
           </div>
+          </div>
 
           <Button
             onClick={handleLogin}
@@ -505,20 +506,19 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
             </div>
           )}
         </div>
-        </ScrollArea>
-      </div>
 
-      <div className="px-8 py-4 border-t border-border/30 flex items-center justify-between bg-muted/20">
-        <div className="text-sm text-foreground font-medium">
-          {users.length > 1 && (
-            <span>
-              {users.length} {data.get(lang, 'login.users') || 'users'}
-            </span>
-          )}
+        <div className="px-8 py-4 border-t border-border/30 flex items-center justify-between bg-muted/20">
+          <div className="text-sm text-foreground font-medium">
+            {users.length > 1 && (
+              <span>
+                {users.length} {data.get(lang, 'login.users') || 'users'}
+              </span>
+            )}
+          </div>
+
+          {dateEnabled && <div className="text-sm text-foreground">{currentDate}</div>}
         </div>
-
-        {dateEnabled && <div className="text-sm text-foreground">{currentDate}</div>}
-      </div>
+        </ScrollArea>
       <style>{`
         @keyframes shake {
           0%, 100% { transform: translateX(0); }

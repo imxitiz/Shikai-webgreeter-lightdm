@@ -327,10 +327,11 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
     '??'
 
   return (
-    <form className="flex-1 h-full flex flex-col relative min-h-0 no-wall-change" aria-label="Login form">
+    <form className="flex-1 h-full min-h-0 flex flex-col overflow-hidden relative no-wall-change" aria-label="Login form">
+    <div className="shrink-0 px-8 pt-3">
       <button
         type="button"
-        className="login-handle absolute top-0 left-0 right-0 h-12 flex items-center justify-center cursor-grab active:cursor-grabbing group"
+        className="login-handle group flex h-10 w-full items-center justify-center cursor-grab active:cursor-grabbing touch-none"
         onDoubleClick={onRecenter}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -344,9 +345,10 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
           <span className="text-sm text-foreground font-medium">Drag to move</span>
         </div>
       </button>
+    </div>
 
-        <ScrollArea className="flex-1 h-full w-full">
-          <div className="flex-1 h-full flex flex-col min-h-0 items-center justify-center px-12 py-8">
+        <ScrollArea className="flex-1 min-h-0 w-full">
+          <div className="flex min-h-full flex-col items-center justify-center px-12 py-8">
             <div className="w-full flex flex-col items-center">
               <div className="flex items-center justify-center gap-6 my-8">
                 {users?.length > 1 && (
@@ -450,7 +452,6 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                 >
                   {passwordVisible ? <EyeOffIcon /> : <EyeIcon />}
                 </button>
-              </div>
             </div>
           </div>
           </div>
@@ -489,7 +490,7 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
                 <SelectTrigger className="w-full h-12 text-lg bg-card/80 border-input hover:border-input/80 px-4 rounded-xl transition-colors text-foreground">
                   <SelectValue placeholder={data.get(lang, 'login.session') || 'Select session'} />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="no-wall-change">
                   {sessions.map((s) => (
                     <SelectItem key={s.key} value={s.key} aria-label={`${s.type?.toUpperCase() || 'X11'} ${s.name}`}>
                       <span className="inline-flex items-center gap-2" aria-hidden>
@@ -506,8 +507,9 @@ export default function ModernUserPanel({ onRecenter }: ModernUserPanelProps) {
             </div>
           )}
         </div>
+        </div>
 
-        <div className="px-8 py-4 border-t border-border/30 flex items-center justify-between bg-muted/20">
+        <div className="shrink-0 px-8 py-4 border-t border-border/30 flex items-center justify-between bg-muted/20">
           <div className="text-sm text-foreground font-medium">
             {users.length > 1 && (
               <span>
